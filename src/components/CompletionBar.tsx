@@ -34,14 +34,22 @@ export function CompletionBar({ map, tamed, total }: CompletionBarProps) {
         aria-valuenow={percent}
         aria-valuemin={0}
         aria-valuemax={100}
-        className="h-3 overflow-hidden rounded-full bg-gray-800"
+        className="h-3 overflow-hidden rounded-full bg-gray-800 shadow-inner"
       >
         <div
-          className={`h-full rounded-full bg-gradient-to-r from-green-700 to-green-400 transition-all duration-500 ease-out ${
+          className={`relative h-full overflow-hidden rounded-full bg-gradient-to-r from-green-700 via-green-500 to-green-400 transition-all duration-700 ease-out ${
             complete ? 'shadow-[0_0_12px_rgba(74,222,128,0.7)]' : ''
           }`}
           style={{ width: `${percent}%` }}
-        />
+        >
+          {/* Shimmer-Lichtstreifen wandert über die gefüllte Bar */}
+          {percent > 0 && (
+            <span
+              aria-hidden
+              className="absolute inset-y-0 w-1/4 animate-shimmer bg-gradient-to-r from-transparent via-white/25 to-transparent"
+            />
+          )}
+        </div>
       </div>
 
       {complete && (

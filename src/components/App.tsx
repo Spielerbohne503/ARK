@@ -53,15 +53,30 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-ark-bg pb-16 font-body text-gray-100">
-      {/* Header */}
-      <header className="border-b border-gray-800 bg-gradient-to-b from-gray-900 to-ark-bg">
-        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
-          <h1 className="text-center font-display text-3xl font-bold tracking-wider text-gray-100 sm:text-4xl">
-            🦖 ARK <span className="text-green-400">DINO TRACKER</span>
+      {/* Hero-Header mit grünem Glow */}
+      <header className="relative overflow-hidden border-b border-gray-800">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-b from-gray-900 to-ark-bg"
+        />
+        <div
+          aria-hidden
+          className="absolute left-1/2 top-0 h-64 w-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-green-500/10 blur-3xl"
+        />
+        <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
+          <h1 className="text-center font-display text-3xl font-bold tracking-wider text-gray-100 drop-shadow-[0_0_18px_rgba(74,222,128,0.25)] sm:text-4xl">
+            🦖 ARK{' '}
+            <span className="bg-gradient-to-r from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+              DINO TRACKER
+            </span>
           </h1>
-          <p className="mt-1 text-center text-sm text-gray-500">
+          <p className="mt-2 text-center text-sm tracking-wide text-gray-500">
             Survival Evolved · Zähmungs-Fortschritt für alle Maps
           </p>
+          <span
+            aria-hidden
+            className="mx-auto mt-5 block h-px w-48 bg-gradient-to-r from-transparent via-green-500/60 to-transparent"
+          />
         </div>
       </header>
 

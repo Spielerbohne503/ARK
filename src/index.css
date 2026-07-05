@@ -8,6 +8,26 @@ body {
   color-scheme: dark;
 }
 
+::selection {
+  background-color: rgba(74, 222, 128, 0.3);
+}
+
+:focus-visible {
+  outline: 2px solid rgba(74, 222, 128, 0.7);
+  outline-offset: 2px;
+}
+
+/* Barrierefreiheit: Nutzer mit Bewegungsempfindlichkeit bekommen keine Animationen */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;

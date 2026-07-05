@@ -20,11 +20,13 @@ export function DinoGrid({ dinos, map, isTamed, onTogglePin, onOpenDetails }: Di
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-      {dinos.map((dino) => (
+    // key={map} remountet das Grid bei Map-Wechsel → Stagger-Animation läuft erneut
+    <div key={map} className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {dinos.map((dino, index) => (
         <DinoCard
           key={dino.id}
           dino={dino}
+          index={index}
           tamed={isTamed(map, dino.id)}
           onTogglePin={() => onTogglePin(dino)}
           onOpenDetails={() => onOpenDetails(dino)}

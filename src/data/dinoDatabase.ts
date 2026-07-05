@@ -1,10 +1,10 @@
 import type { Dino, MapName } from '../types';
 
 /**
- * Dino-Bilder werden von Dododex (CDN) geladen. Schlägt das fehl
- * (offline, URL geändert), greift der lokale SVG-Fallback in DinoCard.
+ * Dino-Bilder liegen lokal in public/dinos/ (via scripts/fetch-images.mjs
+ * aus dem Ark-Wiki geladen). Fehlt eine Datei, greift der SVG-Fallback.
  */
-const img = (slug: string) => `https://www.dododex.com/media/creature/${slug}.png`;
+const img = (id: string) => `/dinos/${id}.webp`;
 
 // Wiederverwendbare Map-Gruppen, damit die Zuordnung lesbar bleibt.
 const ALL: MapName[] = ['The Island', 'Ragnarok', 'Extinction', 'Genesis 1', 'Genesis 2', 'Crystal Isles', 'Lost Island'];
@@ -103,7 +103,7 @@ export const DINO_DATABASE: Dino[] = [
     breedingInterval: 1440,
     eggIncubationTime: 150,
     difficulty: 'easy',
-    imageUrl: img('triceratops'),
+    imageUrl: img('trike'),
   },
   {
     id: 'stego',
@@ -118,7 +118,7 @@ export const DINO_DATABASE: Dino[] = [
     breedingInterval: 1440,
     eggIncubationTime: 170,
     difficulty: 'easy',
-    imageUrl: img('stegosaurus'),
+    imageUrl: img('stego'),
   },
   {
     id: 'carbonemys',
@@ -300,7 +300,7 @@ export const DINO_DATABASE: Dino[] = [
     breedingInterval: 1440,
     eggIncubationTime: 150,
     difficulty: 'medium',
-    imageUrl: img('carnotaurus'),
+    imageUrl: img('carno'),
   },
   {
     id: 'ankylosaurus',
@@ -720,7 +720,7 @@ export const DINO_DATABASE: Dino[] = [
     breedingInterval: 2880,
     eggIncubationTime: 300,
     difficulty: 'medium',
-    imageUrl: img('brontosaurus'),
+    imageUrl: img('bronto'),
   },
   {
     id: 'diplodocus',
@@ -902,7 +902,7 @@ export const DINO_DATABASE: Dino[] = [
     breedingInterval: 2880,
     eggIncubationTime: 270,
     difficulty: 'hard',
-    imageUrl: img('spinosaurus'),
+    imageUrl: img('spino'),
   },
   {
     id: 'allosaurus',

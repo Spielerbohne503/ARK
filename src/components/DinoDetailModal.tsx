@@ -61,15 +61,19 @@ export function DinoDetailModal({ dino, map, record, onTogglePin, onClose }: Din
         aria-modal="true"
         aria-label={`Details zu ${dino.name}`}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[92vh] w-full max-w-2xl animate-modal-in overflow-y-auto rounded-2xl border border-gray-700 bg-ark-surface shadow-2xl"
+        className="max-h-[92vh] w-full max-w-2xl animate-slide-up overflow-y-auto rounded-2xl border border-gray-700 bg-ark-surface shadow-2xl shadow-black/60 sm:animate-modal-in"
       >
-        {/* Kopfbereich mit Bild */}
-        <div className="relative flex h-44 items-center justify-center bg-gradient-to-b from-gray-900 to-ark-surface sm:h-52">
+        {/* Kopfbereich: Dossier-Artwork mit Verlauf in den Modal-Body */}
+        <div className="relative h-52 overflow-hidden bg-gray-900 sm:h-64">
           <img
             src={imageFailed ? '/dinos/placeholder.svg' : dino.imageUrl}
             alt={dino.name}
             onError={() => setImageFailed(true)}
-            className="h-full w-full object-contain p-4"
+            className="h-full w-full object-cover"
+          />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ark-surface via-transparent to-black/30"
           />
           <button
             ref={closeButtonRef}

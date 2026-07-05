@@ -11,7 +11,7 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
 - **Pin-System** 📍: Dino als gezähmt markieren – Karte wird grün, Status wird in **IndexedDB** gespeichert (kein Server, komplett offline)
 - **Completion-Tracker** mit Progress-Bar pro Map
 - **Detail-Modal** mit **Taming-Calculator** (Level 1–150 → Kibble, Narcotics, Zähmzeit) und **Breeding-Infos**
-- **Suche**, responsives Grid (1–4 Spalten), Dark Theme im Ark-Stil
+- **Suche**, responsives Grid (1–4 Spalten), Dark Theme im Ark-Stil mit offiziellen Dossier-Artworks und sanften Animationen (Stagger-Einblendung, Hover-Effekte, Shimmer-Progress; respektiert `prefers-reduced-motion`)
 
 ## Schnellstart
 
@@ -35,7 +35,7 @@ npm run preview    # Build lokal testen
 | Styling | Tailwind CSS 3 (Dark Theme, Cinzel + Roboto lokal gebundelt) |
 | Persistenz | IndexedDB (eigener Promise-Wrapper, `src/lib/db.ts`) |
 | Daten | Hardcoded in `src/data/dinoDatabase.ts` – keine API nötig |
-| Bilder | Externe Dino-Bilder mit lokalem SVG-Fallback (funktioniert auch offline) |
+| Bilder | Offizielle Dossier-Artworks, lokal gebundelt in `public/dinos/` (via `node scripts/fetch-images.mjs` aus dem Ark-Wiki, CC-BY-SA) – komplett offline |
 
 ## Projektstruktur
 
