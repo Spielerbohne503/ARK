@@ -6,10 +6,20 @@ interface CompletionBarProps {
   map: MapName;
   tamed: number;
   total: number;
+  /** Einheit im Zählerstand, z. B. "gezähmt" oder "gefunden". */
+  unit?: string;
+  /** Text der 100 %-Meldung. */
+  completeText?: string;
 }
 
-/** Fortschrittsanzeige: X/Y Dinos gezähmt mit animierter Progress-Bar und Count-up. */
-export function CompletionBar({ map, tamed, total }: CompletionBarProps) {
+/** Fortschrittsanzeige: X/Y erledigt mit animierter Progress-Bar und Count-up. */
+export function CompletionBar({
+  map,
+  tamed,
+  total,
+  unit = 'gezähmt',
+  completeText = 'Map komplett – alle Kreaturen gezähmt.',
+}: CompletionBarProps) {
   const percent = total > 0 ? Math.round((tamed / total) * 100) : 0;
   const complete = percent === 100 && total > 0;
   const animatedTamed = useCountUp(tamed);
@@ -26,7 +36,7 @@ export function CompletionBar({ map, tamed, total }: CompletionBarProps) {
         </h2>
         <p className="font-body text-sm text-gray-300">
           <span className="text-lg font-bold tabular-nums text-green-400">{animatedTamed}</span>
-          <span className="text-gray-500"> / {total} gezähmt</span>
+          <span className="text-gray-500"> / {total} {unit}</span>
           <span className="ml-3 rounded bg-gray-800 px-2 py-0.5 font-mono text-xs tabular-nums text-green-300">
             {animatedPercent}%
           </span>
@@ -59,7 +69,7 @@ export function CompletionBar({ map, tamed, total }: CompletionBarProps) {
       {complete && (
         <p className="mt-2.5 flex animate-fade-in items-center justify-center gap-2 font-display text-sm text-amber-400">
           <IconTrophy size={16} />
-          Map komplett – alle Kreaturen gezähmt.
+          {completeText}
         </p>
       )}
     </section>

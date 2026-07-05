@@ -1,13 +1,18 @@
-import type { NoteRecord, TamedRecord } from '../types';
+import type { FoundNoteRecord, NoteRecord, TamedRecord } from '../types';
 
 const DB_NAME = 'ark-dino-tracker';
-const DB_VERSION = 2;
+const DB_VERSION = 3;
 
 export const STORE_TAMED = 'tamed';
 export const STORE_FAVORITES = 'favorites';
 export const STORE_NOTES = 'notes';
+export const STORE_FOUND_NOTES = 'foundNotes';
 
-type StoreName = typeof STORE_TAMED | typeof STORE_FAVORITES | typeof STORE_NOTES;
+type StoreName =
+  | typeof STORE_TAMED
+  | typeof STORE_FAVORITES
+  | typeof STORE_NOTES
+  | typeof STORE_FOUND_NOTES;
 
 let dbPromise: Promise<IDBDatabase> | null = null;
 
@@ -22,10 +27,11 @@ function openDb(): Promise<IDBDatabase> {
     }
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-    // v1 → v2: Stores für Favoriten und Notizen kommen dazu; 'tamed' bleibt unangetastet.
+    // Migrationen sind additiv: neue Stores werden angelegt, bestehende Daten
+    // (v2: tamed/favorites/notes, v3: +foundNotes) bleiben erhalten.
     request.onupgradeneeded = () => {
       const db = request.result;
-      for (const store of [STORE_TAMED, STORE_FAVORITES, STORE_NOTES]) {
+      for (const store of [STORE_TAMED, STORE_FAVORITES, STORE_NOTES, STORE_FOUND_NOTES]) {
         if (!db.objectStoreNames.contains(store)) {
           db.createObjectStore(store, { keyPath: 'key' });
         }
@@ -79,3 +85,11 @@ export const getAllNotes = () =>
   withStore(STORE_NOTES, 'readonly', (s) => s.getAll() as IDBRequest<NoteRecord[]>);
 export const putNote = (record: NoteRecord) => withStore(STORE_NOTES, 'readwrite', (s) => s.put(record));
 export const deleteNote = (key: string) => withStore(STORE_NOTES, 'readwrite', (s) => s.delete(key));
+
+// ── Gefundene Erkunder-Notizen ──
+export const getAllFoundNotes = () =>
+  withStore(STORE_FOUND_NOTES, 'readonly', (s) => s.getAll() as IDBRequest<FoundNoteRecord[]>);
+export const putFoundNote = (record: FoundNoteRecord) =>
+  withStore(STORE_FOUND_NOTES, 'readwrite', (s) => s.put(record));
+export const deleteFoundNote = (key: string) =>
+  withStore(STORE_FOUND_NOTES, 'readwrite', (s) => s.delete(key));

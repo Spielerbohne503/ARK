@@ -76,6 +76,28 @@ export interface NoteRecord {
   updatedAt: string;
 }
 
+/** Eine Erkunder-Notiz (Explorer Note), die auf einer Map gesammelt werden kann. */
+export interface ExplorerNote {
+  /** Global eindeutige ID, z. B. "island-helena-1". */
+  id: string;
+  map: MapName;
+  /** Autor/Charakter, z. B. "Helena Walker". */
+  explorer: string;
+  /** Nummer innerhalb der Reihe dieses Autors. */
+  number: number;
+  /** Ungefähre Fundstelle auf der Map (GPS Lat/Lon). */
+  coords: { lat: number; lon: number };
+  /** Kurzes Thema der Notiz. */
+  topic: string;
+}
+
+/** Persistierter "gefunden"-Eintrag einer Erkunder-Notiz in IndexedDB. */
+export interface FoundNoteRecord {
+  /** Schlüssel = ExplorerNote.id */
+  key: string;
+  foundDate: string;
+}
+
 /** Ergebnis des Taming-Calculators. */
 export interface TamingResult {
   kibbleCount: number;

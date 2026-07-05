@@ -1,18 +1,23 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DINO_DATABASE, getDinosForMap } from '../data/dinoDatabase';
+import { EXPLORER_NOTES, getNotesForMap } from '../data/explorerNotes';
 import { useCountUp } from '../hooks/useCountUp';
 import { useDinoTracker } from '../hooks/useDinoTracker';
+import { useExplorerTracker } from '../hooks/useExplorerTracker';
 import { exportBackup, parseBackup } from '../lib/backup';
 import { fireConfetti } from '../lib/confetti';
-import { MAPS, type Dino, type MapName } from '../types';
+import { MAPS, type Dino, type ExplorerNote, type MapName } from '../types';
 import { CompletionBar } from './CompletionBar';
 import { DinoDetailModal } from './DinoDetailModal';
 import { DinoGrid } from './DinoGrid';
+import { ExplorerNotesView } from './ExplorerNotesView';
 import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } from './FilterBar';
 import { MapTabs } from './MapTabs';
 import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
-import { IconDownload, IconList, IconSearch, IconSkull, IconUpload, IconWarning } from './icons';
+import { IconBook, IconDownload, IconList, IconSearch, IconSkull, IconSwords, IconUpload, IconWarning } from './icons';
+
+type ViewMode = 'creatures' | 'notes';
 
 const MAP_STORAGE_KEY = 'ark-dino-tracker:selected-map';
 const DIFFICULTY_RANK = { easy: 0, medium: 1, hard: 2 } as const;
@@ -32,16 +37,19 @@ function loadInitialMap(): MapName {
 
 export function App() {
   const [selectedMap, setSelectedMap] = useState<MapName>(loadInitialMap);
+  const [viewMode, setViewMode] = useState<ViewMode>('creatures');
   const [selectedDino, setSelectedDino] = useState<Dino | null>(null);
   const [plannerOpen, setPlannerOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [difficulty, setDifficulty] = useState<DifficultyFilter>('all');
   const [sort, setSort] = useState<SortOrder>('name');
+  const [notesOnlyOpen, setNotesOnlyOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const toastIdRef = useRef(0);
   const importInputRef = useRef<HTMLInputElement>(null);
   const tracker = useDinoTracker();
+  const explorer = useExplorerTracker();
 
   useEffect(() => {
     try {
@@ -71,23 +79,38 @@ export function App() {
     [mapDinos, tracker, selectedMap],
   );
 
-  // Fortschritt pro Map für die Tabs (und "Maps komplett" im Hero).
+  // Erkunder-Notizen der aktuellen Map.
+  const mapNotes = useMemo(() => getNotesForMap(selectedMap), [selectedMap]);
+  const mapNoteIds = useMemo(() => new Set(mapNotes.map((n) => n.id)), [mapNotes]);
+  const foundCount = explorer.countFound(mapNoteIds);
+
+  // Fortschritt pro Map für die Tabs – je nach Modus Zähmungen oder Notizen.
   const mapProgress = useCallback(
     (map: MapName): [number, number] => {
+      if (viewMode === 'notes') {
+        const notes = getNotesForMap(map);
+        return [explorer.countFound(new Set(notes.map((n) => n.id))), notes.length];
+      }
       const dinos = getDinosForMap(map);
       return [tracker.countTamed(map, new Set(dinos.map((d) => d.id))), dinos.length];
     },
-    [tracker],
+    [tracker, explorer, viewMode],
   );
 
   const completedMaps = useMemo(
-    () => MAPS.filter((map) => { const [t, total] = mapProgress(map); return total > 0 && t === total; }).length,
-    [mapProgress],
+    () =>
+      MAPS.filter((map) => {
+        const dinos = getDinosForMap(map);
+        return dinos.length > 0 && tracker.countTamed(map, new Set(dinos.map((d) => d.id))) === dinos.length;
+      }).length,
+    [tracker],
   );
 
   // Hero-Stats mit Count-up.
   const speciesCount = useCountUp(DINO_DATABASE.length);
   const totalTames = useCountUp(tracker.records.size);
+  const notesCount = useCountUp(EXPLORER_NOTES.length);
+  const foundTotal = useCountUp(explorer.found.size);
   const completedMapsAnimated = useCountUp(completedMaps);
 
   const visibleDinos = useMemo(() => {
@@ -149,6 +172,24 @@ export function App() {
     [tracker, selectedMap, pushToast],
   );
 
+  const handleToggleNote = useCallback(
+    (note: ExplorerNote) => {
+      const nowFound = explorer.toggleFound(note.id);
+      if (nowFound) {
+        const willBeComplete = explorer.countFound(mapNoteIds) + 1 === mapNotes.length;
+        if (willBeComplete) {
+          fireConfetti();
+          pushToast('complete', `${selectedMap}: Alle ${mapNotes.length} Erkunder-Notizen gefunden!`);
+        } else {
+          pushToast('tamed', `${note.explorer} #${note.number} als gefunden markiert`);
+        }
+      } else {
+        pushToast('untamed', `${note.explorer} #${note.number} wieder als offen markiert`);
+      }
+    },
+    [explorer, mapNoteIds, mapNotes.length, selectedMap, pushToast],
+  );
+
   const handleImportFile = async (file: File) => {
     try {
       const parsed = parseBackup(await file.text());
@@ -188,17 +229,24 @@ export function App() {
             </span>
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-relaxed text-gray-400">
-            Verfolge deine Zähmungen auf sieben Maps, plane den nächsten Fang mit dem
-            Taming-Calculator und behalte Favoriten und Notizen an einem Ort.
+            Verfolge deine Zähmungen und Erkunder-Notizen auf sieben Maps, plane den
+            nächsten Fang mit dem Taming-Calculator und behalte alles an einem Ort.
           </p>
 
-          {/* Global-Stats mit Count-up */}
+          {/* Global-Stats mit Count-up (kontextabhängig) */}
           <dl className="mx-auto mt-8 flex max-w-lg items-stretch justify-center divide-x divide-gray-800">
-            {[
-              { value: speciesCount, label: 'Spezies' },
-              { value: totalTames, label: 'Zähmungen' },
-              { value: completedMapsAnimated, label: 'Maps komplett' },
-            ].map((stat) => (
+            {(viewMode === 'notes'
+              ? [
+                  { value: notesCount, label: 'Notizen' },
+                  { value: foundTotal, label: 'Gefunden' },
+                  { value: completedMapsAnimated, label: 'Maps komplett' },
+                ]
+              : [
+                  { value: speciesCount, label: 'Spezies' },
+                  { value: totalTames, label: 'Zähmungen' },
+                  { value: completedMapsAnimated, label: 'Maps komplett' },
+                ]
+            ).map((stat) => (
               <div key={stat.label} className="flex-1 px-4 text-center sm:px-8">
                 <dd className="font-display text-3xl font-bold tabular-nums text-amber-400 sm:text-4xl">
                   {stat.value}
@@ -210,78 +258,149 @@ export function App() {
         </div>
       </header>
 
-      {/* Sticky Glass-Toolbar: Map-Tabs + Suche */}
+      {/* Modus-Umschalter: Kreaturen ↔ Erkunder-Notizen */}
+      <div className="border-b border-gray-800/60 bg-ark-bg">
+        <div className="mx-auto flex max-w-7xl gap-2 px-4 py-2 sm:px-6">
+          {([
+            { mode: 'creatures', label: 'Kreaturen', icon: <IconSwords size={16} /> },
+            { mode: 'notes', label: 'Erkunder-Notizen', icon: <IconBook size={16} /> },
+          ] as const).map((entry) => (
+            <button
+              key={entry.mode}
+              type="button"
+              onClick={() => setViewMode(entry.mode)}
+              aria-pressed={viewMode === entry.mode}
+              className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
+                viewMode === entry.mode
+                  ? 'bg-green-500/10 text-green-300 ring-1 ring-green-500/40'
+                  : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+              }`}
+            >
+              {entry.icon}
+              {entry.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Sticky Glass-Toolbar: Map-Tabs + (im Kreaturen-Modus) Planer & Suche */}
       <div className="sticky top-0 z-40 border-b border-gray-800/70 bg-ark-bg/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2.5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <MapTabs selected={selectedMap} onChange={handleMapChange} progress={mapProgress} />
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setPlannerOpen(true)}
-              className="relative flex shrink-0 items-center gap-1.5 rounded-lg border border-gray-700/80 bg-ark-surface/80 px-3 py-2 text-sm text-gray-300 transition-colors hover:border-amber-500/60 hover:text-amber-300"
-              title="Zähm-Planer für deine Favoriten"
-            >
-              <IconList size={16} />
-              <span className="hidden sm:inline">Planer</span>
-              {favoriteDinos.length > 0 && (
-                <span className="ml-0.5 rounded-full bg-amber-500/20 px-1.5 text-[11px] font-bold text-amber-300">
-                  {favoriteDinos.length}
-                </span>
-              )}
-            </button>
-            <label className="relative block flex-1 lg:w-56">
-              <span className="sr-only">Dino suchen</span>
-              <IconSearch
-                size={16}
-                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-              />
-              <input
-                type="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Dino suchen …"
-                className="w-full rounded-lg border border-gray-700/80 bg-ark-surface/80 py-2 pl-9 pr-3 text-sm text-gray-100 placeholder-gray-500 outline-none transition-colors duration-200 focus:border-green-500"
-              />
-            </label>
-          </div>
+          {viewMode === 'creatures' && (
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setPlannerOpen(true)}
+                className="relative flex shrink-0 items-center gap-1.5 rounded-lg border border-gray-700/80 bg-ark-surface/80 px-3 py-2 text-sm text-gray-300 transition-colors hover:border-amber-500/60 hover:text-amber-300"
+                title="Zähm-Planer für deine Favoriten"
+              >
+                <IconList size={16} />
+                <span className="hidden sm:inline">Planer</span>
+                {favoriteDinos.length > 0 && (
+                  <span className="ml-0.5 rounded-full bg-amber-500/20 px-1.5 text-[11px] font-bold text-amber-300">
+                    {favoriteDinos.length}
+                  </span>
+                )}
+              </button>
+              <label className="relative block flex-1 lg:w-56">
+                <span className="sr-only">Dino suchen</span>
+                <IconSearch
+                  size={16}
+                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+                />
+                <input
+                  type="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Dino suchen …"
+                  className="w-full rounded-lg border border-gray-700/80 bg-ark-surface/80 py-2 pl-9 pr-3 text-sm text-gray-100 placeholder-gray-500 outline-none transition-colors duration-200 focus:border-green-500"
+                />
+              </label>
+            </div>
+          )}
         </div>
       </div>
 
       <main className="relative mx-auto max-w-7xl space-y-5 px-4 pb-16 pt-6 sm:px-6">
-        {tracker.storageError && (
+        {(tracker.storageError || explorer.storageError) && (
           <p
             role="alert"
             className="flex items-center gap-2 rounded-lg border border-yellow-600/50 bg-yellow-900/30 px-4 py-2 text-sm text-yellow-300"
           >
             <IconWarning size={16} />
-            {tracker.storageError}
+            {tracker.storageError ?? explorer.storageError}
           </p>
         )}
 
-        <CompletionBar map={selectedMap} tamed={tamedCount} total={mapDinos.length} />
+        {viewMode === 'creatures' ? (
+          <>
+            <CompletionBar map={selectedMap} tamed={tamedCount} total={mapDinos.length} />
 
-        <FilterBar
-          status={status}
-          difficulty={difficulty}
-          sort={sort}
-          resultCount={visibleDinos.length}
-          onStatus={setStatus}
-          onDifficulty={setDifficulty}
-          onSort={setSort}
-        />
+            <FilterBar
+              status={status}
+              difficulty={difficulty}
+              sort={sort}
+              resultCount={visibleDinos.length}
+              onStatus={setStatus}
+              onDifficulty={setDifficulty}
+              onSort={setSort}
+            />
 
-        {tracker.loading ? (
-          <p className="p-10 text-center text-gray-500">Lade gespeicherte Zähmungen …</p>
+            {tracker.loading ? (
+              <p className="p-10 text-center text-gray-500">Lade gespeicherte Zähmungen …</p>
+            ) : (
+              <DinoGrid
+                dinos={visibleDinos}
+                map={selectedMap}
+                isTamed={tracker.isTamed}
+                isFavorite={tracker.isFavorite}
+                onTogglePin={(dino) => handleTogglePin(dino)}
+                onToggleFavorite={handleToggleFavorite}
+                onOpenDetails={setSelectedDino}
+              />
+            )}
+          </>
         ) : (
-          <DinoGrid
-            dinos={visibleDinos}
-            map={selectedMap}
-            isTamed={tracker.isTamed}
-            isFavorite={tracker.isFavorite}
-            onTogglePin={(dino) => handleTogglePin(dino)}
-            onToggleFavorite={handleToggleFavorite}
-            onOpenDetails={setSelectedDino}
-          />
+          <>
+            <CompletionBar
+              map={selectedMap}
+              tamed={foundCount}
+              total={mapNotes.length}
+              unit="gefunden"
+              completeText="Alle Erkunder-Notizen dieser Map gefunden."
+            />
+
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-800/80 bg-ark-surface/60 p-3.5 sm:p-4">
+              <p className="text-sm text-gray-400">
+                Tippe eine Notiz an, um sie als <span className="text-green-300">gefunden</span> zu markieren.
+                Die Koordinaten sind Richtwerte.
+              </p>
+              <button
+                type="button"
+                aria-pressed={notesOnlyOpen}
+                onClick={() => setNotesOnlyOpen((v) => !v)}
+                className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
+                  notesOnlyOpen
+                    ? 'border-green-500/60 bg-green-500/10 text-green-300'
+                    : 'border-gray-800 text-gray-500 hover:border-gray-600 hover:text-gray-300'
+                }`}
+              >
+                Nur offene
+              </button>
+            </div>
+
+            {explorer.loading ? (
+              <p className="p-10 text-center text-gray-500">Lade gefundene Notizen …</p>
+            ) : (
+              <ExplorerNotesView
+                map={selectedMap}
+                isFound={explorer.isFound}
+                onToggleFound={handleToggleNote}
+                onlyOpen={notesOnlyOpen}
+              />
+            )}
+          </>
         )}
       </main>
 

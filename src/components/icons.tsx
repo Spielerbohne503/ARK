@@ -212,6 +212,21 @@ export const IconTerminal = (p: IconProps) => (
   </Svg>
 );
 
+export const IconBook = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5Z" />
+    <path d="M4 19a2 2 0 0 1 2-2h13" />
+    <path d="M9 7h6M9 11h6" />
+  </Svg>
+);
+
+export const IconMapPin = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+    <circle cx="12" cy="10" r="3" />
+  </Svg>
+);
+
 export const IconList = (p: IconProps) => (
   <Svg {...p}>
     <path d="M9 6h11M9 12h11M9 18h11" />
