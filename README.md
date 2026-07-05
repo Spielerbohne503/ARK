@@ -1,4 +1,4 @@
-# 🦖 Ark Dino Tracker
+# Ark Dino Tracker
 
 Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte auf jeder Map den Überblick, welche Kreaturen du schon gezähmt hast.
 
@@ -8,10 +8,14 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
 
 - **7 Maps**: The Island, Ragnarok, Extinction, Genesis 1, Genesis 2, Crystal Isles, Lost Island
 - **80+ Kreaturen** mit Spawn-Locations, Base-Stats, Futter- und Kibble-Angaben
-- **Pin-System** 📍: Dino als gezähmt markieren – Karte wird grün, Status wird in **IndexedDB** gespeichert (kein Server, komplett offline)
+- **Pin-System**: Dino als gezähmt markieren – Karte wird grün, Status wird in **IndexedDB** gespeichert (kein Server, komplett offline)
+- **Favoriten & Notizen**: Zähm-Wunschliste pro Map, Freitext-Notizen (z. B. Spawn-Koordinaten) mit Auto-Save
+- **Filter & Sortierung**: Status, Schwierigkeit, Name/Schwierigkeit/zuletzt gezähmt
+- **Backup**: Fortschritt als JSON exportieren/importieren
+- **Beschreibungen + Einsatz-Rollen** für alle 98 Kreaturen (z. B. „Metall-Farm", „Boss-Kampf")
 - **Completion-Tracker** mit Progress-Bar pro Map
 - **Detail-Modal** mit **Taming-Calculator** (Level 1–150 → Kibble, Narcotics, Zähmzeit) und **Breeding-Infos**
-- **Suche**, responsives Grid (1–4 Spalten), Dark Theme im Ark-Stil mit offiziellen Dossier-Artworks und sanften Animationen (Stagger-Einblendung, Hover-Effekte, Shimmer-Progress; respektiert `prefers-reduced-motion`)
+- **Design**: Cinematic Hero, Sticky-Toolbar mit Map-Tabs, 3D-Tilt + Cursor-Spotlight auf Karten, Film-Grain, Count-up-Statistiken, Toasts und Konfetti bei 100 % – eigenes SVG-Icon-Set, respektiert `prefers-reduced-motion`
 
 ## Schnellstart
 

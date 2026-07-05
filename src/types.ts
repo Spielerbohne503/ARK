@@ -36,6 +36,10 @@ export interface Dino {
   eggIncubationTime: number;
   difficulty: Difficulty;
   imageUrl: string;
+  /** 1–2 Sätze: Verhalten + Zähm-Tipp. */
+  description: string;
+  /** Einsatz-Rollen, z. B. "Metall-Farmer", "Boss-Kampf". */
+  roles: string[];
 }
 
 /** Persistierter Zähm-Eintrag in IndexedDB. */
@@ -49,6 +53,14 @@ export interface TamedRecord {
   level: number;
 }
 
+/** Persistierte Notiz pro Dino+Map in IndexedDB. */
+export interface NoteRecord {
+  /** Zusammengesetzter Schlüssel: `${map}:${dinoId}` */
+  key: string;
+  text: string;
+  updatedAt: string;
+}
+
 /** Ergebnis des Taming-Calculators. */
 export interface TamingResult {
   kibbleCount: number;
@@ -57,5 +69,5 @@ export interface TamingResult {
   foodAmount: number;
   tamingMinutes: number;
   tamingTimeFormatted: string;
-  resources: { label: string; amount: number; icon: string }[];
+  resources: { label: string; amount: number; icon: 'kibble' | 'food' | 'narcotic' | 'berry' }[];
 }

@@ -1,4 +1,6 @@
+import { useCountUp } from '../hooks/useCountUp';
 import type { MapName } from '../types';
+import { IconTrophy } from './icons';
 
 interface CompletionBarProps {
   map: MapName;
@@ -6,25 +8,27 @@ interface CompletionBarProps {
   total: number;
 }
 
-/** Fortschrittsanzeige: X/Y Dinos gezähmt mit animierter Progress-Bar. */
+/** Fortschrittsanzeige: X/Y Dinos gezähmt mit animierter Progress-Bar und Count-up. */
 export function CompletionBar({ map, tamed, total }: CompletionBarProps) {
   const percent = total > 0 ? Math.round((tamed / total) * 100) : 0;
   const complete = percent === 100 && total > 0;
+  const animatedTamed = useCountUp(tamed);
+  const animatedPercent = useCountUp(percent);
 
   return (
     <section
       aria-label="Zähm-Fortschritt"
-      className="rounded-xl border border-gray-800 bg-ark-surface p-4 shadow-lg sm:p-5"
+      className="rounded-xl border border-gray-800 bg-ark-surface/80 p-4 shadow-lg sm:p-5"
     >
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="font-display text-sm uppercase tracking-widest text-gray-300">
           Completion · <span className="text-green-400">{map}</span>
         </h2>
         <p className="font-body text-sm text-gray-300">
-          <span className="text-lg font-bold text-green-400">{tamed}</span>
+          <span className="text-lg font-bold tabular-nums text-green-400">{animatedTamed}</span>
           <span className="text-gray-500"> / {total} gezähmt</span>
-          <span className="ml-3 rounded bg-gray-800 px-2 py-0.5 font-mono text-xs text-green-300">
-            {percent}%
+          <span className="ml-3 rounded bg-gray-800 px-2 py-0.5 font-mono text-xs tabular-nums text-green-300">
+            {animatedPercent}%
           </span>
         </p>
       </div>
@@ -53,8 +57,9 @@ export function CompletionBar({ map, tamed, total }: CompletionBarProps) {
       </div>
 
       {complete && (
-        <p className="mt-2 animate-fade-in text-center font-display text-sm text-green-400">
-          🏆 Map komplett! Alle Kreaturen gezähmt.
+        <p className="mt-2.5 flex animate-fade-in items-center justify-center gap-2 font-display text-sm text-amber-400">
+          <IconTrophy size={16} />
+          Map komplett – alle Kreaturen gezähmt.
         </p>
       )}
     </section>

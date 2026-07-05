@@ -42,6 +42,10 @@ export default {
           '70%': { transform: 'scale(0.9) rotate(6deg)' },
           '100%': { transform: 'scale(1) rotate(0deg)' },
         },
+        'toast-in': {
+          '0%': { opacity: '0', transform: 'translateY(12px) scale(0.96)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
       },
       animation: {
         'modal-in': 'modal-in 0.25s ease-out',
@@ -50,6 +54,7 @@ export default {
         'slide-up': 'slide-up 0.3s ease-out',
         shimmer: 'shimmer 2.5s ease-in-out infinite',
         'pin-pop': 'pin-pop 0.4s ease-out',
+        'toast-in': 'toast-in 0.25s ease-out',
       },
     },
   },

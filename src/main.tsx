@@ -21,7 +21,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean
       return (
         <div className="flex min-h-screen items-center justify-center bg-ark-bg p-6 text-center">
           <div>
-            <p className="font-display text-2xl text-red-400">Etwas ist schiefgelaufen 🦴</p>
+            <p className="font-display text-2xl text-red-400">Etwas ist schiefgelaufen</p>
             <button
               type="button"
               onClick={() => window.location.reload()}

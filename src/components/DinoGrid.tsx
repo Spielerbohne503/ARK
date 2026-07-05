@@ -5,16 +5,26 @@ interface DinoGridProps {
   dinos: Dino[];
   map: MapName;
   isTamed: (map: MapName, dinoId: string) => boolean;
+  isFavorite: (map: MapName, dinoId: string) => boolean;
   onTogglePin: (dino: Dino) => void;
+  onToggleFavorite: (dino: Dino) => void;
   onOpenDetails: (dino: Dino) => void;
 }
 
 /** Responsive Karten-Grid: 1 Spalte mobil, bis zu 4 Spalten auf Desktop. */
-export function DinoGrid({ dinos, map, isTamed, onTogglePin, onOpenDetails }: DinoGridProps) {
+export function DinoGrid({
+  dinos,
+  map,
+  isTamed,
+  isFavorite,
+  onTogglePin,
+  onToggleFavorite,
+  onOpenDetails,
+}: DinoGridProps) {
   if (dinos.length === 0) {
     return (
       <p className="rounded-xl border border-gray-800 bg-ark-surface p-10 text-center text-gray-400">
-        Keine Dinos gefunden – Suchbegriff anpassen oder andere Map wählen.
+        Keine Dinos gefunden – Filter zurücksetzen oder andere Map wählen.
       </p>
     );
   }
@@ -28,7 +38,9 @@ export function DinoGrid({ dinos, map, isTamed, onTogglePin, onOpenDetails }: Di
           dino={dino}
           index={index}
           tamed={isTamed(map, dino.id)}
+          favorite={isFavorite(map, dino.id)}
           onTogglePin={() => onTogglePin(dino)}
+          onToggleFavorite={() => onToggleFavorite(dino)}
           onOpenDetails={() => onOpenDetails(dino)}
         />
       ))}

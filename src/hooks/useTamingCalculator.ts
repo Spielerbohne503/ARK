@@ -44,10 +44,10 @@ export function calculateTaming(dino: Dino, level: number): TamingResult {
     tamingMinutes,
     tamingTimeFormatted: formatMinutes(tamingMinutes),
     resources: [
-      { label: dino.kibbleType, amount: kibbleCount, icon: '🍳' },
-      { label: dino.tamingFood, amount: foodAmount, icon: '🍖' },
-      { label: 'Narcotics', amount: narcotics, icon: '💉' },
-      { label: 'Narcoberries (Alternative)', amount: narcoberries, icon: '🫐' },
+      { label: dino.kibbleType, amount: kibbleCount, icon: 'kibble' },
+      { label: dino.tamingFood, amount: foodAmount, icon: 'food' },
+      { label: 'Narcotics', amount: narcotics, icon: 'narcotic' },
+      { label: 'Narcoberries (Alternative)', amount: narcoberries, icon: 'berry' },
     ],
   };
 }
