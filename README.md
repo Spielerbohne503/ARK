@@ -14,7 +14,12 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
 - **Backup**: Fortschritt als JSON exportieren/importieren
 - **Beschreibungen + Einsatz-Rollen** für alle 98 Kreaturen (z. B. „Metall-Farm", „Boss-Kampf")
 - **Completion-Tracker** mit Progress-Bar pro Map
-- **Detail-Modal** mit **Taming-Calculator** (Level 1–150 → Kibble, Narcotics, Zähmzeit) und **Breeding-Infos**
+- **Detail-Ansicht mit 6 Tabs** (Dododex-Stil):
+  - *Zähmen*: Futter-Tabelle (Kibble bis Beeren) mit Menge, Effektivität, Zeit und Zähmbonus-Level, Narkosemittel-Bedarf, Torpor-Abbaurate
+  - *Betäuben*: Treffer bis K.O. für 9 Waffen (Körper/Kopf ×3) inkl. Todeschance
+  - *Statuswerte*: alle 8 Werte mit Basis, Wild-Anstieg pro Level, Zähm-Anstieg und Rang unter allen Spezies
+  - *Zucht*: Paarungsintervall, Brut-/Tragzeit, Reifung + Baby-Timer-Rechner
+  - *Umgang*: Kann getragen werden von, betroffen von (Bola/Fallen), kann beschädigen, passt durch, Drops, Kill-XP, Klonkammer-Kosten
 - **Design**: Cinematic Hero, Sticky-Toolbar mit Map-Tabs, 3D-Tilt + Cursor-Spotlight auf Karten, Film-Grain, Count-up-Statistiken, Toasts und Konfetti bei 100 % – eigenes SVG-Icon-Set, respektiert `prefers-reduced-motion`
 
 ## Schnellstart

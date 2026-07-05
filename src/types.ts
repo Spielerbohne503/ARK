@@ -13,6 +13,9 @@ export type MapName = (typeof MAPS)[number];
 
 export type Difficulty = 'easy' | 'medium' | 'hard';
 
+/** Größenklasse – steuert Tragbarkeit, Fallen, Tore, Klon-Kosten usw. */
+export type SizeClass = 'tiny' | 'small' | 'medium' | 'large' | 'huge' | 'ocean-small' | 'ocean-large';
+
 export interface DinoBaseStats {
   health: number;
   damage: number;
@@ -40,6 +43,18 @@ export interface Dino {
   description: string;
   /** Einsatz-Rollen, z. B. "Metall-Farmer", "Boss-Kampf". */
   roles: string[];
+  sizeClass: SizeClass;
+  /** Beute beim Töten. */
+  drops: string[];
+  /** Weitere Basiswerte (Level 1) für die Statuswerte-Tabelle. */
+  extraStats: {
+    stamina: number;
+    /** null = Wasseratmer ohne Sauerstoff-Stat. */
+    oxygen: number | null;
+    food: number;
+    weight: number;
+    torpor: number;
+  };
 }
 
 /** Persistierter Zähm-Eintrag in IndexedDB. */

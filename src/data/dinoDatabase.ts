@@ -30,6 +30,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Der friedlichste Bewohner der Insel und das perfekte erste Zähm-Ziel. Ein Schlag mit der Faust reicht meist schon – Dodo-Eier sind später Grundlage für Basic Kibble.",
     roles: ["Früh-Game", "Eier-Farm"],
+    sizeClass: 'tiny',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 100, oxygen: 150, food: 450, weight: 50, torpor: 30 },
     imageUrl: img('dodo'),
   },
   {
@@ -47,6 +50,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Kleiner Pflanzenfresser, der passiv mit Rare Flowers gezähmt wird. Verteilt einen XP-Bonus auf nahe Tames – ideal neben der Basis geparkt.",
     roles: ["XP-Buff", "Früh-Game"],
+    sizeClass: 'tiny',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 100, oxygen: 150, food: 450, weight: 45, torpor: 35 },
     imageUrl: img('lystrosaurus'),
   },
   {
@@ -64,6 +70,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Anfänger-Reittier Nummer eins: schnell bewusstlos, günstig zu sätteln. Sein Radar-Schrei warnt vor Feinden und entdeckt versteckte Spieler.",
     roles: ["Reittier", "Radar", "Früh-Game"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 450, oxygen: 150, food: 1500, weight: 255, torpor: 130 },
     imageUrl: img('parasaur'),
   },
   {
@@ -81,6 +90,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Gemütliches Nutztier, das mit Stimberries gefüttert große Mengen Dünger produziert. Mit einem Schlagstock schnell bewusstlos.",
     roles: ["Dünger-Farm", "Früh-Game"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 140, oxygen: 150, food: 500, weight: 100, torpor: 130 },
     imageUrl: img('phiomia'),
   },
   {
@@ -98,6 +110,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Fauler Allesfresser, der passiv gefüttert werden will – am liebsten mit Honig oder Prime Meat. Gezähmt sammelt er zuverlässig Fasern, Beeren und sogar Leech Blood.",
     roles: ["Ressourcen-Sammler", "Faser-Farm"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 165, oxygen: 150, food: 900, weight: 260, torpor: 260 },
     imageUrl: img('moschops'),
   },
   {
@@ -115,6 +130,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Robuster Pflanzenfresser mit Rammattacke, die Angreifer zurückstößt. Früh verfügbar und stark im Beeren-Farmen – Vorsicht vor dem Wut-Buff bei niedriger HP.",
     roles: ["Beeren-Farm", "Früh-Game", "Tank"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Keratin"],
+    extraStats: { stamina: 150, oxygen: 150, food: 3000, weight: 365, torpor: 365 },
     imageUrl: img('trike'),
   },
   {
@@ -132,6 +150,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Wandelnde Festung mit verstellbaren Rückenplatten für Angriff oder Verteidigung. Farmt Beeren in großen Mengen und ignoriert Pfeile fast komplett.",
     roles: ["Beeren-Farm", "Tank"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Keratin"],
+    extraStats: { stamina: 300, oxygen: 150, food: 6000, weight: 500, torpor: 500 },
     imageUrl: img('stego'),
   },
   {
@@ -149,6 +170,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Gepanzerte Schildkröte mit enormem Health-Pool. Perfekter Köder für Unterwasser-Zähmungen und günstiger Tank für frühe Höhlen.",
     roles: ["Tank", "Früh-Game"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Keratin"],
+    extraStats: { stamina: 200, oxygen: 150, food: 2000, weight: 270, torpor: 335 },
     imageUrl: img('carbonemys'),
   },
   {
@@ -166,6 +190,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Speit blendendes Gift und jagt im Rudel. Schnell gezähmt und als lebende Alarmanlage vor der Basis nützlich.",
     roles: ["Wache", "Früh-Game"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 110, oxygen: 150, food: 450, weight: 45, torpor: 65 },
     imageUrl: img('dilophosaur'),
   },
   {
@@ -183,6 +210,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Winziger Schwarmjäger, der nur mit Raw Prime Meat Vertrauen fasst. Allein harmlos, im Rudel mit Pack-Buff erstaunlich bissig.",
     roles: ["Begleiter", "Rudel-Buff"],
+    sizeClass: 'tiny',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 100, oxygen: 150, food: 450, weight: 25, torpor: 25 },
     imageUrl: img('compy'),
   },
   {
@@ -200,6 +230,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Frecher Affe, der passiv mit Beeren gezähmt wird. Sitzt auf der Schulter, wirft Kot auf Feinde und kann Türen für dich öffnen.",
     roles: ["Schulter-Tier", "Infiltration"],
+    sizeClass: 'tiny',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 100, oxygen: 150, food: 450, weight: 30, torpor: 45 },
     imageUrl: img('mesopithecus'),
   },
   {
@@ -217,6 +250,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Eierdieb, der passiv mit einem Dodo-Ei gezähmt wird. Sein Pheromon steigert die Eiablage aller Weibchen in der Nähe massiv.",
     roles: ["Eier-Farm", "Zucht-Support"],
+    sizeClass: 'tiny',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 120, oxygen: 150, food: 450, weight: 55, torpor: 60 },
     imageUrl: img('oviraptor'),
   },
   {
@@ -234,6 +270,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Sturer Dickschädel mit Kopfstoß-Sprint. Günstig zu zähmen und überraschend effektiv, um Spieler bewusstlos zu rammen.",
     roles: ["Torpor-Angriff", "Früh-Game"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 150, oxygen: 150, food: 450, weight: 110, torpor: 145 },
     imageUrl: img('pachy'),
   },
   {
@@ -251,6 +290,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Wechselt nahtlos zwischen zwei und vier Beinen und sprintet vierbeinig ohne Stamina-Verbrauch. Verwandelt Früchte per Knopfdruck in Samen.",
     roles: ["Reisen", "Samen-Farm"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 160, oxygen: 150, food: 800, weight: 375, torpor: 175 },
     imageUrl: img('iguanodon'),
   },
   {
@@ -268,6 +310,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Verspielter Delfin der Meere, der sich passiv mit Fleisch füttern lässt. Flinkes erstes Wasser-Reittier für Perlen-Touren.",
     roles: ["Wasser-Reittier", "Früh-Game"],
+    sizeClass: 'ocean-small',
+    drops: ["Rohes Fischfleisch", "Hide"],
+    extraStats: { stamina: 200, oxygen: null, food: 1500, weight: 250, torpor: 150 },
     imageUrl: img('ichthyosaurus'),
   },
   {
@@ -285,6 +330,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Knuffiger Begleiter, der lebende Fische als Zähm-Futter braucht. Auf der Schulter wärmt oder kühlt er dich und sammelt Silica-Perlen aus Fischen.",
     roles: ["Schulter-Tier", "Isolation", "Perlen"],
+    sizeClass: 'tiny',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 180, oxygen: 150, food: 450, weight: 30, torpor: 25 },
     imageUrl: img('otter'),
   },
   {
@@ -302,6 +350,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'easy',
     description: "Schüchterner Mini-Flatterer, der Chitin als Leckerli will. Auf dem Rücken getragen macht er dich zum Gleitflieger mit Jetpack-Gefühl.",
     roles: ["Gleitflug", "Schulter-Tier"],
+    sizeClass: 'tiny',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 150, oxygen: 150, food: 450, weight: 55, torpor: 50 },
     imageUrl: img('sinomacrops'),
   },
 
@@ -321,6 +372,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Aggressiver Rudeljäger mit Sprung-Pin-Attacke. Schnelles frühes Kampf-Reittier – aber pass auf, dass dich wilde Artgenossen nicht vom Tier reißen.",
     roles: ["Kampf", "Reittier", "Früh-Game"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 150, oxygen: 150, food: 700, weight: 140, torpor: 180 },
     imageUrl: img('raptor'),
   },
   {
@@ -338,6 +392,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Mittelklasse-Fleischfresser mit ordentlich Wums und Knockback. Solide Brücke zwischen Raptor und Rex auf dem Weg nach oben.",
     roles: ["Kampf", "Fleisch-Farm"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 300, oxygen: 150, food: 2000, weight: 300, torpor: 350 },
     imageUrl: img('carno'),
   },
   {
@@ -355,6 +412,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Der Metall-Farmer schlechthin: Sein Schwanzhammer zertrümmert Erz, Kristall und Obsidian mit Gewichtsrabatt. Am besten per Argentavis zur Mine tragen.",
     roles: ["Metall-Farm", "Kristall-Farm"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Keratin"],
+    extraStats: { stamina: 175, oxygen: 150, food: 3000, weight: 250, torpor: 420 },
     imageUrl: img('ankylosaurus'),
   },
   {
@@ -372,6 +432,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Rollende Steinkugel, die Stein automatisch abbaut und sich bei Gefahr einkugelt. Pflichttier für jedes große Bauprojekt.",
     roles: ["Stein-Farm", "Tank"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Keratin"],
+    extraStats: { stamina: 300, oxygen: 150, food: 3000, weight: 250, torpor: 800 },
     imageUrl: img('doedicurus'),
   },
   {
@@ -389,6 +452,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Fleißiger Riesenbiber mit eingebauter Smithy im Sattel. Farmt Holz mit Gewichtsrabatt – wilde Biberdämme sind zudem Cementing-Paste-Goldminen.",
     roles: ["Holz-Farm", "Mobile Werkbank"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 180, oxygen: 150, food: 2000, weight: 300, torpor: 400 },
     imageUrl: img('castoroides'),
   },
   {
@@ -406,6 +472,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Riesenfrosch, dessen Zungenschlag Insekten in Cementing Paste verwandelt. Hüpft mit irrer Sprungkraft durch Sümpfe – der beste Paste-Farmer im Spiel.",
     roles: ["Paste-Farm", "Sumpf-Reittier"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 200, oxygen: 150, food: 1200, weight: 160, torpor: 262 },
     imageUrl: img('beelzebufo'),
   },
   {
@@ -423,6 +492,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Amphibischer Allrounder: an Land flott, im Wasser mit Schwanzwirbel, der Angreifer betäubt. Frisst nur Fisch – ideal für Höhlen mit Wasserpassagen.",
     roles: ["Höhlen", "Wasser-Kampf"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 325, oxygen: 150, food: 2000, weight: 325, torpor: 425 },
     imageUrl: img('baryonyx'),
   },
   {
@@ -440,6 +512,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Lauernder Fluss-Krokodil-Klassiker mit Todesrolle. Bewegt sich an Land wie im Wasser souverän und lässt sich früh günstig zähmen.",
     roles: ["Wasser-Kampf", "Früh-Game"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 250, oxygen: 150, food: 2000, weight: 300, torpor: 450 },
     imageUrl: img('sarco'),
   },
   {
@@ -457,6 +532,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Hinterhältiger Sumpfjäger, der Opfer im Sprung vom Reittier reißt. Klein, schnell und gemein – als Schocktruppe im PvP gefürchtet.",
     roles: ["PvP", "Sumpf-Reittier"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 200, oxygen: 150, food: 1200, weight: 140, torpor: 245 },
     imageUrl: img('kaprosuchus'),
   },
   {
@@ -474,6 +552,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Flugunfähiger Sprinter mit Gleitflug-Sprung. Günstige Alternative zum Raptor mit ordentlicher Angriffsgeschwindigkeit.",
     roles: ["Kampf", "Reisen"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 160, oxygen: 150, food: 900, weight: 120, torpor: 190 },
     imageUrl: img('terrorbird'),
   },
   {
@@ -491,6 +572,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Jagt im Rudel mit Alpha-Buff und heulendem Rudelbonus. Sattelfrei reitbar, riecht Beute durch Wände – der treueste Schnee-Begleiter.",
     roles: ["Rudel-Buff", "Kampf", "Sattelfrei"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 260, oxygen: 150, food: 1200, weight: 170, torpor: 350 },
     imageUrl: img('direwolf'),
   },
   {
@@ -508,6 +592,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Eleganter Schnee-Jäger, der Chitin und Keratin aus Kadavern reißt wie kein Zweiter. Schnell, wendig und früh im Schneegebiet zähmbar.",
     roles: ["Chitin-Farm", "Kampf"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 200, oxygen: 150, food: 1200, weight: 200, torpor: 290 },
     imageUrl: img('sabertooth'),
   },
   {
@@ -525,6 +612,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Scheues Rudeltier, das nur geduckt und geduldig gestreichelt gezähmt wird. Sein Satteltaschen-Kühlfach hält Fleisch doppelt so lange frisch.",
     roles: ["Kühl-Transport", "Rudel-Buff"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 160, oxygen: 150, food: 700, weight: 170, torpor: 250 },
     imageUrl: img('hyaenodon'),
   },
   {
@@ -542,6 +632,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Sanfter Riese mit gewaltigem Holz-Gewichtsrabatt. Der Kriegs-Trommel-Sattel bufft Verbündete – Vorsicht: hasst Feuer.",
     roles: ["Holz-Farm", "Support"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 330, oxygen: 150, food: 5000, weight: 500, torpor: 550 },
     imageUrl: img('mammoth'),
   },
   {
@@ -559,6 +652,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Sein Anlauf-Sturmangriff skaliert mit der Distanz zu verheerendem Schaden. Nebenbei ein hervorragender Keratin- und Pelz-Farmer.",
     roles: ["Sturmangriff", "Keratin-Farm"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Keratin", "Pelt"],
+    extraStats: { stamina: 300, oxygen: 150, food: 3000, weight: 750, torpor: 600 },
     imageUrl: img('woollyrhino'),
   },
   {
@@ -576,6 +672,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Anmutiger Riesenhirsch, dessen Geweih Stroh farmt. Weibchen sind schneller – als flinkes Wald-Reittier für Kuriere beliebt.",
     roles: ["Reisen", "Stroh-Farm"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 300, oxygen: 150, food: 1500, weight: 220, torpor: 250 },
     imageUrl: img('megaloceros'),
   },
   {
@@ -593,6 +692,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Wildpferd, das beim Reiten mit Rockarrots beruhigt werden muss. Gezähmt: mobile Mörser-Werkbank im Sattel und Lasso für Gefangene.",
     roles: ["Reisen", "Mobile Werkbank", "Lasso"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 240, oxygen: 150, food: 600, weight: 255, torpor: 195 },
     imageUrl: img('equus'),
   },
   {
@@ -610,6 +712,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Riesenkänguru mit Beuteltasche für Babys oder Mitspieler. Springt über Klippen und halbiert das Traggewicht des Beifahrers.",
     roles: ["Zucht-Support", "Reisen"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 350, oxygen: 150, food: 700, weight: 550, torpor: 375 },
     imageUrl: img('procoptodon'),
   },
   {
@@ -627,6 +732,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Brachiale Kraft im Pelz: ignoriert Bienenstiche und farmt Honig, Fasern und Beeren. Im Redwood eine ernstzunehmende Gefahr – gezähmt ein Multitalent.",
     roles: ["Honig-Farm", "Kampf", "Tank"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 300, oxygen: 150, food: 3000, weight: 650, torpor: 700 },
     imageUrl: img('direbear'),
   },
   {
@@ -644,6 +752,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Lauert eingegraben im Schnee und springt Reiter aus dem Boden an. Gezähmt der perfekte Basis-Wächter mit Überraschungseffekt.",
     roles: ["Wache", "PvP-Falle"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 160, oxygen: 150, food: 700, weight: 150, torpor: 425 },
     imageUrl: img('purlovia'),
   },
   {
@@ -661,6 +772,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Riesenskorpion, dessen Stich Torpor aufbaut statt zu töten. Wird mit verdorbenem Fleisch gezähmt und hilft bei lebend-Fängen.",
     roles: ["Torpor-Angriff", "Höhlen"],
+    sizeClass: 'small',
+    drops: ["Chitin", "Rohes Fleisch"],
+    extraStats: { stamina: 100, oxygen: 150, food: 450, weight: 160, torpor: 150 },
     imageUrl: img('pulmonoscorpius'),
   },
   {
@@ -678,6 +792,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Klettert Wände hoch und spuckt verlangsamende Netze. Mit verdorbenem Fleisch passiv zähmbar – Broodmother lässt grüßen.",
     roles: ["Höhlen", "Netz-Fernkampf"],
+    sizeClass: 'small',
+    drops: ["Chitin", "Rohes Fleisch"],
+    extraStats: { stamina: 100, oxygen: 150, food: 450, weight: 100, torpor: 80 },
     imageUrl: img('araneo'),
   },
   {
@@ -695,6 +812,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Säure speiender Riesentausendfüßler, dessen Angriffe Rüstung und Strukturen zerfressen. Das Belagerungs-Insekt für PvP-Raids.",
     roles: ["Raid", "Struktur-Schaden"],
+    sizeClass: 'medium',
+    drops: ["Chitin", "Rohes Fleisch"],
+    extraStats: { stamina: 100, oxygen: 150, food: 1200, weight: 100, torpor: 200 },
     imageUrl: img('arthropluera'),
   },
   {
@@ -712,6 +832,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Dein erstes Flugtier: schnell gezähmt, flink und mit Barrel-Roll-Attacke. Trägt kleine Kreaturen im Greifflug davon.",
     roles: ["Flug-Reittier", "Früh-Game", "Transport"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 150, oxygen: 150, food: 1200, weight: 120, torpor: 120 },
     imageUrl: img('pteranodon'),
   },
   {
@@ -729,6 +852,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Fliegende Schulter-Piranha: klein, fix und im Schwarm tödlich. Greift im PvP direkt den Reiter statt das Reittier an.",
     roles: ["Schulter-Tier", "PvP"],
+    sizeClass: 'tiny',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 100, oxygen: 150, food: 450, weight: 50, torpor: 40 },
     imageUrl: img('dimorphodon'),
   },
   {
@@ -746,6 +872,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Das Arbeitstier der Lüfte: Doppel-Greifklauen, Smithy im Sattel und Gewichtsrabatt auf Metall & Erz. Regeneriert beim Kadaver-Fressen.",
     roles: ["Transport", "Metall-Logistik", "Mobile Werkbank"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 400, oxygen: 150, food: 2000, weight: 400, torpor: 600 },
     imageUrl: img('argentavis'),
   },
   {
@@ -763,6 +892,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Wasserfester Segler, der auf dem Meer landen kann. Farmt Organic Polymer aus Pinguinen, ohne es zu zerstören.",
     roles: ["Polymer-Farm", "Wasser-Flug"],
+    sizeClass: 'small',
+    drops: ["Rohes Fischfleisch", "Hide"],
+    extraStats: { stamina: 180, oxygen: 150, food: 1200, weight: 150, torpor: 150 },
     imageUrl: img('pelagornis'),
   },
   {
@@ -780,6 +912,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Diebische Möwe – wild nervig, gezähmt genial: Sie jagt Fische und bringt sie dir als Prime Fish zurück.",
     roles: ["Prime-Fisch", "Schulter-Tier"],
+    sizeClass: 'tiny',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 150, oxygen: 150, food: 450, weight: 55, torpor: 30 },
     imageUrl: img('ichthyornis'),
   },
   {
@@ -797,6 +932,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Der schnellste Läufer der Insel mit Drei-Personen-Sattel. Kein Kämpfer, aber im Sprint holt ihn nichts ein.",
     roles: ["Reisen", "Taxi"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 300, oxygen: 150, food: 500, weight: 195, torpor: 130 },
     imageUrl: img('gallimimus'),
   },
   {
@@ -814,6 +952,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Wandelnder Berg, dessen Schwanzfeger ganze Beerenfelder auf einmal erntet. Mit Plattform-Sattel die mobile Basis schlechthin.",
     roles: ["Beeren-Farm", "Plattform-Basis"],
+    sizeClass: 'huge',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 240, oxygen: 150, food: 10000, weight: 1600, torpor: 2000 },
     imageUrl: img('bronto'),
   },
   {
@@ -831,6 +972,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Gutmütiger Langhals, der selbst beim Angriff nur schubst. Zwölf Sitzplätze machen ihn zum Reisebus des Archipels.",
     roles: ["Taxi", "Reisen"],
+    sizeClass: 'huge',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 300, oxygen: 150, food: 8000, weight: 800, torpor: 3000 },
     imageUrl: img('diplodocus'),
   },
   {
@@ -848,6 +992,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Der große Bruder des Lastenträgers: enorme Tragkraft und Plattform-Sattel für mobile Türme oder Farm-Stationen.",
     roles: ["Transport", "Plattform-Basis"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 300, oxygen: 150, food: 7500, weight: 850, torpor: 1300 },
     imageUrl: img('paracer'),
   },
   {
@@ -865,6 +1012,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Lebende Stachelfestung, die Angreifer reflektierend verwundet und aufspießt. Nicht reitbar, aber als Zucht-Verteidigung brutal effektiv.",
     roles: ["Basis-Verteidigung", "Tank"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Keratin"],
+    extraStats: { stamina: 300, oxygen: 150, food: 6000, weight: 400, torpor: 440 },
     imageUrl: img('kentrosaurus'),
   },
   {
@@ -882,6 +1032,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Der Klassiker unter den Meeresjägern mit Blutrausch-Rudelbonus. Solides erstes Kampf-Tier für tiefe Gewässer.",
     roles: ["Wasser-Kampf", "Rudel-Buff"],
+    sizeClass: 'ocean-small',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 320, oxygen: null, food: 2000, weight: 250, torpor: 600 },
     imageUrl: img('megalodon'),
   },
   {
@@ -899,6 +1052,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Gepanzerter Urzeitfisch, der Öl und Stein unter Wasser farmt. Seine Knochenplatten schlucken enorm viel Schaden.",
     roles: ["Öl-Farm", "Unterwasser-Tank"],
+    sizeClass: 'ocean-small',
+    drops: ["Rohes Fischfleisch", "Chitin"],
+    extraStats: { stamina: 250, oxygen: null, food: 2000, weight: 910, torpor: 700 },
     imageUrl: img('dunkleosteus'),
   },
   {
@@ -916,6 +1072,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Leuchtet die Tiefsee aus und erntet Silica-Perlen im Akkord. Sein Licht ist zugleich Lampe für Unterwasser-Bauprojekte.",
     roles: ["Perlen-Farm", "Tiefsee-Licht"],
+    sizeClass: 'ocean-small',
+    drops: ["Rohes Fischfleisch", "Hide"],
+    extraStats: { stamina: 200, oxygen: null, food: 1500, weight: 350, torpor: 240 },
     imageUrl: img('anglerfish'),
   },
   {
@@ -933,6 +1092,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Eleganter Springer zwischen Meer und Luft mit hoher Geschwindigkeit. Passiv mit AnglerGel zähmen – flinker Eskort-Jäger.",
     roles: ["Wasser-Reittier", "Eskorte"],
+    sizeClass: 'ocean-small',
+    drops: ["Rohes Fischfleisch", "Hide"],
+    extraStats: { stamina: 200, oxygen: null, food: 1500, weight: 300, torpor: 100 },
     imageUrl: img('manta'),
   },
   {
@@ -950,6 +1112,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Skurriler Ressourcen-Automat: Füttere ihn mit Steinen oder Owl Pellets und er produziert Kristalle mit Zufalls-Loot bis hin zu Element-Staub.",
     roles: ["Loot-Produktion", "Ressourcen-Sammler"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 300, oxygen: 150, food: 5000, weight: 1100, torpor: 800 },
     imageUrl: img('gacha'),
   },
   {
@@ -967,6 +1132,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Aufblasbarer Lastenballon, der mit Luftstößen schwebt. Riesige Tragkraft – der schwebende Umzugswagen der Wasteland.",
     roles: ["Transport", "Schwebeflug"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 250, oxygen: 150, food: 1200, weight: 1600, torpor: 400 },
     imageUrl: img('gasbags'),
   },
   {
@@ -984,6 +1152,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'medium',
     description: "Plattschwänziges Gleittier, das Babys säugt und automatisch füttert. Die beste Zucht-Amme des Spiels und dazu flott unterwegs.",
     roles: ["Zucht-Amme", "Gleitflug", "Reisen"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 300, oxygen: 150, food: 800, weight: 300, torpor: 250 },
     imageUrl: img('maewing'),
   },
 
@@ -1003,6 +1174,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Der König: brachialer Schaden, riesiger HP-Pool und furchteinflößendes Gebrüll. Rückgrat jeder Boss-Armee – gezüchtete Linien sind Pflicht.",
     roles: ["Boss-Kampf", "Kampf", "Fleisch-Farm"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 420, oxygen: 150, food: 3000, weight: 500, torpor: 1550 },
     imageUrl: img('rex'),
   },
   {
@@ -1020,6 +1194,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Flussjäger, der im Wasser einen Kampf-Buff erhält und zwischen zwei- und vierbeinig wechselt. Auf Feucht-Maps dem Rex oft überlegen.",
     roles: ["Boss-Kampf", "Wasser-Kampf"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 350, oxygen: 150, food: 2600, weight: 350, torpor: 850 },
     imageUrl: img('spino'),
   },
   {
@@ -1037,6 +1214,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Rudel-Raubtier: Der Alpha verursacht blutende Wunden, die Ziele verlangsamen. Drei Allos ersetzen früh einen Rex.",
     roles: ["Rudel-Buff", "Kampf", "Blutung"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 340, oxygen: 150, food: 2000, weight: 380, torpor: 500 },
     imageUrl: img('allosaurus'),
   },
   {
@@ -1054,6 +1234,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Edward mit den Sensenhänden: farmt Fasern, Holz und Fleisch gleichermaßen und kämpft auf Rex-Niveau. Teuer zu zähmen, unbezahlbar im Alltag.",
     roles: ["Allround-Farm", "Boss-Kampf"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 300, oxygen: 150, food: 3000, weight: 365, torpor: 1100 },
     imageUrl: img('therizinosaurus'),
   },
   {
@@ -1071,6 +1254,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Sein Mut-Gebrüll bufft alle Verbündeten und lässt Feinde fliehen. Der unverzichtbare Feldherr in jedem Boss-Kampf.",
     roles: ["Boss-Support", "Kampf-Buff"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 420, oxygen: 150, food: 3000, weight: 500, torpor: 1600 },
     imageUrl: img('yutyrannus'),
   },
   {
@@ -1088,6 +1274,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Der gefürchtetste Jäger des Spiels – selbst ein Rex ist Beute. Wild ein Albtraum, gezähmt die ultimative Belagerungswaffe. Vorsicht: Wut-Modus wirft Reiter ab.",
     roles: ["Endgame-Kampf", "Raid"],
+    sizeClass: 'huge',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 400, oxygen: 150, food: 4000, weight: 700, torpor: 10000 },
     imageUrl: img('giganotosaurus'),
   },
   {
@@ -1105,6 +1294,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Höllenschwein mit passiver Massen-Heilung für dein ganzes Team. Frisst dafür Unmengen – im Boss-Kampf der Sanitäter deiner Rex-Armee.",
     roles: ["Heiler", "Boss-Support"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 300, oxygen: 150, food: 3000, weight: 400, torpor: 600 },
     imageUrl: img('daeodon'),
   },
   {
@@ -1122,6 +1314,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Riesenfaultier mit Insektenvernichter-Buff: gegen Käfer und die Broodmother die absolute Geheimwaffe. Farmt nebenbei Chitin in Massen.",
     roles: ["Boss-Kampf", "Chitin-Farm"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 300, oxygen: 150, food: 3000, weight: 725, torpor: 800 },
     imageUrl: img('megatherium'),
   },
   {
@@ -1139,6 +1334,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Beutellöwe, der von Redwood-Stämmen auf Beute springt. Klettert senkrechte Wände hoch und blutet Ziele aus – Hinterhalt-Räuber par excellence.",
     roles: ["Klettern", "Kampf", "Höhlen"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 350, oxygen: 150, food: 1500, weight: 300, torpor: 500 },
     imageUrl: img('thylacoleo'),
   },
   {
@@ -1156,6 +1354,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Giftechse, deren Biss Mega-Tollwut überträgt. Klettert jede Wand und macht Höhlen unsicher – ihr Toxin ist begehrtes Kibble-Material.",
     roles: ["Klettern", "Höhlen", "Gift"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 200, oxygen: 150, food: 1500, weight: 300, torpor: 375 },
     imageUrl: img('megalania'),
   },
   {
@@ -1173,6 +1374,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Hypnotische Riesenschlange, die nur mit befruchteten Eiern besänftigt wird. Ihr Biss betäubt – als lebende Torpor-Falle einsetzbar.",
     roles: ["Torpor-Angriff", "Basis-Verteidigung"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 150, oxygen: 150, food: 1200, weight: 150, torpor: 275 },
     imageUrl: img('titanoboa'),
   },
   {
@@ -1190,6 +1394,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Wendigster Flieger des Spiels: hängt an Wänden, fliegt seitwärts und rückwärts. Der Tek-Sattel macht ihn zum fliegenden Geschützturm.",
     roles: ["Flug-Reittier", "PvP", "Erkundung"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 250, oxygen: 150, food: 1200, weight: 280, torpor: 225 },
     imageUrl: img('tapejara'),
   },
   {
@@ -1207,6 +1414,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Fliegender Lastenkran mit Plattform-Sattel – trägt sogar Ankylos zur Mine. Das Logistik-Rückgrat jeder großen Basis.",
     roles: ["Schwer-Transport", "Plattform-Basis"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 750, oxygen: 150, food: 1200, weight: 780, torpor: 1850 },
     imageUrl: img('quetzal'),
   },
   {
@@ -1224,6 +1434,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Eulen-Grazie mit Wärmebild-Blick und Eis-Sturzflug, der einfriert und heilt zugleich. Ihre Pellets füttern Gachas.",
     roles: ["Heiler", "Wärmebild", "Flug-Reittier"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide", "Pelt"],
+    extraStats: { stamina: 270, oxygen: 150, food: 1300, weight: 350, torpor: 220 },
     imageUrl: img('snowowl'),
   },
   {
@@ -1241,6 +1454,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Sanfter Urwal, immun gegen Quallen- und Tuso-Betäubung, heilt an der Oberfläche. Der sicherste Tiefsee-Bergarbeiter für Öl und Perlen.",
     roles: ["Unterwasser-Tank", "Öl-Farm"],
+    sizeClass: 'ocean-large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide", "Öl (Basilosaurus)"],
+    extraStats: { stamina: 300, oxygen: null, food: 4000, weight: 700, torpor: 2000 },
     imageUrl: img('basilosaurus'),
   },
   {
@@ -1258,6 +1474,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Apex-Räuber der Tiefsee mit Plattform-Sattel für Unterwasser-Basen. In den dunkelsten Tiefen zu Hause – Zähmung nichts für schwache Nerven.",
     roles: ["Endgame-Wasser", "Plattform-Basis"],
+    sizeClass: 'ocean-large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 400, oxygen: null, food: 6000, weight: 1300, torpor: 2300 },
     imageUrl: img('mosasaurus'),
   },
   {
@@ -1275,6 +1494,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Eleganter Tiefsee-Langhals, schnell genug für lange Ozean-Patrouillen. Mit Plattform-Sattel die mobile U-Boot-Basis.",
     roles: ["Wasser-Reisen", "Plattform-Basis"],
+    sizeClass: 'ocean-large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 400, oxygen: null, food: 4000, weight: 800, torpor: 1600 },
     imageUrl: img('plesiosaur'),
   },
   {
@@ -1292,6 +1514,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Der Kraken: packt Beute mit Tentakeln, saugt ihr Blut und stößt Tintenwolken aus. Nur mit Black Pearls zähmbar – Endgegner der Meere.",
     roles: ["Endgame-Wasser", "Greif-Angriff"],
+    sizeClass: 'ocean-large',
+    drops: ["Rohes Fleisch", "Black Pearl", "Öl"],
+    extraStats: { stamina: 400, oxygen: null, food: 4000, weight: 800, torpor: 3200 },
     imageUrl: img('tusoteuthis'),
   },
   {
@@ -1309,6 +1534,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Riesenkrabbe mit zwei Greifscheren – trägt zwei Kreaturen gleichzeitig und springt enorme Distanzen. Nur mit Katapult bewusstlos zu bekommen.",
     roles: ["Transport", "Sprung-Mobilität", "Kampf"],
+    sizeClass: 'large',
+    drops: ["Chitin", "Rohes Fleisch", "Rohes Fischfleisch"],
+    extraStats: { stamina: 480, oxygen: 150, food: 3000, weight: 600, torpor: 2000 },
     imageUrl: img('karkinos'),
   },
   {
@@ -1326,6 +1554,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Lebender Fels, fast immun gegen Beschuss, wirft Steinbrocken über weite Distanz. Nur Kanonenkugeln kitzeln ihn wach – Belagerung pur.",
     roles: ["Raid", "Tank", "Fernkampf"],
+    sizeClass: 'large',
+    drops: ["Stein", "Kristall", "Obsidian"],
+    extraStats: { stamina: 200, oxygen: 150, food: 3000, weight: 850, torpor: 5000 },
     imageUrl: img('rockelemental'),
   },
   {
@@ -1343,6 +1574,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Majestätischer Sturzflug-Jäger: Sein Dive-Bomb-Angriff vervielfacht den Schaden. Trägt zwei Reiter und bleibt dabei pfeilschnell.",
     roles: ["Flug-Kampf", "Reisen", "PvP"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 372, oxygen: 150, food: 1600, weight: 300, torpor: 950 },
     imageUrl: img('griffin'),
   },
   {
@@ -1360,6 +1594,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Feuer, Blitz oder Gift aus der Luft – als Ei aus der Trench gestohlen und mit Wyvern-Milch großgezogen. Das Statussymbol jedes Überlebenden.",
     roles: ["Flug-Kampf", "Endgame", "Elementar-Atem"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide", "Sulfur"],
+    extraStats: { stamina: 361, oxygen: 150, food: 2600, weight: 400, torpor: 2500 },
     imageUrl: img('wyvern'),
   },
   {
@@ -1377,6 +1614,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Frost-Variante aus dem Murdersnow: Ihr Eisatem verlangsamt alles, was er trifft. Ei-Raub bei minus 30 Grad – kleide dich warm.",
     roles: ["Flug-Kampf", "Verlangsamung"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 361, oxygen: 150, food: 2600, weight: 400, torpor: 2500 },
     imageUrl: img('icewyvern'),
   },
   {
@@ -1394,6 +1634,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Zahmere Kristall-Verwandte, die passiv mit Primal Crystal gezähmt wird. Tropische Eleganz mit Hitze-, Blitz- oder Ember-Atem.",
     roles: ["Flug-Kampf", "Kristall-Farm"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide", "Kristall"],
+    extraStats: { stamina: 361, oxygen: 150, food: 2600, weight: 400, torpor: 2200 },
     imageUrl: img('crystalwyvern'),
   },
   {
@@ -1411,6 +1654,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Der Kampfjet unter den Fliegern: Mit Jetpack-Sattel und Flak-Kanone wird er zur fliegenden Festung. Nur mit Ketten-Bola vom Himmel zu holen.",
     roles: ["Luft-Gefecht", "PvP", "Reisen"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 340, oxygen: 150, food: 1600, weight: 340, torpor: 510 },
     imageUrl: img('tropeognathus'),
   },
   {
@@ -1428,6 +1674,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Organisches Maschinengewehr, das Stacheln im Dauerfeuer verschießt. Im Turret-Modus die perfekte lebende Flugabwehr.",
     roles: ["Fernkampf", "Flugabwehr", "Basis-Verteidigung"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 220, oxygen: 150, food: 1200, weight: 325, torpor: 375 },
     imageUrl: img('velonasaur'),
   },
   {
@@ -1445,6 +1694,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Eis speiender Sprinter, der über die Map dasht und Ziele einfriert. Das schnellste Land-Reittier – im PvP gefürchtet wie kein Zweites.",
     roles: ["Mobilität", "PvP", "Einfrieren"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 400, oxygen: 150, food: 1500, weight: 400, torpor: 500 },
     imageUrl: img('managarmr'),
   },
   {
@@ -1462,6 +1714,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Mechanischer Wächter aus der Sanctuary: klettert Wände, blinkt durch Raum und Zeit. Wird nicht gezähmt, sondern aus Blaupausen gebaut.",
     roles: ["Mobilität", "Tek", "Wache"],
+    sizeClass: 'medium',
+    drops: ["Element-Staub", "Schrottmetall", "Elektronik"],
+    extraStats: { stamina: 400, oxygen: 150, food: 600, weight: 600, torpor: 500 },
     imageUrl: img('enforcer'),
   },
   {
@@ -1479,6 +1734,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Lava-Salamander, der Metall im Bauch schmilzt und Feuerbälle wie ein Mörser verschießt. Ei-Raub in der Vulkan-Kammer – Hitzeschutz ist Pflicht.",
     roles: ["Metall-Schmelze", "Raid", "Kampf"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide", "Sulfur"],
+    extraStats: { stamina: 300, oxygen: 150, food: 2600, weight: 550, torpor: 2700 },
     imageUrl: img('magmasaur'),
   },
   {
@@ -1496,6 +1754,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Niedlicher Knuddel, der sich mit Element in ein tobendes Monster verwandelt. Suchtgefahr inklusive – die Verwandlung will gemanagt werden.",
     roles: ["Kampf-Verwandlung", "Klettern"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 180, oxygen: 150, food: 450, weight: 100, torpor: 165 },
     imageUrl: img('ferox'),
   },
   {
@@ -1513,6 +1774,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Spinnen-Vampir, der dich an Netzfäden durch die Baumkronen schwingt wie Spider-Man. Zähmung kostet ordentlich eigenes Blut.",
     roles: ["Mobilität", "Baumkronen", "Greif-Angriff"],
+    sizeClass: 'large',
+    drops: ["Chitin", "Rohes Fleisch"],
+    extraStats: { stamina: 350, oxygen: 150, food: 2600, weight: 350, torpor: 1600 },
     imageUrl: img('bloodstalker'),
   },
   {
@@ -1530,6 +1794,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Wandelnde Insel: Auf seinem Rückenpanzer lässt sich eine komplette Basis errichten, unter Wasser spendet er Atemluft.",
     roles: ["Plattform-Basis", "Wasser-Reisen"],
+    sizeClass: 'ocean-large',
+    drops: ["Rohes Fischfleisch", "Raw Prime Fish Meat", "Hide", "Keratin"],
+    extraStats: { stamina: 660, oxygen: null, food: 6000, weight: 1200, torpor: 4000 },
     imageUrl: img('megachelon'),
   },
   {
@@ -1547,6 +1814,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Weltraumwal, der durch den Hyperraum blinkt und ganze Gruppen teleportiert. Mit Kanonen-Sattel das bizarrste Schlachtschiff des Spiels.",
     roles: ["Teleport", "Schwer-Transport", "Endgame"],
+    sizeClass: 'huge',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide", "Ambergris"],
+    extraStats: { stamina: 300, oxygen: 150, food: 4000, weight: 1500, torpor: 4500 },
     imageUrl: img('astrocetus'),
   },
   {
@@ -1564,6 +1834,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Teleportierender Löwen-Fisch-Hybrid mit Tarnfeld und Blitz-Sprungangriff. Schlafend mit Fischkörben zähmen – Königsklasse im PvP.",
     roles: ["PvP", "Tarnung", "Boss-Kampf"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 400, oxygen: 150, food: 1500, weight: 400, torpor: 650 },
     imageUrl: img('shadowmane'),
   },
   {
@@ -1581,6 +1854,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Weltraum-Delfin mit Tek-Sattel: fliegt Loopings, feuert Laser und driftet durchs All wie ein Sternenjäger.",
     roles: ["Luft-Gefecht", "Tek", "Reisen"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 400, oxygen: 150, food: 1500, weight: 300, torpor: 600 },
     imageUrl: img('astrodelphis'),
   },
   {
@@ -1598,6 +1874,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Gedankenkontrollierender Parasit: Er übernimmt feindliche Kreaturen und Spieler. Klein, gruselig und strategisch unbezahlbar.",
     roles: ["Gedankenkontrolle", "PvP", "Infiltration"],
+    sizeClass: 'tiny',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 180, oxygen: 150, food: 450, weight: 65, torpor: 175 },
     imageUrl: img('noglin'),
   },
   {
@@ -1615,6 +1894,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Tek-Läufer mit modularen Aufsätzen: Ernte-Laser, Schild oder Langstrecken-Teleport. Wird über Missions-Hacks rekrutiert statt gezähmt.",
     roles: ["Auto-Farm", "Tek", "Teleport"],
+    sizeClass: 'large',
+    drops: ["Element-Staub", "Schrottmetall"],
+    extraStats: { stamina: 500, oxygen: 150, food: 800, weight: 1200, torpor: 2000 },
     imageUrl: img('stryder'),
   },
   {
@@ -1632,6 +1914,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Stachel-Sauropode, dessen Rückensegel Hitze- und Kälte-Projektile verschießt. Die Stacheln wollen einzeln per Fütterung besänftigt werden.",
     roles: ["Fernkampf", "Klima-Support", "Transport"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Hide", "Keratin"],
+    extraStats: { stamina: 300, oxygen: 150, food: 5000, weight: 700, torpor: 1400 },
     imageUrl: img('amargasaurus'),
   },
   {
@@ -1649,6 +1934,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Pavian-General, der im Rudel herrscht: Nur der Alpha lässt sich zähmen – danach folgt dir die ganze Bande samt Granaten-Würfen.",
     roles: ["Rudel-Buff", "Raid", "Klettern"],
+    sizeClass: 'medium',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 300, oxygen: 150, food: 2000, weight: 300, torpor: 550 },
     imageUrl: img('dinopithecus'),
   },
   {
@@ -1666,6 +1954,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Kletternder Nest-Räuber, dessen Blutungs-Sprungangriff größere Beute zerlegt. Eier aus bewachten Klippen-Nestern stehlen und ausbrüten.",
     roles: ["Blutung", "Klettern", "Kampf"],
+    sizeClass: 'small',
+    drops: ["Rohes Fleisch", "Hide"],
+    extraStats: { stamina: 180, oxygen: 150, food: 700, weight: 140, torpor: 235 },
     imageUrl: img('deinonychus'),
   },
   {
@@ -1683,6 +1974,9 @@ export const DINO_DATABASE: Dino[] = [
     difficulty: 'hard',
     description: "Gräbt sich durch den Boden und spuckt ätzendes Gift. Nur mit befruchteten Magmasaur-Eiern zu überzeugen – der Tunnel-Terror von Genesis.",
     roles: ["Untergrund", "Gift", "Kampf"],
+    sizeClass: 'large',
+    drops: ["Rohes Fleisch", "Raw Prime Meat", "Hide"],
+    extraStats: { stamina: 380, oxygen: 150, food: 3000, weight: 440, torpor: 2400 },
     imageUrl: img('basilisk'),
   },
 ];

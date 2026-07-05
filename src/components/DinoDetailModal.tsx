@@ -1,20 +1,31 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  breedingTimes,
+  cloneCost,
+  husbandryInfo,
+  killXp,
+  knockoutTable,
+  statAtLevel,
+  statRank,
+  tamingBonusLevels,
+  tamingFoodTable,
+  torporDrainRate,
+  TAMED_GAIN_PCT,
+  TOTAL_SPECIES,
+  WILD_GAIN,
+  type RankableStat,
+} from '../data/gameplay';
 import { MAX_LEVEL, MIN_LEVEL, useTamingCalculator } from '../hooks/useTamingCalculator';
 import { formatDate, formatMinutes, formatNumber } from '../lib/format';
-import type { Dino, MapName, TamedRecord, TamingResult } from '../types';
+import type { Dino, MapName, TamedRecord } from '../types';
 import {
   IconBerry,
   IconClose,
   IconCompass,
-  IconDrumstick,
   IconEgg,
   IconFlask,
-  IconGauge,
-  IconHeart,
   IconNote,
   IconPinFilled,
-  IconSparkles,
-  IconSwords,
   IconTimer,
 } from './icons';
 
@@ -24,12 +35,37 @@ const DIFFICULTY_META: Record<Dino['difficulty'], { label: string; dot: string }
   hard: { label: 'Schwer', dot: 'bg-red-400' },
 };
 
-const RESOURCE_ICON: Record<TamingResult['resources'][number]['icon'], JSX.Element> = {
-  kibble: <IconSparkles size={20} />,
-  food: <IconDrumstick size={20} />,
-  narcotic: <IconFlask size={20} />,
-  berry: <IconBerry size={20} />,
-};
+type TabId = 'info' | 'taming' | 'knockout' | 'stats' | 'breeding' | 'misc';
+
+const TABS: { id: TabId; label: string }[] = [
+  { id: 'info', label: 'Übersicht' },
+  { id: 'taming', label: 'Zähmen' },
+  { id: 'knockout', label: 'Betäuben' },
+  { id: 'stats', label: 'Statuswerte' },
+  { id: 'breeding', label: 'Zucht' },
+  { id: 'misc', label: 'Umgang' },
+];
+
+const panelClass = 'rounded-xl border border-gray-800 bg-gray-900/50 p-4 sm:p-5';
+const headingClass = 'mb-3 flex items-center gap-2 font-display text-sm uppercase tracking-widest text-gray-300';
+const chipClass = 'rounded border border-gray-700 bg-gray-900/60 px-2 py-0.5 text-[11px] font-medium tracking-wide text-gray-300';
+
+function ChipList({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div>
+      <h4 className="mb-2 text-xs font-semibold uppercase tracking-widest text-gray-500">{title}</h4>
+      {items.length === 0 ? (
+        <p className="text-sm text-gray-600">–</p>
+      ) : (
+        <div className="flex flex-wrap gap-1.5">
+          {items.map((item) => (
+            <span key={item} className={chipClass}>{item}</span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface DinoDetailModalProps {
   dino: Dino;
@@ -42,7 +78,7 @@ interface DinoDetailModalProps {
   onClose: () => void;
 }
 
-/** Detail-Ansicht mit Taming-Calculator, Breeding-Infos, Notizen und Level-Edit. */
+/** Detail-Ansicht mit Dododex-artigen Tabs: Zähmen, Betäuben, Werte, Zucht, Umgang. */
 export function DinoDetailModal({
   dino,
   map,
@@ -54,8 +90,11 @@ export function DinoDetailModal({
   onClose,
 }: DinoDetailModalProps) {
   const [level, setLevel] = useState(record?.level ?? 150);
+  const [tab, setTab] = useState<TabId>('info');
   const [noteDraft, setNoteDraft] = useState(note);
   const [imageFailed, setImageFailed] = useState(false);
+  const [incubationPct, setIncubationPct] = useState(0);
+  const [maturationPct, setMaturationPct] = useState(0);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const noteTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const taming = useTamingCalculator(dino, level);
@@ -98,6 +137,34 @@ export function DinoDetailModal({
   };
   useEffect(() => () => clearTimeout(noteTimerRef.current), []);
 
+  const foodRows = useMemo(
+    () => tamingFoodTable(dino, taming.kibbleCount, taming.tamingMinutes),
+    [dino, taming.kibbleCount, taming.tamingMinutes],
+  );
+  const knockout = useMemo(() => knockoutTable(dino, level), [dino, level]);
+  const husbandry = useMemo(() => husbandryInfo(dino), [dino]);
+  const breeding = useMemo(() => breedingTimes(dino), [dino]);
+  const clone = useMemo(() => cloneCost(dino, level), [dino, level]);
+  const drain = torporDrainRate(dino);
+
+  const statRows: {
+    label: string;
+    stat: RankableStat | null;
+    base: number | null;
+    wild: keyof typeof WILD_GAIN | null;
+    tamedPct: number | null;
+    suffix?: string;
+  }[] = [
+    { label: 'Gesundheit', stat: 'health', base: dino.baseStats.health, wild: 'health', tamedPct: TAMED_GAIN_PCT.health },
+    { label: 'Ausdauer', stat: 'stamina', base: dino.extraStats.stamina, wild: 'stamina', tamedPct: TAMED_GAIN_PCT.stamina },
+    { label: 'Sauerstoff', stat: null, base: dino.extraStats.oxygen, wild: 'oxygen', tamedPct: TAMED_GAIN_PCT.oxygen },
+    { label: 'Nahrung', stat: 'food', base: dino.extraStats.food, wild: 'food', tamedPct: TAMED_GAIN_PCT.food },
+    { label: 'Gewicht', stat: 'weight', base: dino.extraStats.weight, wild: 'weight', tamedPct: TAMED_GAIN_PCT.weight },
+    { label: 'Nahkampf', stat: 'melee', base: dino.baseStats.damage, wild: 'melee', tamedPct: TAMED_GAIN_PCT.melee, suffix: '%' },
+    { label: 'Bewegung', stat: null, base: dino.baseStats.speed, wild: null, tamedPct: TAMED_GAIN_PCT.speed, suffix: '%' },
+    { label: 'Betäubung', stat: 'torpor', base: dino.extraStats.torpor, wild: 'torpor', tamedPct: null },
+  ];
+
   return (
     <div
       className="fixed inset-0 z-50 flex animate-fade-in items-center justify-center bg-black/70 p-3 backdrop-blur-sm sm:p-6"
@@ -109,20 +176,17 @@ export function DinoDetailModal({
         aria-modal="true"
         aria-label={`Details zu ${dino.name}`}
         onClick={(e) => e.stopPropagation()}
-        className="max-h-[92vh] w-full max-w-2xl animate-slide-up overflow-y-auto rounded-2xl border border-gray-700 bg-ark-surface shadow-2xl shadow-black/60 sm:animate-modal-in"
+        className="flex max-h-[94vh] w-full max-w-2xl animate-slide-up flex-col overflow-hidden rounded-2xl border border-gray-700 bg-ark-surface shadow-2xl shadow-black/60 sm:animate-modal-in"
       >
-        {/* Kopfbereich: Dossier-Artwork mit Verlauf in den Modal-Body */}
-        <div className="relative h-52 overflow-hidden bg-gray-900 sm:h-64">
+        {/* Kopfbereich: Artwork + Titel */}
+        <div className="relative h-40 shrink-0 overflow-hidden bg-gray-900 sm:h-48">
           <img
             src={imageFailed ? '/dinos/placeholder.svg' : dino.imageUrl}
             alt={dino.name}
             onError={() => setImageFailed(true)}
             className="h-full w-full object-cover"
           />
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ark-surface via-transparent to-black/30"
-          />
+          <span aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ark-surface via-black/20 to-black/30" />
           <button
             ref={closeButtonRef}
             type="button"
@@ -137,144 +201,335 @@ export function DinoDetailModal({
               Gezähmt am {formatDate(record.tamedDate)} · Lv. {record.level}
             </span>
           )}
+          <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-2 p-4">
+            <h2 className="font-display text-2xl font-bold text-white drop-shadow-md">{dino.name}</h2>
+            <span className="mb-1 flex items-center gap-1.5 text-sm text-gray-200">
+              <span aria-hidden className={`h-2 w-2 rounded-full ${difficulty.dot}`} />
+              {difficulty.label}
+            </span>
+          </div>
         </div>
 
-        <div className="space-y-6 p-5 sm:p-7">
-          {/* Titel + Basisinfos */}
-          <header>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="font-display text-2xl font-bold text-gray-100">{dino.name}</h2>
-              <span className="flex items-center gap-1.5 text-sm text-gray-300">
-                <span aria-hidden className={`h-2 w-2 rounded-full ${difficulty.dot}`} />
-                {difficulty.label}
-              </span>
-            </div>
-            <p className="mt-2.5 text-sm leading-relaxed text-gray-300">{dino.description}</p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {dino.roles.map((role) => (
+        {/* Wild-Level gilt für alle Tabs */}
+        <div className="flex shrink-0 items-center gap-3 border-b border-gray-800 bg-gray-900/40 px-4 py-2.5 sm:px-6">
+          <label htmlFor="level-input" className="shrink-0 text-xs uppercase tracking-widest text-gray-500">
+            Wild-Level
+          </label>
+          <input
+            type="range"
+            min={MIN_LEVEL}
+            max={MAX_LEVEL}
+            value={level}
+            onChange={(e) => handleLevelInput(e.target.value)}
+            className="w-full accent-green-500"
+            aria-label={`Wild-Level Schieberegler, aktuell ${level}`}
+          />
+          <input
+            id="level-input"
+            type="number"
+            min={MIN_LEVEL}
+            max={MAX_LEVEL}
+            value={level}
+            onChange={(e) => handleLevelInput(e.target.value)}
+            className="w-16 shrink-0 rounded-lg border border-gray-700 bg-gray-800 px-2 py-1 text-center font-mono text-sm text-green-300 outline-none focus:border-green-500"
+          />
+        </div>
+
+        {/* Tab-Leiste */}
+        <nav aria-label="Detail-Bereiche" className="scrollbar-hide shrink-0 overflow-x-auto border-b border-gray-800">
+          <div className="flex w-max gap-1 px-2" role="tablist">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                type="button"
+                role="tab"
+                aria-selected={tab === t.id}
+                onClick={() => setTab(t.id)}
+                className={`relative shrink-0 px-3 py-2.5 text-sm transition-colors duration-200 ${
+                  tab === t.id ? 'font-semibold text-green-300' : 'text-gray-500 hover:text-gray-300'
+                }`}
+              >
+                {t.label}
                 <span
-                  key={role}
-                  className="rounded border border-gray-700 bg-gray-900/60 px-2 py-0.5 text-[11px] font-medium tracking-wide text-gray-300"
-                >
-                  {role}
-                </span>
-              ))}
-            </div>
-            <p className="mt-3 flex items-start gap-1.5 text-sm text-gray-400">
-              <IconCompass size={16} className="mt-0.5 shrink-0" />
-              <span>
-                Spawn auf {map}: {dino.spawnLocations.join(', ')}
-              </span>
-            </p>
-          </header>
-
-          {/* Base Stats */}
-          <section aria-label="Basiswerte" className="grid grid-cols-3 gap-3">
-            {[
-              { icon: <IconHeart size={16} />, label: 'Health', value: formatNumber(dino.baseStats.health) },
-              { icon: <IconSwords size={16} />, label: 'Damage', value: formatNumber(dino.baseStats.damage) },
-              { icon: <IconGauge size={16} />, label: 'Speed', value: formatNumber(dino.baseStats.speed) },
-            ].map((stat) => (
-              <div key={stat.label} className="rounded-lg border border-gray-800 bg-gray-900/60 p-3 text-center">
-                <p className="flex items-center justify-center gap-1.5 text-xs text-gray-500">
-                  {stat.icon}
-                  {stat.label}
-                </p>
-                <p className="mt-1 font-mono text-lg text-gray-100">{stat.value}</p>
-              </div>
+                  aria-hidden
+                  className={`absolute inset-x-2 -bottom-px h-0.5 rounded-full transition-colors duration-200 ${
+                    tab === t.id ? 'bg-green-400' : 'bg-transparent'
+                  }`}
+                />
+              </button>
             ))}
-          </section>
+          </div>
+        </nav>
 
-          {/* Taming Calculator */}
-          <section aria-label="Taming Calculator" className="rounded-xl border border-green-900/60 bg-gray-900/50 p-4 sm:p-5">
-            <h3 className="mb-4 flex items-center gap-2 font-display text-sm uppercase tracking-widest text-green-400">
-              <IconTimer size={16} />
-              Taming Calculator
-            </h3>
+        {/* Tab-Inhalt */}
+        <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4 sm:p-6">
+          {tab === 'info' && (
+            <>
+              <p className="text-sm leading-relaxed text-gray-300">{dino.description}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {dino.roles.map((role) => (
+                  <span key={role} className={chipClass}>{role}</span>
+                ))}
+              </div>
+              <p className="flex items-start gap-1.5 text-sm text-gray-400">
+                <IconCompass size={16} className="mt-0.5 shrink-0" />
+                <span>Spawn auf {map}: {dino.spawnLocations.join(', ')}</span>
+              </p>
+              <section aria-label="Notizen" className={panelClass}>
+                <h3 className={headingClass}>
+                  <IconNote size={16} />
+                  Notizen
+                </h3>
+                <textarea
+                  value={noteDraft}
+                  onChange={(e) => handleNoteChange(e.target.value)}
+                  placeholder={`Eigene Notizen zu ${dino.name} auf ${map} – z. B. Spawn-Koordinaten (Lat 35, Lon 78) …`}
+                  rows={3}
+                  className="w-full resize-y rounded-lg border border-gray-700 bg-gray-800/80 px-3 py-2.5 text-sm text-gray-200 placeholder-gray-600 outline-none transition-colors focus:border-green-500"
+                />
+                <p className="mt-1.5 text-[11px] text-gray-600">Wird automatisch gespeichert.</p>
+              </section>
+            </>
+          )}
 
-            <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <label htmlFor="level-input" className="shrink-0 text-sm text-gray-300">
-                Wild-Level
-              </label>
-              <input
-                type="range"
-                min={MIN_LEVEL}
-                max={MAX_LEVEL}
-                value={level}
-                onChange={(e) => handleLevelInput(e.target.value)}
-                className="w-full accent-green-500"
-                aria-label={`Wild-Level Schieberegler, aktuell ${level}`}
-              />
-              <input
-                id="level-input"
-                type="number"
-                min={MIN_LEVEL}
-                max={MAX_LEVEL}
-                value={level}
-                onChange={(e) => handleLevelInput(e.target.value)}
-                className="w-20 shrink-0 rounded-lg border border-gray-700 bg-gray-800 px-2 py-1.5 text-center font-mono text-green-300 outline-none focus:border-green-500"
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {taming.resources.map((res) => (
-                <div key={res.label} className="rounded-lg border border-gray-800 bg-ark-surface p-3 text-center">
-                  <p className="flex justify-center text-green-400/80">{RESOURCE_ICON[res.icon]}</p>
-                  <p className="mt-1.5 font-mono text-lg font-bold tabular-nums text-green-300">
-                    {formatNumber(res.amount)}
-                  </p>
-                  <p className="mt-0.5 text-[11px] leading-tight text-gray-400">{res.label}</p>
+          {tab === 'taming' && (
+            <>
+              <section aria-label="Futter" className={panelClass}>
+                <h3 className={headingClass}>
+                  <IconTimer size={16} />
+                  Futter (Level {level})
+                </h3>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[26rem] text-sm">
+                    <thead>
+                      <tr className="text-left text-[11px] uppercase tracking-widest text-gray-500">
+                        <th className="pb-2 font-medium">Futter</th>
+                        <th className="pb-2 text-right font-medium">Menge</th>
+                        <th className="pb-2 text-right font-medium">Effektivität</th>
+                        <th className="pb-2 text-right font-medium">Zeit</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-800/70">
+                      {foodRows.map((row, index) => (
+                        <tr key={row.food} className={index === 0 ? 'text-green-300' : 'text-gray-300'}>
+                          <td className="py-2 pr-2">{row.food}</td>
+                          <td className="py-2 text-right font-mono tabular-nums">{formatNumber(row.amount)}</td>
+                          <td className="py-2 text-right font-mono tabular-nums">{row.effectiveness.toFixed(1)} %</td>
+                          <td className="py-2 text-right font-mono tabular-nums">{formatMinutes(row.minutes)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              ))}
-            </div>
-
-            <p className="mt-4 flex items-center justify-center gap-2 text-center text-sm text-gray-300">
-              <IconTimer size={15} className="text-green-400/80" />
-              Geschätzte Zähmzeit:
-              <span className="font-mono font-bold text-green-300">{taming.tamingTimeFormatted}</span>
-            </p>
-            <p className="mt-1 text-center text-xs text-gray-500">
-              Futter: {dino.tamingFood} · Kibble: {dino.kibbleType}
-            </p>
-          </section>
-
-          {/* Breeding Info */}
-          <section aria-label="Breeding" className="rounded-xl border border-gray-800 bg-gray-900/50 p-4 sm:p-5">
-            <h3 className="mb-3 flex items-center gap-2 font-display text-sm uppercase tracking-widest text-gray-300">
-              <IconEgg size={16} />
-              Breeding
-            </h3>
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div className="rounded-lg border border-gray-800 bg-ark-surface p-3">
-                <p className="text-xs text-gray-500">Paarungsintervall</p>
-                <p className="mt-1 font-mono text-gray-100">{formatMinutes(dino.breedingInterval)}</p>
-              </div>
-              <div className="rounded-lg border border-gray-800 bg-ark-surface p-3">
-                <p className="text-xs text-gray-500">Ei-Brutzeit</p>
-                <p className="mt-1 font-mono text-gray-100">
-                  {dino.eggIncubationTime > 0 ? formatMinutes(dino.eggIncubationTime) : 'Lebendgeburt'}
+                <p className="mt-3 text-center text-sm text-gray-300">
+                  Mit Zähmbonus (bestes Futter):{' '}
+                  <span className="font-mono font-bold text-amber-300">
+                    Lv. {level + tamingBonusLevels(level, foodRows[0].effectiveness)}
+                  </span>
                 </p>
+              </section>
+
+              <section aria-label="Narkosemittel" className={panelClass}>
+                <h3 className={headingClass}>
+                  <IconFlask size={16} />
+                  Narkosemittel
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-lg border border-gray-800 bg-ark-surface p-3 text-center">
+                    <p className="flex justify-center text-green-400/80"><IconFlask size={18} /></p>
+                    <p className="mt-1 font-mono text-lg font-bold tabular-nums text-green-300">{formatNumber(taming.narcotics)}</p>
+                    <p className="text-[11px] text-gray-400">Narcotics</p>
+                  </div>
+                  <div className="rounded-lg border border-gray-800 bg-ark-surface p-3 text-center">
+                    <p className="flex justify-center text-green-400/80"><IconBerry size={18} /></p>
+                    <p className="mt-1 font-mono text-lg font-bold tabular-nums text-green-300">{formatNumber(taming.narcoberries)}</p>
+                    <p className="text-[11px] text-gray-400">Narcoberries</p>
+                  </div>
+                </div>
+                <p className="mt-3 text-center text-xs text-gray-500">
+                  Betäubungs-Abbau: <span className="text-gray-300">{drain.rate.toFixed(1)}/s ({drain.label})</span>
+                </p>
+              </section>
+            </>
+          )}
+
+          {tab === 'knockout' && (
+            <section aria-label="Betäuben" className={panelClass}>
+              <h3 className={headingClass}>Treffer bis K.O. (Level {level})</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[26rem] text-sm">
+                  <thead>
+                    <tr className="text-left text-[11px] uppercase tracking-widest text-gray-500">
+                      <th className="pb-2 font-medium">Waffe</th>
+                      <th className="pb-2 text-right font-medium">Körper</th>
+                      <th className="pb-2 text-right font-medium">Kopf (×3)</th>
+                      <th className="pb-2 text-right font-medium">Todeschance</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-800/70">
+                    {knockout.map((row) => (
+                      <tr key={row.weapon} className="text-gray-300">
+                        <td className="py-2 pr-2">{row.weapon}</td>
+                        <td className="py-2 text-right font-mono tabular-nums">{formatNumber(row.hits)}</td>
+                        <td className="py-2 text-right font-mono tabular-nums">{formatNumber(row.headHits)}</td>
+                        <td className={`py-2 text-right font-mono tabular-nums ${row.deathChance >= 50 ? 'text-red-400' : row.deathChance > 0 ? 'text-yellow-400' : 'text-gray-600'}`}>
+                          {row.deathChance > 0 ? `${row.deathChance} %` : '–'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            </div>
-          </section>
+              <p className="mt-3 text-[11px] leading-relaxed text-gray-600">
+                Näherungswerte. Kopftreffer zählen ×3 (nicht bei allen Kreaturen möglich). Die
+                Todeschance schätzt den Waffenschaden gegen die Gesundheit auf diesem Level.
+              </p>
+            </section>
+          )}
 
-          {/* Notizen */}
-          <section aria-label="Notizen" className="rounded-xl border border-gray-800 bg-gray-900/50 p-4 sm:p-5">
-            <h3 className="mb-3 flex items-center gap-2 font-display text-sm uppercase tracking-widest text-gray-300">
-              <IconNote size={16} />
-              Notizen
-            </h3>
-            <textarea
-              value={noteDraft}
-              onChange={(e) => handleNoteChange(e.target.value)}
-              placeholder={`Eigene Notizen zu ${dino.name} auf ${map} – z. B. Spawn-Koordinaten (Lat 35, Lon 78), Falle steht bei …`}
-              rows={3}
-              className="w-full resize-y rounded-lg border border-gray-700 bg-gray-800/80 px-3 py-2.5 text-sm text-gray-200 placeholder-gray-600 outline-none transition-colors focus:border-green-500"
-            />
-            <p className="mt-1.5 text-[11px] text-gray-600">Wird automatisch gespeichert.</p>
-          </section>
+          {tab === 'stats' && (
+            <section aria-label="Statuswerte" className={panelClass}>
+              <h3 className={headingClass}>Basiswerte &amp; Anstieg pro Level</h3>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[28rem] text-sm">
+                  <thead>
+                    <tr className="text-left text-[11px] uppercase tracking-widest text-gray-500">
+                      <th className="pb-2 font-medium">Wert</th>
+                      <th className="pb-2 text-right font-medium">Basis (Lv. 1)</th>
+                      <th className="pb-2 text-right font-medium">Lv. {level} wild</th>
+                      <th className="pb-2 text-right font-medium">Wild/Lv.</th>
+                      <th className="pb-2 text-right font-medium">Gezähmt/Lv.</th>
+                      <th className="pb-2 text-right font-medium">Rang</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-800/70">
+                    {statRows.map((row) => {
+                      if (row.base === null) {
+                        return (
+                          <tr key={row.label} className="text-gray-600">
+                            <td className="py-2 pr-2">{row.label}</td>
+                            <td colSpan={5} className="py-2 text-right">– (Wasseratmer)</td>
+                          </tr>
+                        );
+                      }
+                      const gain = row.wild ? WILD_GAIN[row.wild] : 0;
+                      return (
+                        <tr key={row.label} className="text-gray-300">
+                          <td className="py-2 pr-2">{row.label}</td>
+                          <td className="py-2 text-right font-mono tabular-nums">
+                            {formatNumber(row.base)}{row.suffix ?? ''}
+                          </td>
+                          <td className="py-2 text-right font-mono tabular-nums text-green-300">
+                            {formatNumber(Math.round(statAtLevel(row.base, gain, level)))}{row.suffix ?? ''}
+                          </td>
+                          <td className="py-2 text-right font-mono tabular-nums">
+                            {row.wild ? `+${formatNumber(Math.round(row.base * gain * 10) / 10)}` : '–'}
+                          </td>
+                          <td className="py-2 text-right font-mono tabular-nums">
+                            {row.tamedPct !== null ? `+${row.tamedPct} %` : '–'}
+                          </td>
+                          <td className="py-2 text-right font-mono tabular-nums text-gray-500">
+                            {row.stat ? `#${statRank(dino, row.stat)}/${TOTAL_SPECIES}` : '–'}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
 
-          {/* Zähm-Status umschalten (übernimmt das aktuell eingestellte Level) */}
+          {tab === 'breeding' && (
+            <>
+              <section aria-label="Zucht-Zeiten" className={panelClass}>
+                <h3 className={headingClass}>
+                  <IconEgg size={16} />
+                  Zucht-Zeiten
+                </h3>
+                <div className="grid grid-cols-3 gap-3 text-sm">
+                  <div className="rounded-lg border border-gray-800 bg-ark-surface p-3">
+                    <p className="text-xs text-gray-500">Paarungsintervall</p>
+                    <p className="mt-1 font-mono text-gray-100">{formatMinutes(dino.breedingInterval)}</p>
+                  </div>
+                  <div className="rounded-lg border border-gray-800 bg-ark-surface p-3">
+                    <p className="text-xs text-gray-500">{breeding.isEgg ? 'Brutzeit' : 'Tragzeit'}</p>
+                    <p className="mt-1 font-mono text-gray-100">{formatMinutes(breeding.incubationMinutes)}</p>
+                  </div>
+                  <div className="rounded-lg border border-gray-800 bg-ark-surface p-3">
+                    <p className="text-xs text-gray-500">Reifung</p>
+                    <p className="mt-1 font-mono text-gray-100">{formatMinutes(breeding.maturationMinutes)}</p>
+                  </div>
+                </div>
+              </section>
+
+              <section aria-label="Baby-Timer" className={panelClass}>
+                <h3 className={headingClass}>Baby-Timer</h3>
+                <p className="mb-4 text-sm text-gray-400">
+                  Gib den aktuellen Stand ein, um zu sehen, wie lange {breeding.isEgg ? 'Ei' : 'Tragzeit'} und
+                  Aufzucht noch dauern.
+                </p>
+                {[
+                  { label: `% ${breeding.isEgg ? 'Brutzeit' : 'Tragzeit'}`, value: incubationPct, setter: setIncubationPct, total: breeding.incubationMinutes },
+                  { label: '% Heranwachsen', value: maturationPct, setter: setMaturationPct, total: breeding.maturationMinutes },
+                ].map((row) => {
+                  const remaining = row.total * (1 - row.value / 100);
+                  const done = new Date(Date.now() + remaining * 60_000);
+                  return (
+                    <div key={row.label} className="mb-4 last:mb-0">
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="number"
+                          min={0}
+                          max={100}
+                          value={row.value}
+                          onChange={(e) => row.setter(Math.min(100, Math.max(0, Number(e.target.value) || 0)))}
+                          className="w-20 rounded-lg border border-gray-700 bg-gray-800 px-2 py-1.5 text-center font-mono text-sm text-green-300 outline-none focus:border-green-500"
+                          aria-label={row.label}
+                        />
+                        <span className="text-sm text-gray-300">{row.label}</span>
+                      </div>
+                      <p className="mt-1.5 text-sm text-gray-400">
+                        <span className="font-mono font-semibold text-green-300">{formatMinutes(remaining)}</span>{' '}
+                        verbleibend · fertig um{' '}
+                        {new Intl.DateTimeFormat('de-DE', { hour: '2-digit', minute: '2-digit' }).format(done)} Uhr
+                      </p>
+                    </div>
+                  );
+                })}
+              </section>
+            </>
+          )}
+
+          {tab === 'misc' && (
+            <>
+              <section aria-label="Umgang" className={`${panelClass} space-y-4`}>
+                <ChipList title="Kann getragen werden von" items={husbandry.carriedBy} />
+                <ChipList title="Betroffen von" items={husbandry.affectedBy} />
+                <ChipList title="Kann beschädigen" items={husbandry.canDamage} />
+                <ChipList title="Passt durch" items={husbandry.fitsThrough} />
+              </section>
+              <section aria-label="Beute und Kosten" className={`${panelClass} space-y-4`}>
+                <ChipList title="Lässt fallen" items={dino.drops} />
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-lg border border-gray-800 bg-ark-surface p-3">
+                    <p className="text-xs text-gray-500">XP fürs Töten (Lv. {level})</p>
+                    <p className="mt-1 font-mono text-gray-100">{formatNumber(killXp(dino, level))}</p>
+                  </div>
+                  <div className="rounded-lg border border-gray-800 bg-ark-surface p-3">
+                    <p className="text-xs text-gray-500">Klonkammer (Lv. {level})</p>
+                    <p className="mt-1 font-mono text-gray-100">
+                      {formatNumber(clone.shards)} Splitter · {formatMinutes(clone.seconds / 60)}
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </>
+          )}
+        </div>
+
+        {/* Zähm-Status umschalten (übernimmt das aktuell eingestellte Level) */}
+        <div className="shrink-0 border-t border-gray-800 p-3 sm:px-6">
           <button
             type="button"
             onClick={() => onTogglePin(level)}
