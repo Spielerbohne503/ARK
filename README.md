@@ -20,6 +20,10 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
   - *Statuswerte*: alle 8 Werte mit Basis, Wild-Anstieg pro Level, Zähm-Anstieg und Rang unter allen Spezies
   - *Zucht*: Paarungsintervall, Brut-/Tragzeit, Reifung + Baby-Timer-Rechner
   - *Umgang*: Kann getragen werden von, betroffen von (Bola/Fallen), kann beschädigen, passt durch, Drops, Kill-XP, Klonkammer-Kosten
+- **Sortierbare Tabellen**: Alle Detail-Tabellen (Futter, Waffen, Statuswerte) und der Planer lassen sich per Spaltenkopf auf-/absteigend sortieren
+- **Server-Rate-Multiplikator** (1×–10×) im Zähmen-Tab: skaliert Futter, Narkose und Zeit, gespeichert für die nächste Sitzung
+- **Konsolen-Befehle** pro Kreatur (wild + gezähmt) mit Copy-Button und echten Klassennamen
+- **Zähm-Planer**: fasst deine Favoriten einer Map als Einkaufsliste zusammen (Kibble pro Sorte, Narcotics gesamt, Gesamtzähmzeit) bei frei wählbarem Ziel-Level
 - **Design**: Cinematic Hero, Sticky-Toolbar mit Map-Tabs, 3D-Tilt + Cursor-Spotlight auf Karten, Film-Grain, Count-up-Statistiken, Toasts und Konfetti bei 100 % – eigenes SVG-Icon-Set, respektiert `prefers-reduced-motion`
 
 ## Schnellstart

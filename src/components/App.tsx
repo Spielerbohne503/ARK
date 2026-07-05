@@ -10,8 +10,9 @@ import { DinoDetailModal } from './DinoDetailModal';
 import { DinoGrid } from './DinoGrid';
 import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } from './FilterBar';
 import { MapTabs } from './MapTabs';
+import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
-import { IconDownload, IconSearch, IconSkull, IconUpload, IconWarning } from './icons';
+import { IconDownload, IconList, IconSearch, IconSkull, IconUpload, IconWarning } from './icons';
 
 const MAP_STORAGE_KEY = 'ark-dino-tracker:selected-map';
 const DIFFICULTY_RANK = { easy: 0, medium: 1, hard: 2 } as const;
@@ -32,6 +33,7 @@ function loadInitialMap(): MapName {
 export function App() {
   const [selectedMap, setSelectedMap] = useState<MapName>(loadInitialMap);
   const [selectedDino, setSelectedDino] = useState<Dino | null>(null);
+  const [plannerOpen, setPlannerOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [difficulty, setDifficulty] = useState<DifficultyFilter>('all');
@@ -62,6 +64,12 @@ export function App() {
   const mapDinos = useMemo(() => getDinosForMap(selectedMap), [selectedMap]);
   const mapDinoIds = useMemo(() => new Set(mapDinos.map((d) => d.id)), [mapDinos]);
   const tamedCount = tracker.countTamed(selectedMap, mapDinoIds);
+
+  // Favorisierte Dinos der aktuellen Map für den Zähm-Planer.
+  const favoriteDinos = useMemo(
+    () => mapDinos.filter((dino) => tracker.isFavorite(selectedMap, dino.id)),
+    [mapDinos, tracker, selectedMap],
+  );
 
   // Fortschritt pro Map für die Tabs (und "Maps komplett" im Hero).
   const mapProgress = useCallback(
@@ -206,20 +214,36 @@ export function App() {
       <div className="sticky top-0 z-40 border-b border-gray-800/70 bg-ark-bg/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2.5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <MapTabs selected={selectedMap} onChange={handleMapChange} progress={mapProgress} />
-          <label className="relative block lg:w-64">
-            <span className="sr-only">Dino suchen</span>
-            <IconSearch
-              size={16}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-            />
-            <input
-              type="search"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Dino suchen …"
-              className="w-full rounded-lg border border-gray-700/80 bg-ark-surface/80 py-2 pl-9 pr-3 text-sm text-gray-100 placeholder-gray-500 outline-none transition-colors duration-200 focus:border-green-500"
-            />
-          </label>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setPlannerOpen(true)}
+              className="relative flex shrink-0 items-center gap-1.5 rounded-lg border border-gray-700/80 bg-ark-surface/80 px-3 py-2 text-sm text-gray-300 transition-colors hover:border-amber-500/60 hover:text-amber-300"
+              title="Zähm-Planer für deine Favoriten"
+            >
+              <IconList size={16} />
+              <span className="hidden sm:inline">Planer</span>
+              {favoriteDinos.length > 0 && (
+                <span className="ml-0.5 rounded-full bg-amber-500/20 px-1.5 text-[11px] font-bold text-amber-300">
+                  {favoriteDinos.length}
+                </span>
+              )}
+            </button>
+            <label className="relative block flex-1 lg:w-56">
+              <span className="sr-only">Dino suchen</span>
+              <IconSearch
+                size={16}
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+              />
+              <input
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Dino suchen …"
+                className="w-full rounded-lg border border-gray-700/80 bg-ark-surface/80 py-2 pl-9 pr-3 text-sm text-gray-100 placeholder-gray-500 outline-none transition-colors duration-200 focus:border-green-500"
+              />
+            </label>
+          </div>
         </div>
       </div>
 
@@ -337,6 +361,18 @@ export function App() {
           onUpdateLevel={(level) => tracker.updateLevel(selectedMap, selectedDino.id, level)}
           onSaveNote={(text) => tracker.saveNote(selectedMap, selectedDino.id, text)}
           onClose={() => setSelectedDino(null)}
+        />
+      )}
+
+      {plannerOpen && (
+        <TamingPlanner
+          map={selectedMap}
+          dinos={favoriteDinos}
+          onClose={() => setPlannerOpen(false)}
+          onOpenDino={(dino) => {
+            setPlannerOpen(false);
+            setSelectedDino(dino);
+          }}
         />
       )}
 

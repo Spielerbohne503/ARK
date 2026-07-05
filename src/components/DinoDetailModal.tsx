@@ -5,6 +5,7 @@ import {
   husbandryInfo,
   killXp,
   knockoutTable,
+  spawnCommands,
   statAtLevel,
   statRank,
   tamingBonusLevels,
@@ -13,6 +14,8 @@ import {
   TAMED_GAIN_PCT,
   TOTAL_SPECIES,
   WILD_GAIN,
+  type FoodRow,
+  type KnockoutRow,
   type RankableStat,
 } from '../data/gameplay';
 import { MAX_LEVEL, MIN_LEVEL, useTamingCalculator } from '../hooks/useTamingCalculator';
@@ -22,12 +25,15 @@ import {
   IconBerry,
   IconClose,
   IconCompass,
+  IconCopy,
   IconEgg,
   IconFlask,
   IconNote,
   IconPinFilled,
+  IconTerminal,
   IconTimer,
 } from './icons';
+import { SortableTh, useTableSort } from './SortableTable';
 
 const DIFFICULTY_META: Record<Dino['difficulty'], { label: string; dot: string }> = {
   easy: { label: 'Leicht', dot: 'bg-green-400' },
@@ -47,6 +53,47 @@ const TABS: { id: TabId; label: string }[] = [
 ];
 
 const panelClass = 'rounded-xl border border-gray-800 bg-gray-900/50 p-4 sm:p-5';
+
+// Sortier-Zugriffe pro Tabelle (modul-konstant, damit useTableSort stabil bleibt)
+const FOOD_ACCESSORS = {
+  food: (r: FoodRow) => r.food,
+  amount: (r: FoodRow) => r.amount,
+  effectiveness: (r: FoodRow) => r.effectiveness,
+  minutes: (r: FoodRow) => r.minutes,
+};
+const KO_ACCESSORS = {
+  weapon: (r: KnockoutRow) => r.weapon,
+  hits: (r: KnockoutRow) => r.hits,
+  headHits: (r: KnockoutRow) => r.headHits,
+  deathChance: (r: KnockoutRow) => r.deathChance,
+};
+interface StatRow {
+  label: string;
+  stat: RankableStat | null;
+  base: number | null;
+  wild: keyof typeof WILD_GAIN | null;
+  tamedPct: number | null;
+  suffix?: string;
+}
+const STAT_ACCESSORS = {
+  base: (r: StatRow) => r.base ?? -1,
+  wildGain: (r: StatRow) => (r.base !== null && r.wild ? r.base * WILD_GAIN[r.wild] : -1),
+  tamedPct: (r: StatRow) => r.tamedPct ?? -1,
+};
+
+// Server-Rate (Taming Speed) – wie der „Zähmen: 1ד-Umschalter bei Dododex
+const MULT_STORAGE_KEY = 'ark-dino-tracker:taming-mult';
+const MULTIPLIERS = [1, 2, 3, 5, 10];
+
+function loadMultiplier(): number {
+  try {
+    const stored = Number(localStorage.getItem(MULT_STORAGE_KEY));
+    if (MULTIPLIERS.includes(stored)) return stored;
+  } catch {
+    // localStorage gesperrt – Standard verwenden.
+  }
+  return 1;
+}
 const headingClass = 'mb-3 flex items-center gap-2 font-display text-sm uppercase tracking-widest text-gray-300';
 const chipClass = 'rounded border border-gray-700 bg-gray-900/60 px-2 py-0.5 text-[11px] font-medium tracking-wide text-gray-300';
 
@@ -95,6 +142,8 @@ export function DinoDetailModal({
   const [imageFailed, setImageFailed] = useState(false);
   const [incubationPct, setIncubationPct] = useState(0);
   const [maturationPct, setMaturationPct] = useState(0);
+  const [multiplier, setMultiplier] = useState(loadMultiplier);
+  const [copiedCommand, setCopiedCommand] = useState<string | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const noteTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const taming = useTamingCalculator(dino, level);
@@ -137,24 +186,46 @@ export function DinoDetailModal({
   };
   useEffect(() => () => clearTimeout(noteTimerRef.current), []);
 
+  const changeMultiplier = (value: number) => {
+    setMultiplier(value);
+    try {
+      localStorage.setItem(MULT_STORAGE_KEY, String(value));
+    } catch {
+      // Nicht kritisch – gilt dann nur für die Sitzung.
+    }
+  };
+
+  const copyCommand = async (command: string) => {
+    try {
+      await navigator.clipboard.writeText(command);
+      setCopiedCommand(command);
+      setTimeout(() => setCopiedCommand(null), 1800);
+    } catch {
+      // Clipboard nicht verfügbar (z. B. unsicherer Kontext) – still ignorieren.
+    }
+  };
+
+  // Server-Rate: schnellere Zähmung = weniger Futter, weniger Narkose, kürzere Zeit.
   const foodRows = useMemo(
-    () => tamingFoodTable(dino, taming.kibbleCount, taming.tamingMinutes),
-    [dino, taming.kibbleCount, taming.tamingMinutes],
+    () =>
+      tamingFoodTable(dino, taming.kibbleCount, taming.tamingMinutes).map((row) => ({
+        ...row,
+        amount: Math.max(1, Math.ceil(row.amount / multiplier)),
+        minutes: row.minutes / multiplier,
+      })),
+    [dino, taming.kibbleCount, taming.tamingMinutes, multiplier],
   );
+  const narcotics = Math.ceil(taming.narcotics / multiplier);
   const knockout = useMemo(() => knockoutTable(dino, level), [dino, level]);
+  const foodSort = useTableSort(foodRows, FOOD_ACCESSORS);
+  const koSort = useTableSort(knockout, KO_ACCESSORS);
+  const commands = useMemo(() => spawnCommands(dino, level), [dino, level]);
   const husbandry = useMemo(() => husbandryInfo(dino), [dino]);
   const breeding = useMemo(() => breedingTimes(dino), [dino]);
   const clone = useMemo(() => cloneCost(dino, level), [dino, level]);
   const drain = torporDrainRate(dino);
 
-  const statRows: {
-    label: string;
-    stat: RankableStat | null;
-    base: number | null;
-    wild: keyof typeof WILD_GAIN | null;
-    tamedPct: number | null;
-    suffix?: string;
-  }[] = [
+  const statRows: StatRow[] = [
     { label: 'Gesundheit', stat: 'health', base: dino.baseStats.health, wild: 'health', tamedPct: TAMED_GAIN_PCT.health },
     { label: 'Ausdauer', stat: 'stamina', base: dino.extraStats.stamina, wild: 'stamina', tamedPct: TAMED_GAIN_PCT.stamina },
     { label: 'Sauerstoff', stat: null, base: dino.extraStats.oxygen, wild: 'oxygen', tamedPct: TAMED_GAIN_PCT.oxygen },
@@ -164,6 +235,8 @@ export function DinoDetailModal({
     { label: 'Bewegung', stat: null, base: dino.baseStats.speed, wild: null, tamedPct: TAMED_GAIN_PCT.speed, suffix: '%' },
     { label: 'Betäubung', stat: 'torpor', base: dino.extraStats.torpor, wild: 'torpor', tamedPct: null },
   ];
+  const statSort = useTableSort(statRows, STAT_ACCESSORS);
+  const bestFood = foodRows[0]?.food;
 
   return (
     <div
@@ -295,23 +368,44 @@ export function DinoDetailModal({
           {tab === 'taming' && (
             <>
               <section aria-label="Futter" className={panelClass}>
-                <h3 className={headingClass}>
-                  <IconTimer size={16} />
-                  Futter (Level {level})
-                </h3>
+                <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                  <h3 className={`${headingClass} mb-0`}>
+                    <IconTimer size={16} />
+                    Futter (Level {level})
+                  </h3>
+                  {/* Server-Rate wie bei Dododex: skaliert Menge, Zeit und Narkose */}
+                  <div className="flex items-center gap-1" role="group" aria-label="Zähm-Multiplikator">
+                    <span className="mr-1 text-[11px] uppercase tracking-widest text-gray-500">Zähmen</span>
+                    {MULTIPLIERS.map((m) => (
+                      <button
+                        key={m}
+                        type="button"
+                        aria-pressed={multiplier === m}
+                        onClick={() => changeMultiplier(m)}
+                        className={`rounded-md border px-2 py-0.5 font-mono text-xs transition-colors ${
+                          multiplier === m
+                            ? 'border-green-500/60 bg-green-500/10 text-green-300'
+                            : 'border-gray-800 text-gray-500 hover:border-gray-600 hover:text-gray-300'
+                        }`}
+                      >
+                        {m}×
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <div className="overflow-x-auto">
                   <table className="w-full min-w-[26rem] text-sm">
                     <thead>
-                      <tr className="text-left text-[11px] uppercase tracking-widest text-gray-500">
-                        <th className="pb-2 font-medium">Futter</th>
-                        <th className="pb-2 text-right font-medium">Menge</th>
-                        <th className="pb-2 text-right font-medium">Effektivität</th>
-                        <th className="pb-2 text-right font-medium">Zeit</th>
+                      <tr className="text-[11px]">
+                        <SortableTh label="Futter" sortKey="food" sort={foodSort.sort} onToggle={foodSort.toggle} align="left" />
+                        <SortableTh label="Menge" sortKey="amount" sort={foodSort.sort} onToggle={foodSort.toggle} />
+                        <SortableTh label="Effektivität" sortKey="effectiveness" sort={foodSort.sort} onToggle={foodSort.toggle} />
+                        <SortableTh label="Zeit" sortKey="minutes" sort={foodSort.sort} onToggle={foodSort.toggle} />
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-800/70">
-                      {foodRows.map((row, index) => (
-                        <tr key={row.food} className={index === 0 ? 'text-green-300' : 'text-gray-300'}>
+                      {foodSort.sorted.map((row) => (
+                        <tr key={row.food} className={row.food === bestFood ? 'text-green-300' : 'text-gray-300'}>
                           <td className="py-2 pr-2">{row.food}</td>
                           <td className="py-2 text-right font-mono tabular-nums">{formatNumber(row.amount)}</td>
                           <td className="py-2 text-right font-mono tabular-nums">{row.effectiveness.toFixed(1)} %</td>
@@ -337,12 +431,12 @@ export function DinoDetailModal({
                 <div className="grid grid-cols-2 gap-3">
                   <div className="rounded-lg border border-gray-800 bg-ark-surface p-3 text-center">
                     <p className="flex justify-center text-green-400/80"><IconFlask size={18} /></p>
-                    <p className="mt-1 font-mono text-lg font-bold tabular-nums text-green-300">{formatNumber(taming.narcotics)}</p>
+                    <p className="mt-1 font-mono text-lg font-bold tabular-nums text-green-300">{formatNumber(narcotics)}</p>
                     <p className="text-[11px] text-gray-400">Narcotics</p>
                   </div>
                   <div className="rounded-lg border border-gray-800 bg-ark-surface p-3 text-center">
                     <p className="flex justify-center text-green-400/80"><IconBerry size={18} /></p>
-                    <p className="mt-1 font-mono text-lg font-bold tabular-nums text-green-300">{formatNumber(taming.narcoberries)}</p>
+                    <p className="mt-1 font-mono text-lg font-bold tabular-nums text-green-300">{formatNumber(narcotics * 5)}</p>
                     <p className="text-[11px] text-gray-400">Narcoberries</p>
                   </div>
                 </div>
@@ -359,15 +453,15 @@ export function DinoDetailModal({
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[26rem] text-sm">
                   <thead>
-                    <tr className="text-left text-[11px] uppercase tracking-widest text-gray-500">
-                      <th className="pb-2 font-medium">Waffe</th>
-                      <th className="pb-2 text-right font-medium">Körper</th>
-                      <th className="pb-2 text-right font-medium">Kopf (×3)</th>
-                      <th className="pb-2 text-right font-medium">Todeschance</th>
+                    <tr className="text-[11px]">
+                      <SortableTh label="Waffe" sortKey="weapon" sort={koSort.sort} onToggle={koSort.toggle} align="left" />
+                      <SortableTh label="Körper" sortKey="hits" sort={koSort.sort} onToggle={koSort.toggle} />
+                      <SortableTh label="Kopf (×3)" sortKey="headHits" sort={koSort.sort} onToggle={koSort.toggle} />
+                      <SortableTh label="Todeschance" sortKey="deathChance" sort={koSort.sort} onToggle={koSort.toggle} />
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-800/70">
-                    {knockout.map((row) => (
+                    {koSort.sorted.map((row) => (
                       <tr key={row.weapon} className="text-gray-300">
                         <td className="py-2 pr-2">{row.weapon}</td>
                         <td className="py-2 text-right font-mono tabular-nums">{formatNumber(row.hits)}</td>
@@ -393,17 +487,17 @@ export function DinoDetailModal({
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[28rem] text-sm">
                   <thead>
-                    <tr className="text-left text-[11px] uppercase tracking-widest text-gray-500">
-                      <th className="pb-2 font-medium">Wert</th>
-                      <th className="pb-2 text-right font-medium">Basis (Lv. 1)</th>
-                      <th className="pb-2 text-right font-medium">Lv. {level} wild</th>
-                      <th className="pb-2 text-right font-medium">Wild/Lv.</th>
-                      <th className="pb-2 text-right font-medium">Gezähmt/Lv.</th>
-                      <th className="pb-2 text-right font-medium">Rang</th>
+                    <tr className="text-[11px]">
+                      <th className="pb-2 text-left font-medium uppercase tracking-widest text-gray-500">Wert</th>
+                      <SortableTh label={`Basis (Lv. 1)`} sortKey="base" sort={statSort.sort} onToggle={statSort.toggle} />
+                      <th className="pb-2 text-right font-medium uppercase tracking-widest text-gray-500">Lv. {level} wild</th>
+                      <SortableTh label="Wild/Lv." sortKey="wildGain" sort={statSort.sort} onToggle={statSort.toggle} />
+                      <SortableTh label="Gezähmt/Lv." sortKey="tamedPct" sort={statSort.sort} onToggle={statSort.toggle} />
+                      <th className="pb-2 text-right font-medium uppercase tracking-widest text-gray-500">Rang</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-800/70">
-                    {statRows.map((row) => {
+                    {statSort.sorted.map((row) => {
                       if (row.base === null) {
                         return (
                           <tr key={row.label} className="text-gray-600">
@@ -522,6 +616,36 @@ export function DinoDetailModal({
                       {formatNumber(clone.shards)} Splitter · {formatMinutes(clone.seconds / 60)}
                     </p>
                   </div>
+                </div>
+              </section>
+              <section aria-label="Konsolen-Befehle" className={panelClass}>
+                <h3 className={headingClass}>
+                  <IconTerminal size={16} />
+                  Konsolen-Befehle
+                </h3>
+                <div className="space-y-2">
+                  {[
+                    { label: 'Wild spawnen', cmd: commands.wild },
+                    { label: `Gezähmt (Lv. ${level})`, cmd: commands.tamed },
+                  ].map((entry) => (
+                    <div key={entry.label}>
+                      <p className="mb-1 text-[11px] uppercase tracking-widest text-gray-500">{entry.label}</p>
+                      <div className="flex items-stretch gap-2">
+                        <code className="min-w-0 flex-1 overflow-x-auto whitespace-nowrap rounded-lg border border-gray-800 bg-gray-950/70 px-3 py-2 font-mono text-xs text-green-300">
+                          {entry.cmd}
+                        </code>
+                        <button
+                          type="button"
+                          onClick={() => copyCommand(entry.cmd)}
+                          aria-label={`${entry.label} kopieren`}
+                          className="flex shrink-0 items-center gap-1.5 rounded-lg border border-gray-700 px-3 text-xs text-gray-300 transition-colors hover:border-green-600 hover:text-green-300"
+                        >
+                          <IconCopy size={14} />
+                          {copiedCommand === entry.cmd ? 'Kopiert' : 'Kopieren'}
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </section>
             </>

@@ -224,6 +224,55 @@ const XP_BASE: Record<Dino['difficulty'], number> = { easy: 2, medium: 6, hard: 
 export const killXp = (dino: Dino, level: number) =>
   Math.round(XP_BASE[dino.difficulty] * (1 + 0.1 * (level - 1)) * 10) / 10;
 
+// ── Spawn-Befehle ─────────────────────────────────────────
+
+/** In-Game-Klassennamen für Konsolen-Befehle. */
+const SPAWN_CLASS: Record<string, string> = {
+  dodo: 'Dodo_Character_BP_C', lystrosaurus: 'Lystro_Character_BP_C', parasaur: 'Para_Character_BP_C',
+  phiomia: 'Phiomia_Character_BP_C', moschops: 'Moschops_Character_BP_C', trike: 'Trike_Character_BP_C',
+  stego: 'Stego_Character_BP_C', carbonemys: 'Turtle_Character_BP_C', dilophosaur: 'Dilo_Character_BP_C',
+  compy: 'Compy_Character_BP_C', mesopithecus: 'Monkey_Character_BP_C', oviraptor: 'Oviraptor_Character_BP_C',
+  pachy: 'Pachy_Character_BP_C', iguanodon: 'Iguanodon_Character_BP_C', ichthyosaurus: 'Dolphin_Character_BP_C',
+  otter: 'Otter_Character_BP_C', sinomacrops: 'Sinomacrops_Character_BP_C', raptor: 'Raptor_Character_BP_C',
+  carno: 'Carno_Character_BP_C', ankylosaurus: 'Ankylo_Character_BP_C', doedicurus: 'Doed_Character_BP_C',
+  castoroides: 'Beaver_Character_BP_C', beelzebufo: 'Toad_Character_BP_C', baryonyx: 'Baryonyx_Character_BP_C',
+  sarco: 'Sarco_Character_BP_C', kaprosuchus: 'Kaprosuchus_Character_BP_C', terrorbird: 'TerrorBird_Character_BP_C',
+  direwolf: 'Direwolf_Character_BP_C', sabertooth: 'Saber_Character_BP_C', hyaenodon: 'Hyaenodon_Character_BP_C',
+  mammoth: 'Mammoth_Character_BP_C', woollyrhino: 'Rhino_Character_BP_C', megaloceros: 'Stag_Character_BP_C',
+  equus: 'Equus_Character_BP_C', procoptodon: 'Procoptodon_Character_BP_C', direbear: 'Direbear_Character_BP_C',
+  purlovia: 'Purlovia_Character_BP_C', pulmonoscorpius: 'Scorpion_Character_BP_C', araneo: 'SpiderS_Character_BP_C',
+  arthropluera: 'Arthro_Character_BP_C', pteranodon: 'Ptero_Character_BP_C', dimorphodon: 'Dimorph_Character_BP_C',
+  argentavis: 'Argent_Character_BP_C', pelagornis: 'Pela_Character_BP_C', ichthyornis: 'Ichthyornis_Character_BP_C',
+  gallimimus: 'Galli_Character_BP_C', bronto: 'Sauropod_Character_BP_C', diplodocus: 'Diplodocus_Character_BP_C',
+  paracer: 'Paracer_Character_BP_C', kentrosaurus: 'Kentro_Character_BP_C', megalodon: 'Megalodon_Character_BP_C',
+  dunkleosteus: 'Dunkle_Character_BP_C', anglerfish: 'Angler_Character_BP_C', manta: 'Manta_Character_BP_C',
+  gacha: 'Gacha_Character_BP_C', gasbags: 'GasBags_Character_BP_C', maewing: 'MilkGlider_Character_BP_C',
+  rex: 'Rex_Character_BP_C', spino: 'Spino_Character_BP_C', allosaurus: 'Allo_Character_BP_C',
+  therizinosaurus: 'Therizino_Character_BP_C', yutyrannus: 'Yutyrannus_Character_BP_C',
+  giganotosaurus: 'Gigant_Character_BP_C', daeodon: 'Daeodon_Character_BP_C', megatherium: 'Megatherium_Character_BP_C',
+  thylacoleo: 'Thylacoleo_Character_BP_C', megalania: 'Megalania_Character_BP_C', titanoboa: 'BoaFrill_Character_BP_C',
+  tapejara: 'Tapejara_Character_BP_C', quetzal: 'Quetz_Character_BP_C', snowowl: 'Owl_Character_BP_C',
+  basilosaurus: 'Basilosaurus_Character_BP_C', mosasaurus: 'Mosa_Character_BP_C', plesiosaur: 'Plesiosaur_Character_BP_C',
+  tusoteuthis: 'Tusoteuthis_Character_BP_C', karkinos: 'Crab_Character_BP_C', rockelemental: 'RockGolem_Character_BP_C',
+  griffin: 'Griffin_Character_BP_C', wyvern: 'Wyvern_Character_BP_Fire_C', icewyvern: 'Ragnarok_Wyvern_Override_Ice_C',
+  crystalwyvern: 'CrystalWyvern_Character_BP_WS_C', tropeognathus: 'Tropeognathus_Character_BP_C',
+  velonasaur: 'Spindles_Character_BP_C', managarmr: 'IceJumper_Character_BP_C', enforcer: 'Enforcer_Character_BP_C',
+  magmasaur: 'Cherufe_Character_BP_C', ferox: 'Shapeshifter_Small_Character_BP_C', bloodstalker: 'BogSpider_Character_BP_C',
+  megachelon: 'GiantTurtle_Character_BP_C', astrocetus: 'SpaceWhale_Character_BP_C', shadowmane: 'LionfishLion_Character_BP_C',
+  astrodelphis: 'SpaceDolphin_Character_BP_C', noglin: 'BrainSlug_Character_BP_C', stryder: 'TekStrider_Character_BP_C',
+  amargasaurus: 'Amargasaurus_Character_BP_C', dinopithecus: 'BigMonkey_Character_BP_C',
+  deinonychus: 'Deinonychus_Character_BP_C', basilisk: 'Basilisk_Character_BP_C',
+};
+
+/** Konsolen-Befehle: wild spawnen bzw. gezähmt mit Ziel-Level. */
+export function spawnCommands(dino: Dino, level: number): { wild: string; tamed: string } {
+  const cls = SPAWN_CLASS[dino.id] ?? `${dino.id}_Character_BP_C`;
+  return {
+    wild: `cheat summon ${cls}`,
+    tamed: `cheat GMSummon "${cls}" ${level}`,
+  };
+}
+
 // ── Statuswerte-Ränge ─────────────────────────────────────
 
 export type RankableStat = 'health' | 'stamina' | 'food' | 'weight' | 'melee' | 'torpor';
