@@ -227,6 +227,13 @@ export const IconMapPin = (p: IconProps) => (
   </Svg>
 );
 
+export const IconGem = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M6 3h12l4 6-10 12L2 9l4-6Z" />
+    <path d="M2 9h20M9 3 7 9l5 12M15 3l2 6-5 12" />
+  </Svg>
+);
+
 export const IconList = (p: IconProps) => (
   <Svg {...p}>
     <path d="M9 6h11M9 12h11M9 18h11" />

@@ -1,7 +1,7 @@
 import type { FoundNoteRecord, NoteRecord, TamedRecord } from '../types';
 
 const DB_NAME = 'ark-dino-tracker';
-const DB_VERSION = 4;
+const DB_VERSION = 5;
 
 export const STORE_TAMED = 'tamed';
 export const STORE_FAVORITES = 'favorites';
@@ -9,13 +9,16 @@ export const STORE_NOTES = 'notes';
 export const STORE_FOUND_NOTES = 'foundNotes';
 /** Besiegte Bosse, Key: `${bossId}:${difficulty}`. */
 export const STORE_BOSSES = 'bosses';
+/** Gefundene Artefakte, Key: artifact.id. */
+export const STORE_ARTIFACTS = 'artifacts';
 
 type StoreName =
   | typeof STORE_TAMED
   | typeof STORE_FAVORITES
   | typeof STORE_NOTES
   | typeof STORE_FOUND_NOTES
-  | typeof STORE_BOSSES;
+  | typeof STORE_BOSSES
+  | typeof STORE_ARTIFACTS;
 
 let dbPromise: Promise<IDBDatabase> | null = null;
 
@@ -31,10 +34,10 @@ function openDb(): Promise<IDBDatabase> {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     // Migrationen sind additiv: neue Stores werden angelegt, bestehende Daten
-    // (v2: tamed/favorites/notes, v3: +foundNotes, v4: +bosses) bleiben erhalten.
+    // (v2: tamed/favorites/notes, v3: +foundNotes, v4: +bosses, v5: +artifacts) bleiben erhalten.
     request.onupgradeneeded = () => {
       const db = request.result;
-      for (const store of [STORE_TAMED, STORE_FAVORITES, STORE_NOTES, STORE_FOUND_NOTES, STORE_BOSSES]) {
+      for (const store of [STORE_TAMED, STORE_FAVORITES, STORE_NOTES, STORE_FOUND_NOTES, STORE_BOSSES, STORE_ARTIFACTS]) {
         if (!db.objectStoreNames.contains(store)) {
           db.createObjectStore(store, { keyPath: 'key' });
         }

@@ -7,6 +7,7 @@ import {
   type Boss,
   type BossDifficulty,
 } from '../data/bosses';
+import { getArtifactsForMap, TOTAL_ARTIFACTS, type Artifact } from '../data/artifacts';
 import { DINO_DATABASE, getDinosForMap } from '../data/dinoDatabase';
 import { EXPLORER_NOTES, getNotesForMap } from '../data/explorerNotes';
 import { useCountUp } from '../hooks/useCountUp';
@@ -15,8 +16,10 @@ import { useExplorerTracker } from '../hooks/useExplorerTracker';
 import { useKeySet } from '../hooks/useKeySet';
 import { exportBackup, parseBackup } from '../lib/backup';
 import { fireConfetti } from '../lib/confetti';
-import { STORE_BOSSES } from '../lib/db';
+import { STORE_ARTIFACTS, STORE_BOSSES } from '../lib/db';
 import { MAPS, type Dino, type ExplorerNote, type MapName } from '../types';
+import { ArtifactModal } from './ArtifactModal';
+import { ArtifactView } from './ArtifactView';
 import { BossModal } from './BossModal';
 import { BossView } from './BossView';
 import { CompletionBar } from './CompletionBar';
@@ -28,9 +31,9 @@ import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } f
 import { MapTabs } from './MapTabs';
 import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
-import { IconBook, IconDownload, IconList, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
+import { IconBook, IconDownload, IconGem, IconList, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
 
-type ViewMode = 'creatures' | 'notes' | 'bosses';
+type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts';
 
 const MAP_STORAGE_KEY = 'ark-dino-tracker:selected-map';
 const DIFFICULTY_RANK = { easy: 0, medium: 1, hard: 2 } as const;
@@ -54,6 +57,7 @@ export function App() {
   const [selectedDino, setSelectedDino] = useState<Dino | null>(null);
   const [selectedNote, setSelectedNote] = useState<ExplorerNote | null>(null);
   const [selectedBoss, setSelectedBoss] = useState<Boss | null>(null);
+  const [selectedArtifact, setSelectedArtifact] = useState<Artifact | null>(null);
   const [plannerOpen, setPlannerOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
@@ -66,6 +70,7 @@ export function App() {
   const tracker = useDinoTracker();
   const explorer = useExplorerTracker();
   const bossSet = useKeySet(STORE_BOSSES);
+  const artifactSet = useKeySet(STORE_ARTIFACTS);
 
   useEffect(() => {
     try {
@@ -108,6 +113,11 @@ export function App() {
   );
   const bossDoneCount = bossSet.count(mapBossKeys);
 
+  // Artefakte der aktuellen Map.
+  const mapArtifacts = useMemo(() => getArtifactsForMap(selectedMap), [selectedMap]);
+  const mapArtifactIds = useMemo(() => new Set(mapArtifacts.map((a) => a.id)), [mapArtifacts]);
+  const artifactDoneCount = artifactSet.count(mapArtifactIds);
+
   // Fortschritt pro Map für die Tabs – je nach Modus.
   const mapProgress = useCallback(
     (map: MapName): [number, number] => {
@@ -119,10 +129,14 @@ export function App() {
         const keys = getBossesForMap(map).flatMap((b) => b.difficulties.map((d) => bossKey(b.id, d)));
         return [bossSet.count(new Set(keys)), keys.length];
       }
+      if (viewMode === 'artifacts') {
+        const arts = getArtifactsForMap(map);
+        return [artifactSet.count(new Set(arts.map((a) => a.id))), arts.length];
+      }
       const dinos = getDinosForMap(map);
       return [tracker.countTamed(map, new Set(dinos.map((d) => d.id))), dinos.length];
     },
-    [tracker, explorer, bossSet, viewMode],
+    [tracker, explorer, bossSet, artifactSet, viewMode],
   );
 
   const completedMaps = useMemo(
@@ -139,8 +153,8 @@ export function App() {
     () => MAPS.reduce((sum, map) => sum + getDinosForMap(map).length, 0),
     [],
   );
-  const overallDone = tracker.records.size + explorer.found.size + bossSet.keys.size;
-  const overallTotal = totalDinoSlots + EXPLORER_NOTES.length + TOTAL_BOSS_KILLS;
+  const overallDone = tracker.records.size + explorer.found.size + bossSet.keys.size + artifactSet.keys.size;
+  const overallTotal = totalDinoSlots + EXPLORER_NOTES.length + TOTAL_BOSS_KILLS + TOTAL_ARTIFACTS;
   const overallPercent = overallTotal > 0 ? Math.round((overallDone / overallTotal) * 100) : 0;
   const overallPercentAnimated = useCountUp(overallPercent);
 
@@ -151,6 +165,8 @@ export function App() {
   const foundTotal = useCountUp(explorer.found.size);
   const bossKillTotal = useCountUp(bossSet.keys.size);
   const bossFightCount = useCountUp(TOTAL_BOSS_KILLS);
+  const artifactsCount = useCountUp(TOTAL_ARTIFACTS);
+  const artifactsFound = useCountUp(artifactSet.keys.size);
   const completedMapsAnimated = useCountUp(completedMaps);
 
   const visibleDinos = useMemo(() => {
@@ -248,6 +264,24 @@ export function App() {
     [bossSet, mapBossKeys, selectedMap, pushToast],
   );
 
+  const handleToggleArtifact = useCallback(
+    (artifact: Artifact) => {
+      const now = artifactSet.toggle(artifact.id);
+      if (now) {
+        const willBeComplete = artifactSet.count(mapArtifactIds) + 1 === mapArtifacts.length;
+        if (willBeComplete) {
+          fireConfetti();
+          pushToast('complete', `${selectedMap}: Alle Artefakte gesammelt!`);
+        } else {
+          pushToast('tamed', `${artifact.name} als gefunden markiert`);
+        }
+      } else {
+        pushToast('untamed', `${artifact.name} wieder als offen markiert`);
+      }
+    },
+    [artifactSet, mapArtifactIds, mapArtifacts.length, selectedMap, pushToast],
+  );
+
   const handleImportFile = async (file: File) => {
     try {
       const parsed = parseBackup(await file.text());
@@ -305,11 +339,17 @@ export function App() {
                     { value: bossKillTotal, label: 'Besiegt' },
                     { value: completedMapsAnimated, label: 'Maps komplett' },
                   ]
-                : [
-                    { value: speciesCount, label: 'Spezies' },
-                    { value: totalTames, label: 'Zähmungen' },
-                    { value: completedMapsAnimated, label: 'Maps komplett' },
-                  ]
+                : viewMode === 'artifacts'
+                  ? [
+                      { value: artifactsCount, label: 'Artefakte' },
+                      { value: artifactsFound, label: 'Gefunden' },
+                      { value: completedMapsAnimated, label: 'Maps komplett' },
+                    ]
+                  : [
+                      { value: speciesCount, label: 'Spezies' },
+                      { value: totalTames, label: 'Zähmungen' },
+                      { value: completedMapsAnimated, label: 'Maps komplett' },
+                    ]
             ).map((stat) => (
               <div key={stat.label} className="flex-1 px-4 text-center sm:px-8">
                 <dd className="font-display text-3xl font-bold tabular-nums text-amber-400 sm:text-4xl">
@@ -323,7 +363,7 @@ export function App() {
           {/* Gesamtfortschritt über Kreaturen UND Erkunder-Notizen */}
           <div className="mx-auto mt-8 max-w-lg">
             <div className="mb-1.5 flex items-baseline justify-between text-[11px] uppercase tracking-widest">
-              <span className="text-gray-500">Gesamtfortschritt · Zähmungen, Notizen &amp; Bosse</span>
+              <span className="text-gray-500">Gesamtfortschritt · Kreaturen, Notizen, Bosse &amp; Artefakte</span>
               <span className="font-mono tabular-nums text-green-300">
                 {overallDone} / {overallTotal} · {overallPercentAnimated}%
               </span>
@@ -359,6 +399,7 @@ export function App() {
             { mode: 'creatures', label: 'Kreaturen', icon: <IconSwords size={16} /> },
             { mode: 'notes', label: 'Erkunder-Notizen', icon: <IconBook size={16} /> },
             { mode: 'bosses', label: 'Bosse', icon: <IconTrophy size={16} /> },
+            { mode: 'artifacts', label: 'Artefakte', icon: <IconGem size={16} /> },
           ] as const).map((entry) => (
             <button
               key={entry.mode}
@@ -418,13 +459,13 @@ export function App() {
       </div>
 
       <main className="relative mx-auto max-w-7xl space-y-5 px-4 pb-16 pt-6 sm:px-6">
-        {(tracker.storageError || explorer.storageError || bossSet.storageError) && (
+        {(tracker.storageError || explorer.storageError || bossSet.storageError || artifactSet.storageError) && (
           <p
             role="alert"
             className="flex items-center gap-2 rounded-lg border border-yellow-600/50 bg-yellow-900/30 px-4 py-2 text-sm text-yellow-300"
           >
             <IconWarning size={16} />
-            {tracker.storageError ?? explorer.storageError ?? bossSet.storageError}
+            {tracker.storageError ?? explorer.storageError ?? bossSet.storageError ?? artifactSet.storageError}
           </p>
         )}
 
@@ -497,7 +538,7 @@ export function App() {
               />
             )}
           </>
-        ) : (
+        ) : viewMode === 'bosses' ? (
           <>
             <CompletionBar
               map={selectedMap}
@@ -520,6 +561,47 @@ export function App() {
                 isDefeated={bossSet.has}
                 onToggle={handleToggleBoss}
                 onOpenBoss={setSelectedBoss}
+              />
+            )}
+          </>
+        ) : (
+          <>
+            <CompletionBar
+              map={selectedMap}
+              tamed={artifactDoneCount}
+              total={mapArtifacts.length}
+              unit="gefunden"
+              completeText="Alle Artefakte dieser Map gesammelt."
+            />
+
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-800/80 bg-ark-surface/60 p-3.5 sm:p-4">
+              <p className="text-sm text-gray-400">
+                Höhlen-Artefakte dienen als Boss-Tribut. Tippe eines an, um es als{' '}
+                <span className="text-green-300">gefunden</span> zu markieren. Koordinaten sind Richtwerte.
+              </p>
+              <button
+                type="button"
+                aria-pressed={notesOnlyOpen}
+                onClick={() => setNotesOnlyOpen((v) => !v)}
+                className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
+                  notesOnlyOpen
+                    ? 'border-green-500/60 bg-green-500/10 text-green-300'
+                    : 'border-gray-800 text-gray-500 hover:border-gray-600 hover:text-gray-300'
+                }`}
+              >
+                Nur offene
+              </button>
+            </div>
+
+            {artifactSet.loading ? (
+              <p className="p-10 text-center text-gray-500">Lade Artefakt-Fortschritt …</p>
+            ) : (
+              <ArtifactView
+                map={selectedMap}
+                isFound={artifactSet.has}
+                onToggle={handleToggleArtifact}
+                onOpen={setSelectedArtifact}
+                onlyOpen={notesOnlyOpen}
               />
             )}
           </>
@@ -632,6 +714,15 @@ export function App() {
           isDefeated={bossSet.has}
           onToggle={(difficulty) => handleToggleBoss(selectedBoss, difficulty)}
           onClose={() => setSelectedBoss(null)}
+        />
+      )}
+
+      {selectedArtifact && (
+        <ArtifactModal
+          artifact={selectedArtifact}
+          found={artifactSet.has(selectedArtifact.id)}
+          onToggle={() => handleToggleArtifact(selectedArtifact)}
+          onClose={() => setSelectedArtifact(null)}
         />
       )}
 
