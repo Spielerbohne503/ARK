@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { explorerImage, NOTE_PLACEHOLDER } from '../data/explorers';
 import type { ExplorerNote } from '../types';
 import { IconBook, IconCheck, IconClose, IconMapPin } from './icons';
 
@@ -12,6 +13,7 @@ interface ExplorerNoteModalProps {
 /** Detail-Ansicht einer Erkunder-Notiz mit vollem Inhaltstext. */
 export function ExplorerNoteModal({ note, found, onToggleFound, onClose }: ExplorerNoteModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const [imageFailed, setImageFailed] = useState(false);
 
   // ESC schließt, Fokus auf Close, Hintergrund-Scroll sperren.
   useEffect(() => {
@@ -52,12 +54,24 @@ export function ExplorerNoteModal({ note, found, onToggleFound, onClose }: Explo
           >
             <IconClose size={18} />
           </button>
-          <p className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-green-400/90">
-            <IconBook size={16} />
-            Erkunder-Notiz #{note.number}
-          </p>
-          <h2 className="mt-2 font-display text-2xl font-bold text-gray-100">{note.explorer}</h2>
-          <p className="mt-1 text-sm text-gray-400">{note.topic}</p>
+          <div className="flex items-center gap-4">
+            <img
+              src={imageFailed ? NOTE_PLACEHOLDER : explorerImage(note.explorer)}
+              alt={note.explorer}
+              onError={() => setImageFailed(true)}
+              className="h-16 w-16 shrink-0 rounded-xl border border-gray-700 bg-gray-950/50 object-contain p-1"
+            />
+            <div className="min-w-0">
+              <p className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-green-400/90">
+                <IconBook size={16} />
+                Erkunder-Notiz #{note.number}
+              </p>
+              <h2 className="mt-1.5 font-display text-2xl font-bold leading-tight text-gray-100">
+                {note.explorer}
+              </h2>
+              <p className="mt-1 text-sm text-gray-400">{note.topic}</p>
+            </div>
+          </div>
         </div>
 
         {/* Inhalt der Notiz */}

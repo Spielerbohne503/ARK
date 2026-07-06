@@ -13,7 +13,7 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
 - **Filter & Sortierung**: Status, Schwierigkeit, Name/Schwierigkeit/zuletzt gezähmt
 - **Backup**: Fortschritt als JSON exportieren/importieren
 - **Beschreibungen + Einsatz-Rollen** für alle 98 Kreaturen (z. B. „Metall-Farm", „Boss-Kampf")
-- **Erkunder-Notizen-Tracker** (Explorer Notes): eigener Modus neben den Kreaturen – 119 Notizen über alle 7 Maps, gruppiert nach Autor (Helena Walker, Rockwell, Mei Yin, Nerva, Diana, Santiago, HLN-A …) mit **lesbarem Inhaltstext im Detail-Fenster**, Fundort-Koordinaten, gefunden-Markierung und Fortschritt pro Autor/Map (persistiert in IndexedDB)
+- **Erkunder-Notizen-Tracker** (Explorer Notes): eigener Modus neben den Kreaturen – 119 Notizen über alle 7 Maps, gruppiert nach Autor (Helena Walker, Rockwell, Mei Yin, Nerva, Diana, Santiago, HLN-A, Gabriel, Grad-Student) mit dem **offiziellen In-Game-Notiz-Icon des Autors auf jeder Karte und im Detail-Fenster**, **lesbarem Inhaltstext**, Fundort-Koordinaten, gefunden-Markierung und Fortschritt pro Autor/Map (persistiert in IndexedDB)
 - **Gesamt-Fortschrittsbalken** im Hero: Zähmungen und Erkunder-Notizen über alle Maps zusammengefasst
 - **Completion-Tracker** mit Progress-Bar pro Map
 - **Detail-Ansicht mit 6 Tabs** (Dododex-Stil):
@@ -50,7 +50,7 @@ npm run preview    # Build lokal testen
 | Styling | Tailwind CSS 3 (Dark Theme, Cinzel + Roboto lokal gebundelt) |
 | Persistenz | IndexedDB (eigener Promise-Wrapper, `src/lib/db.ts`) |
 | Daten | Hardcoded in `src/data/dinoDatabase.ts` – keine API nötig |
-| Bilder | Offizielle Dossier-Artworks, lokal gebundelt in `public/dinos/` (via `node scripts/fetch-images.mjs` aus dem Ark-Wiki, CC-BY-SA) – komplett offline |
+| Bilder | Offizielle Dossier-Artworks (`public/dinos/`) und Notiz-Icons (`public/notes/`), lokal gebundelt via `node scripts/fetch-images.mjs` bzw. `fetch-note-images.mjs` aus dem Ark-Wiki (CC-BY-SA) – komplett offline |
 
 ## Projektstruktur
 
