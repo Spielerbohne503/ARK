@@ -94,7 +94,7 @@ export function FilterBar({
           options={STATUS_OPTIONS}
           value={status}
           onChange={onStatus}
-          activeClass="border-green-500/60 bg-green-500/10 text-green-300"
+          activeClass="border-green-500/60 bg-green-500/10 text-green-300 shadow-glow-green"
         />
         <span aria-hidden className="hidden h-5 w-px bg-gray-800 sm:block" />
         <ChipGroup
@@ -113,7 +113,7 @@ export function FilterBar({
             options={SORT_OPTIONS}
             value={sort}
             onChange={onSort}
-            activeClass="border-amber-500/50 bg-amber-500/10 text-amber-300"
+            activeClass="border-amber-500/50 bg-amber-500/10 text-amber-300 shadow-glow-amber"
           />
         </div>
         <p className="font-mono text-xs tabular-nums text-gray-500">

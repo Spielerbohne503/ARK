@@ -31,6 +31,7 @@ import { ExplorerNoteModal } from './ExplorerNoteModal';
 import { ExplorerNotesView } from './ExplorerNotesView';
 import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } from './FilterBar';
 import { MapTabs } from './MapTabs';
+import { Spinner } from './Spinner';
 import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
 import { IconBook, IconDownload, IconDrumstick, IconGem, IconList, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
@@ -478,7 +479,7 @@ export function App() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Dino suchen …"
-                  className="w-full rounded-lg border border-gray-700/80 bg-ark-surface/80 py-2 pl-9 pr-3 text-sm text-gray-100 placeholder-gray-500 outline-none transition-colors duration-200 focus:border-green-500"
+                  className="w-full rounded-lg border border-gray-700/80 bg-ark-surface/80 py-2 pl-9 pr-3 text-sm text-gray-100 placeholder-gray-500 outline-none transition-all duration-200 focus:border-green-500 focus:ring-2 focus:ring-green-500/25"
                 />
               </label>
             </div>
@@ -513,7 +514,7 @@ export function App() {
             />
 
             {tracker.loading ? (
-              <p className="p-10 text-center text-gray-500">Lade gespeicherte Zähmungen …</p>
+              <Spinner label="Lade gespeicherte Zähmungen …" />
             ) : (
               <DinoGrid
                 dinos={visibleDinos}
@@ -556,7 +557,7 @@ export function App() {
             </div>
 
             {explorer.loading ? (
-              <p className="p-10 text-center text-gray-500">Lade gefundene Notizen …</p>
+              <Spinner label="Lade gefundene Notizen …" />
             ) : (
               <ExplorerNotesView
                 map={selectedMap}
@@ -583,7 +584,7 @@ export function App() {
             </p>
 
             {bossSet.loading ? (
-              <p className="p-10 text-center text-gray-500">Lade Boss-Fortschritt …</p>
+              <Spinner label="Lade Boss-Fortschritt …" />
             ) : (
               <BossView
                 map={selectedMap}
@@ -625,7 +626,7 @@ export function App() {
             </div>
 
             {artifactSet.loading ? (
-              <p className="p-10 text-center text-gray-500">Lade Artefakt-Fortschritt …</p>
+              <Spinner label="Lade Artefakt-Fortschritt …" />
             ) : (
               <ArtifactView
                 map={selectedMap}

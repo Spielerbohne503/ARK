@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { getArtifactsForMap, type Artifact } from '../data/artifacts';
 import type { MapName } from '../types';
-import { IconCheck, IconMapPin } from './icons';
+import { IconCheck, IconGem, IconMapPin } from './icons';
 
 function ArtifactImage({ artifact, className }: { artifact: Artifact; className: string }) {
   const [failed, setFailed] = useState(false);
@@ -34,17 +34,21 @@ export function ArtifactView({ map, isFound, onToggle, onOpen, onlyOpen }: Artif
 
   if (all.length === 0) {
     return (
-      <p className="rounded-xl border border-gray-800 bg-ark-surface p-10 text-center text-gray-400">
-        Auf {map} gibt es keine klassischen Höhlen-Artefakte – hier wird über Missionen
-        fortgeschritten.
-      </p>
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-gray-800 bg-ark-surface/60 p-12 text-center">
+        <IconGem size={32} className="text-gray-600" />
+        <p className="max-w-sm text-sm text-gray-400">
+          Auf {map} gibt es keine klassischen Höhlen-Artefakte – hier wird über Missionen
+          fortgeschritten.
+        </p>
+      </div>
     );
   }
   if (visible.length === 0) {
     return (
-      <p className="rounded-xl border border-gray-800 bg-ark-surface p-10 text-center text-gray-400">
-        Alle Artefakte dieser Map sind eingesammelt.
-      </p>
+      <div className="flex flex-col items-center gap-3 rounded-xl border border-green-900/40 bg-green-950/20 p-12 text-center">
+        <IconCheck size={32} className="text-green-400" />
+        <p className="text-sm text-gray-300">Alle Artefakte dieser Map sind eingesammelt.</p>
+      </div>
     );
   }
 

@@ -62,11 +62,14 @@ export function ExplorerNotesView({
 
   if (visibleGroups.length === 0) {
     return (
-      <p className="rounded-xl border border-gray-800 bg-ark-surface p-10 text-center text-gray-400">
-        {onlyOpen
-          ? 'Alle Erkunder-Notizen dieser Map sind eingesammelt.'
-          : 'Für diese Map sind keine Erkunder-Notizen hinterlegt.'}
-      </p>
+      <div className={`flex flex-col items-center gap-3 rounded-xl border p-12 text-center ${onlyOpen ? 'border-green-900/40 bg-green-950/20' : 'border-gray-800 bg-ark-surface/60'}`}>
+        {onlyOpen ? <IconCheck size={32} className="text-green-400" /> : <IconMapPin size={32} className="text-gray-600" />}
+        <p className="text-sm text-gray-300">
+          {onlyOpen
+            ? 'Alle Erkunder-Notizen dieser Map sind eingesammelt.'
+            : 'Für diese Map sind keine Erkunder-Notizen hinterlegt.'}
+        </p>
+      </div>
     );
   }
 
