@@ -642,6 +642,8 @@ export function App() {
 
       {/* Footer mit Sekundär-Navigation, Backup und Credits */}
       <footer className="relative border-t border-gray-800/80 bg-gray-950/60">
+        {/* feiner Licht-Rand oben */}
+        <span aria-hidden className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-green-500/40 to-transparent" />
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:grid-cols-3 sm:px-6">
           <div>
             <h2 className="mb-3 font-display text-xs uppercase tracking-widest text-gray-400">Maps</h2>

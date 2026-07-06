@@ -95,7 +95,7 @@ export function TamingPlanner({ map, dinos, onClose, onOpenDino }: TamingPlanner
         aria-modal="true"
         aria-label={`Zähm-Planer für ${map}`}
         onClick={(e) => e.stopPropagation()}
-        className="flex max-h-[92vh] w-full max-w-2xl animate-slide-up flex-col overflow-hidden rounded-2xl border border-gray-700 bg-ark-surface shadow-2xl shadow-black/60 sm:animate-modal-in"
+        className="flex max-h-[92vh] w-full max-w-2xl animate-slide-up flex-col overflow-hidden rounded-2xl border border-gray-700 bg-ark-surface shadow-2xl shadow-black/70 ring-1 ring-white/[0.06] sm:animate-modal-in"
       >
         <div className="flex shrink-0 items-center justify-between border-b border-gray-800 p-5">
           <h2 className="flex items-center gap-2 font-display text-xl font-bold text-gray-100">
