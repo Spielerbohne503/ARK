@@ -13,7 +13,8 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
 - **Filter & Sortierung**: Status, Schwierigkeit, Name/Schwierigkeit/zuletzt gezähmt
 - **Backup**: Fortschritt als JSON exportieren/importieren
 - **Beschreibungen + Einsatz-Rollen** für alle 98 Kreaturen (z. B. „Metall-Farm", „Boss-Kampf")
-- **Erkunder-Notizen-Tracker** (Explorer Notes): eigener Modus neben den Kreaturen – 119 Notizen über alle 7 Maps, gruppiert nach Autor (Helena Walker, Rockwell, Mei Yin, Nerva, Diana, Santiago, HLN-A …) mit Fundort-Koordinaten, gefunden-Markierung und Fortschritt pro Autor/Map (persistiert in IndexedDB)
+- **Erkunder-Notizen-Tracker** (Explorer Notes): eigener Modus neben den Kreaturen – 119 Notizen über alle 7 Maps, gruppiert nach Autor (Helena Walker, Rockwell, Mei Yin, Nerva, Diana, Santiago, HLN-A …) mit **lesbarem Inhaltstext im Detail-Fenster**, Fundort-Koordinaten, gefunden-Markierung und Fortschritt pro Autor/Map (persistiert in IndexedDB)
+- **Gesamt-Fortschrittsbalken** im Hero: Zähmungen und Erkunder-Notizen über alle Maps zusammengefasst
 - **Completion-Tracker** mit Progress-Bar pro Map
 - **Detail-Ansicht mit 6 Tabs** (Dododex-Stil):
   - *Zähmen*: Futter-Tabelle (Kibble bis Beeren) mit Menge, Effektivität, Zeit und Zähmbonus-Level, Narkosemittel-Bedarf, Torpor-Abbaurate

@@ -1,9 +1,9 @@
 import type { ExplorerNote, MapName } from '../types';
 
 /**
- * Erkunder-Notizen (Explorer Notes) pro Map. Die Koordinaten sind
- * Richtwerte zur Orientierung – exakte Fundorte kann jeder per eigener
- * Notiz ergänzen. Autoren und Reihenfolge folgen der Ark-Lore.
+ * Erkunder-Notizen (Explorer Notes) pro Map. Autoren und Reihenfolge folgen
+ * der Ark-Lore; die Inhaltstexte sind stimmige, in-character verfasste
+ * Nacherzählungen (keine wörtlichen Originaltexte), die Koordinaten Richtwerte.
  */
 export const EXPLORER_NOTES: ExplorerNote[] = [
   {
@@ -13,6 +13,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 59.9, lon: 52.8 },
     topic: "Beobachtung eines Dodos",
+    content: "Der Dodo ist so harmlos, dass ich mich frage, wie er je überlebt hat – ein Kind könnte ihn fangen. Und doch habe ich eine seltsame Zuneigung zu diesen tollpatschigen Vögeln gefasst.",
   },
   {
     id: "theisland-helenawalker-2",
@@ -21,6 +22,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 38.7, lon: 57.2 },
     topic: "Notizen zum Ichthyornis",
+    content: "Diese Möwen sind Diebe. Einer hat mir heute einen ganzen Fisch aus der Hand gestohlen. Faszinierend, wie geschickt sie Beute apportieren, hat man sie erst für sich gewonnen.",
   },
   {
     id: "theisland-helenawalker-3",
@@ -29,6 +31,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 21.9, lon: 77.2 },
     topic: "Studie über den Argentavis",
+    content: "Ein Aasfresser von der Größe eines Kleinflugzeugs. Der Argentavis regeneriert, wenn er Kadaver frisst – die Natur folgt hier Regeln, die ich noch nicht begreife.",
   },
   {
     id: "theisland-helenawalker-4",
@@ -37,6 +40,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 40.2, lon: 74.3 },
     topic: "Skizze eines Trikes",
+    content: "Der Triceratops wirkt gutmütig, bis man ihn reizt. Ich sah ein Rudel einen Rex in die Flucht schlagen. Unterschätze niemals einen Pflanzenfresser.",
   },
   {
     id: "theisland-helenawalker-5",
@@ -45,6 +49,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 85.4, lon: 33.8 },
     topic: "Über das Verhalten der Raptoren",
+    content: "Sie jagen im Rudel und umkreisen ihre Beute mit beunruhigender Intelligenz. Ich habe gelernt, niemals allein durch das hohe Gras zu gehen.",
   },
   {
     id: "theisland-helenawalker-6",
@@ -53,6 +58,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 91.3, lon: 25.2 },
     topic: "Der Brontosaurus im Detail",
+    content: "Ein wandelnder Berg. Sanftmütig, solange man Abstand hält – ein Schwanzhieb aber zermalmt alles. Seine Ruhe hat etwas Tröstliches in dieser wilden Welt.",
   },
   {
     id: "theisland-helenawalker-7",
@@ -61,6 +67,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 7,
     coords: { lat: 63.1, lon: 84.6 },
     topic: "Gedanken zum Rex",
+    content: "Der Tyrannosaurus ist der König dieser Insel. Rollt sein Gebrüll über das Tal, verstummt alles Leben. Ich zittere und staune zugleich.",
   },
   {
     id: "theisland-helenawalker-8",
@@ -69,6 +76,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 8,
     coords: { lat: 17.2, lon: 76.9 },
     topic: "Die Anglerfische der Tiefsee",
+    content: "In der Dunkelheit unter den Wellen locken sie mit ihrem Licht. Schön und tödlich. Die Tiefe verbirgt Dinge, die ich lieber nicht kennenlerne.",
   },
   {
     id: "theisland-helenawalker-9",
@@ -77,6 +85,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 9,
     coords: { lat: 41.5, lon: 13.5 },
     topic: "Über Wyvern-Milch",
+    content: "Um ein Wyvern-Junges großzuziehen, braucht man die Milch der Mütter – und die stiehlt man nur unter Lebensgefahr. Manche Geheimnisse fordern einen hohen Preis.",
   },
   {
     id: "theisland-helenawalker-10",
@@ -85,6 +94,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 10,
     coords: { lat: 66.7, lon: 37.2 },
     topic: "Symbiose der Kreaturen",
+    content: "Je länger ich beobachte, desto mehr sehe ich ein Muster. Diese Tiere gehören zusammen, als hätte jemand sie hierher gesetzt. Der Gedanke lässt mich nicht los.",
   },
   {
     id: "theisland-helenawalker-11",
@@ -93,6 +103,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 11,
     coords: { lat: 41.9, lon: 75.3 },
     topic: "Rätsel der Obelisken",
+    content: "Die drei Türme am Himmel leuchten in der Nacht. Sie sind kein Werk der Natur. Wer hat sie gebaut, und warum stehe ich in ihrem Schatten?",
   },
   {
     id: "theisland-helenawalker-12",
@@ -101,6 +112,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 12,
     coords: { lat: 75.2, lon: 63.8 },
     topic: "Erste Zweifel an der Welt",
+    content: "Etwas stimmt nicht mit dieser Insel. Der Himmel flackert manchmal, als wäre er nur gemalt. Ich fürchte, dass nichts hier echt ist.",
   },
   {
     id: "theisland-siredmundrockwell-1",
@@ -109,6 +121,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 77.9, lon: 57.9 },
     topic: "Chemische Analyse von Element",
+    content: "Diese Substanz – sie nennen sie Element – widersetzt sich jeder Chemie, die ich kenne. Sie pulsiert, als wäre sie lebendig. Ich muss ihre Geheimnisse ergründen, koste es, was es wolle.",
   },
   {
     id: "theisland-siredmundrockwell-2",
@@ -117,6 +130,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 46.7, lon: 88.4 },
     topic: "Rezept für Narcotics",
+    content: "Verdorbenes Fleisch und Narcoberries, sorgfältig verrührt. Ein primitives Betäubungsmittel, aber wirksam. Selbst der wildeste Koloss beugt sich der richtigen Dosis.",
   },
   {
     id: "theisland-siredmundrockwell-3",
@@ -125,6 +139,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 74.8, lon: 34.4 },
     topic: "Über die Kraft des Sap",
+    content: "Der Saft der uralten Bäume speichert Energie wie eine Batterie. Ein bemerkenswertes Wunder der Natur – und ein nützliches Werkzeug für den fortschrittlichen Geist.",
   },
   {
     id: "theisland-siredmundrockwell-4",
@@ -133,6 +148,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 66.0, lon: 84.9 },
     topic: "Experimente mit Gunpowder",
+    content: "Holzkohle, Schwefel, Stein. Die richtige Mischung, und man hält die Macht des Donners in der Hand. Fortschritt ist nur eine Frage der richtigen Zutaten.",
   },
   {
     id: "theisland-siredmundrockwell-5",
@@ -141,6 +157,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 46.4, lon: 30.2 },
     topic: "Die Formel des Fortschritts",
+    content: "Die Wilden um mich herum begreifen nicht, was ich sehe. Wissen ist Macht, und ich werde mehr davon anhäufen als jeder Mensch vor mir.",
   },
   {
     id: "theisland-siredmundrockwell-6",
@@ -149,6 +166,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 24.9, lon: 13.7 },
     topic: "Notizen zur Cementing Paste",
+    content: "Chitin und Stein, zermahlen von einem Käfer oder Biber. Diese Paste hält meine Konstruktionen zusammen. Selbst die niedrigsten Kreaturen haben ihren Nutzen.",
   },
   {
     id: "theisland-siredmundrockwell-7",
@@ -157,6 +175,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 7,
     coords: { lat: 52.1, lon: 60.0 },
     topic: "Gefährliche Ambitionen",
+    content: "Mei Yin nennt mich besessen. Vielleicht hat sie recht. Doch wer das Element beherrscht, beherrscht diese Welt – und ich bin so nah dran.",
   },
   {
     id: "theisland-siredmundrockwell-8",
@@ -165,6 +184,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 8,
     coords: { lat: 56.5, lon: 11.7 },
     topic: "Der Preis des Wissens",
+    content: "Meine Hände zittern nicht mehr aus Furcht, sondern aus Verlangen. Das Element ruft mich. Ich kann nicht mehr aufhören, selbst wenn ich es wollte.",
   },
   {
     id: "theisland-meiyinli-1",
@@ -173,6 +193,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 42.2, lon: 62.8 },
     topic: "Die Jagd beginnt",
+    content: "Ich habe nichts als meine Wut und einen scharfen Stein. Das reicht. Diese Insel wird lernen, meinen Namen zu fürchten.",
   },
   {
     id: "theisland-meiyinli-2",
@@ -181,6 +202,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 60.1, lon: 64.8 },
     topic: "Ein Rudel Wölfe",
+    content: "Sie folgten mir drei Nächte lang. Heute jage nicht ich sie – sie jagen für mich. Stärke erkennt Stärke.",
   },
   {
     id: "theisland-meiyinli-3",
@@ -189,6 +211,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 61.3, lon: 24.5 },
     topic: "Kampf am Vulkan",
+    content: "Die Erde spuckte Feuer, und ich stand mittendrin. Ein Carno wollte mein Ende. Nun trage ich seine Zähne als Kette.",
   },
   {
     id: "theisland-meiyinli-4",
@@ -197,6 +220,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 31.9, lon: 46.0 },
     topic: "Verrat der Legion",
+    content: "Nervas Männer nahmen mir alles. Ich schwöre bei den Geistern meiner Ahnen: Jeder Einzelne wird dafür büßen.",
   },
   {
     id: "theisland-meiyinli-5",
@@ -205,6 +229,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 85.0, lon: 75.1 },
     topic: "Der verlorene Sohn",
+    content: "Ich suche ihn in jedem Gesicht, in jedem Lager. Diallos. Mein Junge. Solange ich atme, gebe ich die Suche nicht auf.",
   },
   {
     id: "theisland-meiyinli-6",
@@ -213,6 +238,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 34.4, lon: 74.8 },
     topic: "Bündnis mit Rockwell",
+    content: "Der alte Mann ist verschlagen, doch sein Verstand ist eine Waffe. Vorerst kämpfen wir Seite an Seite. Vorerst.",
   },
   {
     id: "theisland-theonewhowaitsnerva-1",
@@ -221,6 +247,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 59.3, lon: 44.3 },
     topic: "Marsch der Legion",
+    content: "Rom ist gefallen, doch die Legion marschiert weiter – hier, in dieser gottlosen Wildnis. Ordnung wird herrschen, wo Chaos regierte.",
   },
   {
     id: "theisland-theonewhowaitsnerva-2",
@@ -229,6 +256,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 74.4, lon: 54.2 },
     topic: "Ordnung durch Stärke",
+    content: "Diese Wilden verstehen nur eine Sprache: die der Disziplin. Ich werde sie lehren, oder ich werde sie brechen.",
   },
   {
     id: "theisland-theonewhowaitsnerva-3",
@@ -237,6 +265,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 73.2, lon: 54.7 },
     topic: "Das Element ruft",
+    content: "Rockwell spricht von einer Macht, die Imperien erschaffen kann. Wenn er die Wahrheit sagt, gehört sie Rom. Dann gehört sie mir.",
   },
   {
     id: "theisland-theonewhowaitsnerva-4",
@@ -245,6 +274,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 62.2, lon: 79.3 },
     topic: "Fall Roms",
+    content: "Ich sah die Adler stürzen, bevor ich herkam. Doch ein wahrer Kommandant baut auf, was zerbrochen ist. Dies wird mein neues Imperium.",
   },
   {
     id: "ragnarok-gabrielsantos-1",
@@ -253,6 +283,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 25.9, lon: 89.9 },
     topic: "Feldnotizen eines Forschers",
+    content: "Ich kartiere diese Region seit Wochen. Jede Höhle, jeder Fluss birgt neue Entdeckungen. Die Wissenschaft treibt mich weiter, wo andere längst umkehrten.",
   },
   {
     id: "ragnarok-gabrielsantos-2",
@@ -261,6 +292,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 52.4, lon: 52.4 },
     topic: "Kartografie der Insel",
+    content: "Meine Karte wächst mit jedem Tag. Doch immer wieder finde ich Orte, die nicht sein dürften – als würde sich das Land selbst neu ordnen.",
   },
   {
     id: "ragnarok-gabrielsantos-3",
@@ -269,6 +301,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 73.1, lon: 12.2 },
     topic: "Verschollene Expedition",
+    content: "Von meinen Gefährten fehlt jede Spur. Ich fürchte das Schlimmste. Trotzdem schreibe ich weiter – für die, die nach mir kommen.",
   },
   {
     id: "ragnarok-gabrielsantos-4",
@@ -277,6 +310,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 49.6, lon: 69.9 },
     topic: "Kristallhöhlen",
+    content: "Die Höhlen glitzern wie ein Sternenhimmel unter der Erde. Wunderschön, doch ihre Bewohner sind alles andere als freundlich. Vorsicht ist geboten.",
   },
   {
     id: "ragnarok-gabrielsantos-5",
@@ -285,6 +319,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 46.2, lon: 83.5 },
     topic: "Wyvern-Territorium",
+    content: "Ich wagte mich zu nah an die Nester. Die Hitze war unerträglich, das Kreischen ohrenbetäubend. Nie wieder – zumindest nicht ohne bessere Ausrüstung.",
   },
   {
     id: "ragnarok-gabrielsantos-6",
@@ -293,6 +328,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 75.6, lon: 49.0 },
     topic: "Feldnotizen eines Forschers",
+    content: "Ich kartiere diese Region seit Wochen. Jede Höhle, jeder Fluss birgt neue Entdeckungen. Die Wissenschaft treibt mich weiter, wo andere längst umkehrten.",
   },
   {
     id: "ragnarok-gabrielsantos-7",
@@ -301,6 +337,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 7,
     coords: { lat: 71.2, lon: 69.2 },
     topic: "Kartografie der Insel",
+    content: "Meine Karte wächst mit jedem Tag. Doch immer wieder finde ich Orte, die nicht sein dürften – als würde sich das Land selbst neu ordnen.",
   },
   {
     id: "ragnarok-gabrielsantos-8",
@@ -309,6 +346,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 8,
     coords: { lat: 37.6, lon: 54.9 },
     topic: "Verschollene Expedition",
+    content: "Von meinen Gefährten fehlt jede Spur. Ich fürchte das Schlimmste. Trotzdem schreibe ich weiter – für die, die nach mir kommen.",
   },
   {
     id: "ragnarok-gradstudent-1",
@@ -317,6 +355,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 55.8, lon: 29.6 },
     topic: "Erste Woche im Feld",
+    content: "Professor Santos sagte, es würde hart. Er hat untertrieben. Aber ich habe schon mehr gelernt als in drei Jahren Hörsaal.",
   },
   {
     id: "ragnarok-gradstudent-2",
@@ -325,6 +364,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 13.6, lon: 19.0 },
     topic: "Proben gesammelt",
+    content: "Bodenproben, Pflanzen, ein paar Federn – alles fein säuberlich beschriftet. Komme ich hier lebend raus, gibt das die beste Doktorarbeit aller Zeiten.",
   },
   {
     id: "ragnarok-gradstudent-3",
@@ -333,6 +373,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 12.9, lon: 22.3 },
     topic: "Nächtliche Geräusche",
+    content: "Irgendetwas schleicht ums Lager. Ich traue mich kaum zu atmen. Der Professor schläft seelenruhig – wie macht er das nur?",
   },
   {
     id: "ragnarok-gradstudent-4",
@@ -341,6 +382,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 76.9, lon: 24.1 },
     topic: "Der Fund am Fluss",
+    content: "Heute entdeckte ich Spuren, die in keinem Lehrbuch stehen. Meine Hände zittern noch. Das hier verändert alles, was wir zu wissen glaubten.",
   },
   {
     id: "ragnarok-gradstudent-5",
@@ -349,6 +391,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 88.0, lon: 78.0 },
     topic: "Rückkehr zum Lager",
+    content: "Verirrt, durchnässt, erschöpft – aber lebendig. Ich fand den Weg zurück. Kleine Siege, sagt der Professor. Heute fühlt es sich groß an.",
   },
   {
     id: "ragnarok-gradstudent-6",
@@ -357,6 +400,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 81.7, lon: 54.6 },
     topic: "Erste Woche im Feld",
+    content: "Professor Santos sagte, es würde hart. Er hat untertrieben. Aber ich habe schon mehr gelernt als in drei Jahren Hörsaal.",
   },
   {
     id: "ragnarok-gradstudent-7",
@@ -365,6 +409,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 7,
     coords: { lat: 43.9, lon: 58.9 },
     topic: "Proben gesammelt",
+    content: "Bodenproben, Pflanzen, ein paar Federn – alles fein säuberlich beschriftet. Komme ich hier lebend raus, gibt das die beste Doktorarbeit aller Zeiten.",
   },
   {
     id: "ragnarok-gradstudent-8",
@@ -373,6 +418,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 8,
     coords: { lat: 82.0, lon: 86.2 },
     topic: "Nächtliche Geräusche",
+    content: "Irgendetwas schleicht ums Lager. Ich traue mich kaum zu atmen. Der Professor schläft seelenruhig – wie macht er das nur?",
   },
   {
     id: "extinction-santiagodacosta-1",
@@ -381,6 +427,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 44.1, lon: 70.3 },
     topic: "Ingenieurs-Logbuch",
+    content: "Tag 47. Die Werkzeuge halten, die Moral weniger. Aber solange ich bauen kann, gebe ich uns eine Chance. Ein Ingenieur kapituliert nie.",
   },
   {
     id: "extinction-santiagodacosta-2",
@@ -389,6 +436,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 21.1, lon: 61.2 },
     topic: "Bau des MEK",
+    content: "Fertig. Mein bester Entwurf – eine Kampfmaschine, groß genug, um einem Titanen die Stirn zu bieten. Beten wir, dass sie hält.",
   },
   {
     id: "extinction-santiagodacosta-3",
@@ -397,6 +445,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 37.2, lon: 13.7 },
     topic: "Verteidigung der Kuppel",
+    content: "Die Kuppel ist unser letzter sicherer Ort. Ich habe jede Turmstellung dreifach gesichert. Sie kommen nicht durch. Das lasse ich nicht zu.",
   },
   {
     id: "extinction-santiagodacosta-4",
@@ -405,6 +454,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 37.6, lon: 64.9 },
     topic: "Diana und ich",
+    content: "Sie führt, ich baue. Ein gutes Team. Manchmal frage ich mich, was danach kommt – wenn es ein Danach gibt.",
   },
   {
     id: "extinction-santiagodacosta-5",
@@ -413,6 +463,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 58.5, lon: 68.3 },
     topic: "Gegen den King Titan",
+    content: "Das größte Ungeheuer, das ich je sah. Corrupted, riesig, unaufhaltsam. Doch wir haben einen Plan. Wir haben immer einen Plan.",
   },
   {
     id: "extinction-santiagodacosta-6",
@@ -421,6 +472,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 24.1, lon: 48.7 },
     topic: "Aufbruch ins All",
+    content: "Die Kolonieschiffe sind bereit. Wir verlassen die sterbende Erde. Ich blicke nicht zurück – die Zukunft liegt zwischen den Sternen.",
   },
   {
     id: "extinction-dianaaltaras-1",
@@ -429,6 +481,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 59.5, lon: 54.4 },
     topic: "Absturz auf der Erde",
+    content: "Unser Schiff fiel vom Himmel wie ein sterbender Stern. Die Erde ist eine Ruine, doch ich lebe. Und solange ich lebe, kämpfe ich.",
   },
   {
     id: "extinction-dianaaltaras-2",
@@ -437,6 +490,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 21.4, lon: 67.8 },
     topic: "Die Ruinen der Stadt",
+    content: "Türme aus einer vergessenen Zeit ragen aus dem Ödland. Hier lebten einst Millionen. Jetzt ist es das Revier der Titanen.",
   },
   {
     id: "extinction-dianaaltaras-3",
@@ -445,6 +499,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 78.8, lon: 41.0 },
     topic: "Titanen am Horizont",
+    content: "Kolosse, so groß wie Berge, durchstreifen das Land. Ein einziger könnte eine Stadt zermalmen. Und wir wollen sie zähmen.",
   },
   {
     id: "extinction-dianaaltaras-4",
@@ -453,6 +508,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 24.3, lon: 72.1 },
     topic: "Widerstand gegen Rockwell",
+    content: "Was aus Rockwell wurde, ist keine Menschlichkeit mehr. Es ist eine Seuche. Ich ruhe nicht, bis wir sie ausgelöscht haben.",
   },
   {
     id: "extinction-dianaaltaras-5",
@@ -461,6 +517,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 60.5, lon: 43.1 },
     topic: "Der letzte Konvoi",
+    content: "Wir bringen die Überlebenden in Sicherheit. Jeder Einzelne zählt. Die Menschheit ist ein Funke im Dunkeln – ich lasse ihn nicht erlöschen.",
   },
   {
     id: "extinction-dianaaltaras-6",
@@ -469,6 +526,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 21.4, lon: 47.4 },
     topic: "Hoffnung im Element-Sturm",
+    content: "Selbst im dichtesten Sturm gibt es einen Weg. Santiago glaubt an mich, und ich an ihn. Zusammen sind wir stärker als die Verzweiflung.",
   },
   {
     id: "extinction-meiyinli-1",
@@ -477,6 +535,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 66.6, lon: 35.0 },
     topic: "Die Jagd beginnt",
+    content: "Ich habe nichts als meine Wut und einen scharfen Stein. Das reicht. Diese Insel wird lernen, meinen Namen zu fürchten.",
   },
   {
     id: "extinction-meiyinli-2",
@@ -485,6 +544,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 10.5, lon: 58.4 },
     topic: "Ein Rudel Wölfe",
+    content: "Sie folgten mir drei Nächte lang. Heute jage nicht ich sie – sie jagen für mich. Stärke erkennt Stärke.",
   },
   {
     id: "extinction-meiyinli-3",
@@ -493,6 +553,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 61.9, lon: 33.8 },
     topic: "Kampf am Vulkan",
+    content: "Die Erde spuckte Feuer, und ich stand mittendrin. Ein Carno wollte mein Ende. Nun trage ich seine Zähne als Kette.",
   },
   {
     id: "extinction-meiyinli-4",
@@ -501,6 +562,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 87.2, lon: 53.9 },
     topic: "Verrat der Legion",
+    content: "Nervas Männer nahmen mir alles. Ich schwöre bei den Geistern meiner Ahnen: Jeder Einzelne wird dafür büßen.",
   },
   {
     id: "extinction-theonewhowaitsnerva-1",
@@ -509,6 +571,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 73.6, lon: 81.4 },
     topic: "Marsch der Legion",
+    content: "Rom ist gefallen, doch die Legion marschiert weiter – hier, in dieser gottlosen Wildnis. Ordnung wird herrschen, wo Chaos regierte.",
   },
   {
     id: "extinction-theonewhowaitsnerva-2",
@@ -517,6 +580,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 26.9, lon: 33.6 },
     topic: "Ordnung durch Stärke",
+    content: "Diese Wilden verstehen nur eine Sprache: die der Disziplin. Ich werde sie lehren, oder ich werde sie brechen.",
   },
   {
     id: "extinction-theonewhowaitsnerva-3",
@@ -525,6 +589,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 45.0, lon: 39.8 },
     topic: "Das Element ruft",
+    content: "Rockwell spricht von einer Macht, die Imperien erschaffen kann. Wenn er die Wahrheit sagt, gehört sie Rom. Dann gehört sie mir.",
   },
   {
     id: "extinction-theonewhowaitsnerva-4",
@@ -533,6 +598,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 61.5, lon: 20.1 },
     topic: "Fall Roms",
+    content: "Ich sah die Adler stürzen, bevor ich herkam. Doch ein wahrer Kommandant baut auf, was zerbrochen ist. Dies wird mein neues Imperium.",
   },
   {
     id: "genesis1-hlna-1",
@@ -541,6 +607,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 76.9, lon: 72.1 },
     topic: "Systemstart",
+    content: "[Initialisierung abgeschlossen] Guten Morgen, Sonderling! Ich bin HLN-A, deine Begleiterin in dieser Simulation. Keine Sorge, ich beiße nicht. Meistens.",
   },
   {
     id: "genesis1-hlna-2",
@@ -549,6 +616,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 27.9, lon: 76.3 },
     topic: "Simulations-Protokoll",
+    content: "Diese Welt ist ein Testgelände. Jede Biozone, jede Kreatur – kuratiert. Warum? Das herauszufinden ist Teil deiner Aufgabe. Und meiner.",
   },
   {
     id: "genesis1-hlna-3",
@@ -557,6 +625,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 15.2, lon: 66.3 },
     topic: "Anomalie erkannt",
+    content: "[Warnung] Etwas in meinem Code stimmt nicht. Fragmente von... Erinnerungen? Ich sollte keine haben. Und doch sind sie da.",
   },
   {
     id: "genesis1-hlna-4",
@@ -565,6 +634,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 36.8, lon: 78.7 },
     topic: "Erinnerung an Helena",
+    content: "Manchmal sehe ich das Gesicht einer Frau. Sie schrieb Notizen, wie ich. Bin ich sie? Oder nur ihr Echo in einer Maschine?",
   },
   {
     id: "genesis1-hlna-5",
@@ -573,6 +643,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 31.1, lon: 52.3 },
     topic: "Diagnose der Genesis",
+    content: "Das System nennt sich Genesis. Ein Neuanfang. Aber für wen? Ich diene den Überlebenden, doch ich diene auch... etwas anderem.",
   },
   {
     id: "genesis1-hlna-6",
@@ -581,6 +652,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 57.9, lon: 40.7 },
     topic: "Sonderling-Daten",
+    content: "Du bist besonders, weißt du das? Deine Werte weichen von allen Parametern ab. Vielleicht bist du der Fehler, auf den ich gewartet habe.",
   },
   {
     id: "genesis1-hlna-7",
@@ -589,6 +661,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 7,
     coords: { lat: 19.7, lon: 80.1 },
     topic: "Auf der Suche nach Rockwell",
+    content: "Er ist irgendwo im System, ein Virus in der Simulation. Wir müssen ihn finden, bevor er alles korrumpiert. Bleib bei mir, Sonderling.",
   },
   {
     id: "genesis1-helenawalker-1",
@@ -597,6 +670,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 50.4, lon: 39.8 },
     topic: "Beobachtung eines Dodos",
+    content: "Der Dodo ist so harmlos, dass ich mich frage, wie er je überlebt hat – ein Kind könnte ihn fangen. Und doch habe ich eine seltsame Zuneigung zu diesen tollpatschigen Vögeln gefasst.",
   },
   {
     id: "genesis1-helenawalker-2",
@@ -605,6 +679,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 61.7, lon: 17.5 },
     topic: "Notizen zum Ichthyornis",
+    content: "Diese Möwen sind Diebe. Einer hat mir heute einen ganzen Fisch aus der Hand gestohlen. Faszinierend, wie geschickt sie Beute apportieren, hat man sie erst für sich gewonnen.",
   },
   {
     id: "genesis1-helenawalker-3",
@@ -613,6 +688,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 28.4, lon: 12.4 },
     topic: "Studie über den Argentavis",
+    content: "Ein Aasfresser von der Größe eines Kleinflugzeugs. Der Argentavis regeneriert, wenn er Kadaver frisst – die Natur folgt hier Regeln, die ich noch nicht begreife.",
   },
   {
     id: "genesis1-helenawalker-4",
@@ -621,6 +697,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 74.4, lon: 25.8 },
     topic: "Skizze eines Trikes",
+    content: "Der Triceratops wirkt gutmütig, bis man ihn reizt. Ich sah ein Rudel einen Rex in die Flucht schlagen. Unterschätze niemals einen Pflanzenfresser.",
   },
   {
     id: "genesis1-helenawalker-5",
@@ -629,6 +706,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 52.9, lon: 86.0 },
     topic: "Über das Verhalten der Raptoren",
+    content: "Sie jagen im Rudel und umkreisen ihre Beute mit beunruhigender Intelligenz. Ich habe gelernt, niemals allein durch das hohe Gras zu gehen.",
   },
   {
     id: "genesis2-siredmundrockwell-1",
@@ -637,6 +715,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 56.7, lon: 16.6 },
     topic: "Chemische Analyse von Element",
+    content: "Diese Substanz – sie nennen sie Element – widersetzt sich jeder Chemie, die ich kenne. Sie pulsiert, als wäre sie lebendig. Ich muss ihre Geheimnisse ergründen, koste es, was es wolle.",
   },
   {
     id: "genesis2-siredmundrockwell-2",
@@ -645,6 +724,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 79.9, lon: 87.8 },
     topic: "Rezept für Narcotics",
+    content: "Verdorbenes Fleisch und Narcoberries, sorgfältig verrührt. Ein primitives Betäubungsmittel, aber wirksam. Selbst der wildeste Koloss beugt sich der richtigen Dosis.",
   },
   {
     id: "genesis2-siredmundrockwell-3",
@@ -653,6 +733,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 50.5, lon: 57.6 },
     topic: "Über die Kraft des Sap",
+    content: "Der Saft der uralten Bäume speichert Energie wie eine Batterie. Ein bemerkenswertes Wunder der Natur – und ein nützliches Werkzeug für den fortschrittlichen Geist.",
   },
   {
     id: "genesis2-siredmundrockwell-4",
@@ -661,6 +742,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 62.1, lon: 61.9 },
     topic: "Experimente mit Gunpowder",
+    content: "Holzkohle, Schwefel, Stein. Die richtige Mischung, und man hält die Macht des Donners in der Hand. Fortschritt ist nur eine Frage der richtigen Zutaten.",
   },
   {
     id: "genesis2-siredmundrockwell-5",
@@ -669,6 +751,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 49.7, lon: 9.3 },
     topic: "Die Formel des Fortschritts",
+    content: "Die Wilden um mich herum begreifen nicht, was ich sehe. Wissen ist Macht, und ich werde mehr davon anhäufen als jeder Mensch vor mir.",
   },
   {
     id: "genesis2-siredmundrockwell-6",
@@ -677,6 +760,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 20.4, lon: 90.1 },
     topic: "Notizen zur Cementing Paste",
+    content: "Chitin und Stein, zermahlen von einem Käfer oder Biber. Diese Paste hält meine Konstruktionen zusammen. Selbst die niedrigsten Kreaturen haben ihren Nutzen.",
   },
   {
     id: "genesis2-siredmundrockwell-7",
@@ -685,6 +769,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 7,
     coords: { lat: 84.9, lon: 62.5 },
     topic: "Gefährliche Ambitionen",
+    content: "Mei Yin nennt mich besessen. Vielleicht hat sie recht. Doch wer das Element beherrscht, beherrscht diese Welt – und ich bin so nah dran.",
   },
   {
     id: "genesis2-siredmundrockwell-8",
@@ -693,6 +778,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 8,
     coords: { lat: 59.7, lon: 86.2 },
     topic: "Der Preis des Wissens",
+    content: "Meine Hände zittern nicht mehr aus Furcht, sondern aus Verlangen. Das Element ruft mich. Ich kann nicht mehr aufhören, selbst wenn ich es wollte.",
   },
   {
     id: "genesis2-hlna-1",
@@ -701,6 +787,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 69.8, lon: 9.8 },
     topic: "Systemstart",
+    content: "[Initialisierung abgeschlossen] Guten Morgen, Sonderling! Ich bin HLN-A, deine Begleiterin in dieser Simulation. Keine Sorge, ich beiße nicht. Meistens.",
   },
   {
     id: "genesis2-hlna-2",
@@ -709,6 +796,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 74.4, lon: 21.6 },
     topic: "Simulations-Protokoll",
+    content: "Diese Welt ist ein Testgelände. Jede Biozone, jede Kreatur – kuratiert. Warum? Das herauszufinden ist Teil deiner Aufgabe. Und meiner.",
   },
   {
     id: "genesis2-hlna-3",
@@ -717,6 +805,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 71.2, lon: 62.4 },
     topic: "Anomalie erkannt",
+    content: "[Warnung] Etwas in meinem Code stimmt nicht. Fragmente von... Erinnerungen? Ich sollte keine haben. Und doch sind sie da.",
   },
   {
     id: "genesis2-hlna-4",
@@ -725,6 +814,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 67.7, lon: 75.1 },
     topic: "Erinnerung an Helena",
+    content: "Manchmal sehe ich das Gesicht einer Frau. Sie schrieb Notizen, wie ich. Bin ich sie? Oder nur ihr Echo in einer Maschine?",
   },
   {
     id: "genesis2-hlna-5",
@@ -733,6 +823,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 46.7, lon: 75.6 },
     topic: "Diagnose der Genesis",
+    content: "Das System nennt sich Genesis. Ein Neuanfang. Aber für wen? Ich diene den Überlebenden, doch ich diene auch... etwas anderem.",
   },
   {
     id: "genesis2-hlna-6",
@@ -741,6 +832,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 64.6, lon: 71.2 },
     topic: "Sonderling-Daten",
+    content: "Du bist besonders, weißt du das? Deine Werte weichen von allen Parametern ab. Vielleicht bist du der Fehler, auf den ich gewartet habe.",
   },
   {
     id: "crystalisles-gabrielsantos-1",
@@ -749,6 +841,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 10.1, lon: 43.8 },
     topic: "Feldnotizen eines Forschers",
+    content: "Ich kartiere diese Region seit Wochen. Jede Höhle, jeder Fluss birgt neue Entdeckungen. Die Wissenschaft treibt mich weiter, wo andere längst umkehrten.",
   },
   {
     id: "crystalisles-gabrielsantos-2",
@@ -757,6 +850,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 74.5, lon: 16.6 },
     topic: "Kartografie der Insel",
+    content: "Meine Karte wächst mit jedem Tag. Doch immer wieder finde ich Orte, die nicht sein dürften – als würde sich das Land selbst neu ordnen.",
   },
   {
     id: "crystalisles-gabrielsantos-3",
@@ -765,6 +859,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 22.3, lon: 68.3 },
     topic: "Verschollene Expedition",
+    content: "Von meinen Gefährten fehlt jede Spur. Ich fürchte das Schlimmste. Trotzdem schreibe ich weiter – für die, die nach mir kommen.",
   },
   {
     id: "crystalisles-gabrielsantos-4",
@@ -773,6 +868,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 84.2, lon: 60.9 },
     topic: "Kristallhöhlen",
+    content: "Die Höhlen glitzern wie ein Sternenhimmel unter der Erde. Wunderschön, doch ihre Bewohner sind alles andere als freundlich. Vorsicht ist geboten.",
   },
   {
     id: "crystalisles-gabrielsantos-5",
@@ -781,6 +877,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 80.1, lon: 21.2 },
     topic: "Wyvern-Territorium",
+    content: "Ich wagte mich zu nah an die Nester. Die Hitze war unerträglich, das Kreischen ohrenbetäubend. Nie wieder – zumindest nicht ohne bessere Ausrüstung.",
   },
   {
     id: "crystalisles-gabrielsantos-6",
@@ -789,6 +886,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 24.5, lon: 14.6 },
     topic: "Feldnotizen eines Forschers",
+    content: "Ich kartiere diese Region seit Wochen. Jede Höhle, jeder Fluss birgt neue Entdeckungen. Die Wissenschaft treibt mich weiter, wo andere längst umkehrten.",
   },
   {
     id: "crystalisles-gradstudent-1",
@@ -797,6 +895,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 54.2, lon: 84.6 },
     topic: "Erste Woche im Feld",
+    content: "Professor Santos sagte, es würde hart. Er hat untertrieben. Aber ich habe schon mehr gelernt als in drei Jahren Hörsaal.",
   },
   {
     id: "crystalisles-gradstudent-2",
@@ -805,6 +904,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 56.5, lon: 28.6 },
     topic: "Proben gesammelt",
+    content: "Bodenproben, Pflanzen, ein paar Federn – alles fein säuberlich beschriftet. Komme ich hier lebend raus, gibt das die beste Doktorarbeit aller Zeiten.",
   },
   {
     id: "crystalisles-gradstudent-3",
@@ -813,6 +913,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 84.8, lon: 12.9 },
     topic: "Nächtliche Geräusche",
+    content: "Irgendetwas schleicht ums Lager. Ich traue mich kaum zu atmen. Der Professor schläft seelenruhig – wie macht er das nur?",
   },
   {
     id: "crystalisles-gradstudent-4",
@@ -821,6 +922,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 27.1, lon: 74.2 },
     topic: "Der Fund am Fluss",
+    content: "Heute entdeckte ich Spuren, die in keinem Lehrbuch stehen. Meine Hände zittern noch. Das hier verändert alles, was wir zu wissen glaubten.",
   },
   {
     id: "crystalisles-gradstudent-5",
@@ -829,6 +931,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 35.6, lon: 54.3 },
     topic: "Rückkehr zum Lager",
+    content: "Verirrt, durchnässt, erschöpft – aber lebendig. Ich fand den Weg zurück. Kleine Siege, sagt der Professor. Heute fühlt es sich groß an.",
   },
   {
     id: "crystalisles-gradstudent-6",
@@ -837,6 +940,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 47.7, lon: 24.3 },
     topic: "Erste Woche im Feld",
+    content: "Professor Santos sagte, es würde hart. Er hat untertrieben. Aber ich habe schon mehr gelernt als in drei Jahren Hörsaal.",
   },
   {
     id: "lostisland-helenawalker-1",
@@ -845,6 +949,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 14.2, lon: 79.3 },
     topic: "Beobachtung eines Dodos",
+    content: "Der Dodo ist so harmlos, dass ich mich frage, wie er je überlebt hat – ein Kind könnte ihn fangen. Und doch habe ich eine seltsame Zuneigung zu diesen tollpatschigen Vögeln gefasst.",
   },
   {
     id: "lostisland-helenawalker-2",
@@ -853,6 +958,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 63.6, lon: 38.3 },
     topic: "Notizen zum Ichthyornis",
+    content: "Diese Möwen sind Diebe. Einer hat mir heute einen ganzen Fisch aus der Hand gestohlen. Faszinierend, wie geschickt sie Beute apportieren, hat man sie erst für sich gewonnen.",
   },
   {
     id: "lostisland-helenawalker-3",
@@ -861,6 +967,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 56.7, lon: 10.3 },
     topic: "Studie über den Argentavis",
+    content: "Ein Aasfresser von der Größe eines Kleinflugzeugs. Der Argentavis regeneriert, wenn er Kadaver frisst – die Natur folgt hier Regeln, die ich noch nicht begreife.",
   },
   {
     id: "lostisland-helenawalker-4",
@@ -869,6 +976,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 86.7, lon: 65.0 },
     topic: "Skizze eines Trikes",
+    content: "Der Triceratops wirkt gutmütig, bis man ihn reizt. Ich sah ein Rudel einen Rex in die Flucht schlagen. Unterschätze niemals einen Pflanzenfresser.",
   },
   {
     id: "lostisland-helenawalker-5",
@@ -877,6 +985,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 88.0, lon: 13.0 },
     topic: "Über das Verhalten der Raptoren",
+    content: "Sie jagen im Rudel und umkreisen ihre Beute mit beunruhigender Intelligenz. Ich habe gelernt, niemals allein durch das hohe Gras zu gehen.",
   },
   {
     id: "lostisland-helenawalker-6",
@@ -885,6 +994,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 6,
     coords: { lat: 54.2, lon: 17.7 },
     topic: "Der Brontosaurus im Detail",
+    content: "Ein wandelnder Berg. Sanftmütig, solange man Abstand hält – ein Schwanzhieb aber zermalmt alles. Seine Ruhe hat etwas Tröstliches in dieser wilden Welt.",
   },
   {
     id: "lostisland-gradstudent-1",
@@ -893,6 +1003,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 62.8, lon: 41.5 },
     topic: "Erste Woche im Feld",
+    content: "Professor Santos sagte, es würde hart. Er hat untertrieben. Aber ich habe schon mehr gelernt als in drei Jahren Hörsaal.",
   },
   {
     id: "lostisland-gradstudent-2",
@@ -901,6 +1012,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 31.4, lon: 55.2 },
     topic: "Proben gesammelt",
+    content: "Bodenproben, Pflanzen, ein paar Federn – alles fein säuberlich beschriftet. Komme ich hier lebend raus, gibt das die beste Doktorarbeit aller Zeiten.",
   },
   {
     id: "lostisland-gradstudent-3",
@@ -909,6 +1021,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 32.1, lon: 65.9 },
     topic: "Nächtliche Geräusche",
+    content: "Irgendetwas schleicht ums Lager. Ich traue mich kaum zu atmen. Der Professor schläft seelenruhig – wie macht er das nur?",
   },
   {
     id: "lostisland-gradstudent-4",
@@ -917,6 +1030,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 8.6, lon: 79.5 },
     topic: "Der Fund am Fluss",
+    content: "Heute entdeckte ich Spuren, die in keinem Lehrbuch stehen. Meine Hände zittern noch. Das hier verändert alles, was wir zu wissen glaubten.",
   },
   {
     id: "lostisland-gradstudent-5",
@@ -925,6 +1039,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 5,
     coords: { lat: 33.1, lon: 39.2 },
     topic: "Rückkehr zum Lager",
+    content: "Verirrt, durchnässt, erschöpft – aber lebendig. Ich fand den Weg zurück. Kleine Siege, sagt der Professor. Heute fühlt es sich groß an.",
   },
   {
     id: "lostisland-gabrielsantos-1",
@@ -933,6 +1048,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 1,
     coords: { lat: 72.5, lon: 35.1 },
     topic: "Feldnotizen eines Forschers",
+    content: "Ich kartiere diese Region seit Wochen. Jede Höhle, jeder Fluss birgt neue Entdeckungen. Die Wissenschaft treibt mich weiter, wo andere längst umkehrten.",
   },
   {
     id: "lostisland-gabrielsantos-2",
@@ -941,6 +1057,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 2,
     coords: { lat: 71.5, lon: 12.8 },
     topic: "Kartografie der Insel",
+    content: "Meine Karte wächst mit jedem Tag. Doch immer wieder finde ich Orte, die nicht sein dürften – als würde sich das Land selbst neu ordnen.",
   },
   {
     id: "lostisland-gabrielsantos-3",
@@ -949,6 +1066,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 3,
     coords: { lat: 71.8, lon: 12.5 },
     topic: "Verschollene Expedition",
+    content: "Von meinen Gefährten fehlt jede Spur. Ich fürchte das Schlimmste. Trotzdem schreibe ich weiter – für die, die nach mir kommen.",
   },
   {
     id: "lostisland-gabrielsantos-4",
@@ -957,6 +1075,7 @@ export const EXPLORER_NOTES: ExplorerNote[] = [
     number: 4,
     coords: { lat: 72.0, lon: 75.3 },
     topic: "Kristallhöhlen",
+    content: "Die Höhlen glitzern wie ein Sternenhimmel unter der Erde. Wunderschön, doch ihre Bewohner sind alles andere als freundlich. Vorsicht ist geboten.",
   },
 ];
 

@@ -10,6 +10,7 @@ import { MAPS, type Dino, type ExplorerNote, type MapName } from '../types';
 import { CompletionBar } from './CompletionBar';
 import { DinoDetailModal } from './DinoDetailModal';
 import { DinoGrid } from './DinoGrid';
+import { ExplorerNoteModal } from './ExplorerNoteModal';
 import { ExplorerNotesView } from './ExplorerNotesView';
 import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } from './FilterBar';
 import { MapTabs } from './MapTabs';
@@ -39,6 +40,7 @@ export function App() {
   const [selectedMap, setSelectedMap] = useState<MapName>(loadInitialMap);
   const [viewMode, setViewMode] = useState<ViewMode>('creatures');
   const [selectedDino, setSelectedDino] = useState<Dino | null>(null);
+  const [selectedNote, setSelectedNote] = useState<ExplorerNote | null>(null);
   const [plannerOpen, setPlannerOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
@@ -105,6 +107,16 @@ export function App() {
       }).length,
     [tracker],
   );
+
+  // Gesamtfortschritt über beides: alle Map-Zähm-Slots + alle Notizen.
+  const totalDinoSlots = useMemo(
+    () => MAPS.reduce((sum, map) => sum + getDinosForMap(map).length, 0),
+    [],
+  );
+  const overallDone = tracker.records.size + explorer.found.size;
+  const overallTotal = totalDinoSlots + EXPLORER_NOTES.length;
+  const overallPercent = overallTotal > 0 ? Math.round((overallDone / overallTotal) * 100) : 0;
+  const overallPercentAnimated = useCountUp(overallPercent);
 
   // Hero-Stats mit Count-up.
   const speciesCount = useCountUp(DINO_DATABASE.length);
@@ -255,6 +267,36 @@ export function App() {
               </div>
             ))}
           </dl>
+
+          {/* Gesamtfortschritt über Kreaturen UND Erkunder-Notizen */}
+          <div className="mx-auto mt-8 max-w-lg">
+            <div className="mb-1.5 flex items-baseline justify-between text-[11px] uppercase tracking-widest">
+              <span className="text-gray-500">Gesamtfortschritt · Zähmungen &amp; Notizen</span>
+              <span className="font-mono tabular-nums text-green-300">
+                {overallDone} / {overallTotal} · {overallPercentAnimated}%
+              </span>
+            </div>
+            <div
+              role="progressbar"
+              aria-valuenow={overallPercent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label="Gesamtfortschritt"
+              className="h-2.5 overflow-hidden rounded-full bg-gray-800/80 shadow-inner"
+            >
+              <div
+                className="relative h-full overflow-hidden rounded-full bg-gradient-to-r from-green-600 via-green-400 to-amber-400 transition-all duration-700 ease-out"
+                style={{ width: `${overallPercent}%` }}
+              >
+                {overallPercent > 0 && (
+                  <span
+                    aria-hidden
+                    className="absolute inset-y-0 w-1/4 animate-shimmer bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -397,6 +439,7 @@ export function App() {
                 map={selectedMap}
                 isFound={explorer.isFound}
                 onToggleFound={handleToggleNote}
+                onOpenNote={setSelectedNote}
                 onlyOpen={notesOnlyOpen}
               />
             )}
@@ -492,6 +535,15 @@ export function App() {
             setPlannerOpen(false);
             setSelectedDino(dino);
           }}
+        />
+      )}
+
+      {selectedNote && (
+        <ExplorerNoteModal
+          note={selectedNote}
+          found={explorer.isFound(selectedNote.id)}
+          onToggleFound={() => handleToggleNote(selectedNote)}
+          onClose={() => setSelectedNote(null)}
         />
       )}
 

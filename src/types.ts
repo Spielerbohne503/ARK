@@ -89,6 +89,8 @@ export interface ExplorerNote {
   coords: { lat: number; lon: number };
   /** Kurzes Thema der Notiz. */
   topic: string;
+  /** Nacherzählter Inhaltstext im Stil des Autors. */
+  content: string;
 }
 
 /** Persistierter "gefunden"-Eintrag einer Erkunder-Notiz in IndexedDB. */
