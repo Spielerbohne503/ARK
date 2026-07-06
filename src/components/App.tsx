@@ -10,6 +10,7 @@ import {
 import { getArtifactsForMap, TOTAL_ARTIFACTS, type Artifact } from '../data/artifacts';
 import { DINO_DATABASE, getDinosForMap } from '../data/dinoDatabase';
 import { EXPLORER_NOTES, getNotesForMap } from '../data/explorerNotes';
+import { KIBBLE } from '../data/kibble';
 import { useCountUp } from '../hooks/useCountUp';
 import { useDinoTracker } from '../hooks/useDinoTracker';
 import { useExplorerTracker } from '../hooks/useExplorerTracker';
@@ -22,6 +23,7 @@ import { ArtifactModal } from './ArtifactModal';
 import { ArtifactView } from './ArtifactView';
 import { BossModal } from './BossModal';
 import { BossView } from './BossView';
+import { KibbleView } from './KibbleView';
 import { CompletionBar } from './CompletionBar';
 import { DinoDetailModal } from './DinoDetailModal';
 import { DinoGrid } from './DinoGrid';
@@ -31,9 +33,12 @@ import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } f
 import { MapTabs } from './MapTabs';
 import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
-import { IconBook, IconDownload, IconGem, IconList, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
+import { IconBook, IconDownload, IconDrumstick, IconGem, IconList, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
 
-type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts';
+type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts' | 'kibble';
+
+/** Anzahl Dinos, die überhaupt eine Kibble-Stufe nutzen. */
+const KIBBLE_NAMES = new Set(KIBBLE.map((k) => k.name));
 
 const MAP_STORAGE_KEY = 'ark-dino-tracker:selected-map';
 const DIFFICULTY_RANK = { easy: 0, medium: 1, hard: 2 } as const;
@@ -167,6 +172,8 @@ export function App() {
   const bossFightCount = useCountUp(TOTAL_BOSS_KILLS);
   const artifactsCount = useCountUp(TOTAL_ARTIFACTS);
   const artifactsFound = useCountUp(artifactSet.keys.size);
+  const kibbleTierCount = useCountUp(KIBBLE.length);
+  const kibbleTameCount = useCountUp(DINO_DATABASE.filter((d) => KIBBLE_NAMES.has(d.kibbleType)).length);
   const completedMapsAnimated = useCountUp(completedMaps);
 
   const visibleDinos = useMemo(() => {
@@ -345,11 +352,17 @@ export function App() {
                       { value: artifactsFound, label: 'Gefunden' },
                       { value: completedMapsAnimated, label: 'Maps komplett' },
                     ]
-                  : [
-                      { value: speciesCount, label: 'Spezies' },
-                      { value: totalTames, label: 'Zähmungen' },
-                      { value: completedMapsAnimated, label: 'Maps komplett' },
-                    ]
+                  : viewMode === 'kibble'
+                    ? [
+                        { value: kibbleTierCount, label: 'Kibble-Stufen' },
+                        { value: kibbleTameCount, label: 'Kibble-Zähmungen' },
+                        { value: speciesCount, label: 'Spezies' },
+                      ]
+                    : [
+                        { value: speciesCount, label: 'Spezies' },
+                        { value: totalTames, label: 'Zähmungen' },
+                        { value: completedMapsAnimated, label: 'Maps komplett' },
+                      ]
             ).map((stat) => (
               <div key={stat.label} className="flex-1 px-4 text-center sm:px-8">
                 <dd className="font-display text-3xl font-bold tabular-nums text-amber-400 sm:text-4xl">
@@ -400,6 +413,7 @@ export function App() {
             { mode: 'notes', label: 'Erkunder-Notizen', icon: <IconBook size={16} /> },
             { mode: 'bosses', label: 'Bosse', icon: <IconTrophy size={16} /> },
             { mode: 'artifacts', label: 'Artefakte', icon: <IconGem size={16} /> },
+            { mode: 'kibble', label: 'Kibble', icon: <IconDrumstick size={16} /> },
           ] as const).map((entry) => (
             <button
               key={entry.mode}
@@ -419,7 +433,9 @@ export function App() {
         </div>
       </div>
 
-      {/* Sticky Glass-Toolbar: Map-Tabs + (im Kreaturen-Modus) Planer & Suche */}
+      {/* Sticky Glass-Toolbar: Map-Tabs + (im Kreaturen-Modus) Planer & Suche.
+          Im Kibble-Modus (map-unabhängig) entfällt sie. */}
+      {viewMode !== 'kibble' && (
       <div className="sticky top-0 z-40 border-b border-gray-800/70 bg-ark-bg/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2.5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <MapTabs selected={selectedMap} onChange={handleMapChange} progress={mapProgress} />
@@ -457,6 +473,7 @@ export function App() {
           )}
         </div>
       </div>
+      )}
 
       <main className="relative mx-auto max-w-7xl space-y-5 px-4 pb-16 pt-6 sm:px-6">
         {(tracker.storageError || explorer.storageError || bossSet.storageError || artifactSet.storageError) && (
@@ -564,6 +581,8 @@ export function App() {
               />
             )}
           </>
+        ) : viewMode === 'kibble' ? (
+          <KibbleView />
         ) : (
           <>
             <CompletionBar
