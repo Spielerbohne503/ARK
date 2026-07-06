@@ -1,12 +1,24 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  bossKey,
+  DIFFICULTY_LABEL,
+  getBossesForMap,
+  TOTAL_BOSS_KILLS,
+  type Boss,
+  type BossDifficulty,
+} from '../data/bosses';
 import { DINO_DATABASE, getDinosForMap } from '../data/dinoDatabase';
 import { EXPLORER_NOTES, getNotesForMap } from '../data/explorerNotes';
 import { useCountUp } from '../hooks/useCountUp';
 import { useDinoTracker } from '../hooks/useDinoTracker';
 import { useExplorerTracker } from '../hooks/useExplorerTracker';
+import { useKeySet } from '../hooks/useKeySet';
 import { exportBackup, parseBackup } from '../lib/backup';
 import { fireConfetti } from '../lib/confetti';
+import { STORE_BOSSES } from '../lib/db';
 import { MAPS, type Dino, type ExplorerNote, type MapName } from '../types';
+import { BossModal } from './BossModal';
+import { BossView } from './BossView';
 import { CompletionBar } from './CompletionBar';
 import { DinoDetailModal } from './DinoDetailModal';
 import { DinoGrid } from './DinoGrid';
@@ -16,9 +28,9 @@ import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } f
 import { MapTabs } from './MapTabs';
 import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
-import { IconBook, IconDownload, IconList, IconSearch, IconSkull, IconSwords, IconUpload, IconWarning } from './icons';
+import { IconBook, IconDownload, IconList, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
 
-type ViewMode = 'creatures' | 'notes';
+type ViewMode = 'creatures' | 'notes' | 'bosses';
 
 const MAP_STORAGE_KEY = 'ark-dino-tracker:selected-map';
 const DIFFICULTY_RANK = { easy: 0, medium: 1, hard: 2 } as const;
@@ -41,6 +53,7 @@ export function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('creatures');
   const [selectedDino, setSelectedDino] = useState<Dino | null>(null);
   const [selectedNote, setSelectedNote] = useState<ExplorerNote | null>(null);
+  const [selectedBoss, setSelectedBoss] = useState<Boss | null>(null);
   const [plannerOpen, setPlannerOpen] = useState(false);
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<StatusFilter>('all');
@@ -52,6 +65,7 @@ export function App() {
   const importInputRef = useRef<HTMLInputElement>(null);
   const tracker = useDinoTracker();
   const explorer = useExplorerTracker();
+  const bossSet = useKeySet(STORE_BOSSES);
 
   useEffect(() => {
     try {
@@ -86,17 +100,29 @@ export function App() {
   const mapNoteIds = useMemo(() => new Set(mapNotes.map((n) => n.id)), [mapNotes]);
   const foundCount = explorer.countFound(mapNoteIds);
 
-  // Fortschritt pro Map für die Tabs – je nach Modus Zähmungen oder Notizen.
+  // Bosse der aktuellen Map (jede Schwierigkeit ist ein eigenes Ziel).
+  const mapBosses = useMemo(() => getBossesForMap(selectedMap), [selectedMap]);
+  const mapBossKeys = useMemo(
+    () => new Set(mapBosses.flatMap((b) => b.difficulties.map((d) => bossKey(b.id, d)))),
+    [mapBosses],
+  );
+  const bossDoneCount = bossSet.count(mapBossKeys);
+
+  // Fortschritt pro Map für die Tabs – je nach Modus.
   const mapProgress = useCallback(
     (map: MapName): [number, number] => {
       if (viewMode === 'notes') {
         const notes = getNotesForMap(map);
         return [explorer.countFound(new Set(notes.map((n) => n.id))), notes.length];
       }
+      if (viewMode === 'bosses') {
+        const keys = getBossesForMap(map).flatMap((b) => b.difficulties.map((d) => bossKey(b.id, d)));
+        return [bossSet.count(new Set(keys)), keys.length];
+      }
       const dinos = getDinosForMap(map);
       return [tracker.countTamed(map, new Set(dinos.map((d) => d.id))), dinos.length];
     },
-    [tracker, explorer, viewMode],
+    [tracker, explorer, bossSet, viewMode],
   );
 
   const completedMaps = useMemo(
@@ -108,13 +134,13 @@ export function App() {
     [tracker],
   );
 
-  // Gesamtfortschritt über beides: alle Map-Zähm-Slots + alle Notizen.
+  // Gesamtfortschritt über alles: Zähm-Slots + Notizen + Boss-Siege.
   const totalDinoSlots = useMemo(
     () => MAPS.reduce((sum, map) => sum + getDinosForMap(map).length, 0),
     [],
   );
-  const overallDone = tracker.records.size + explorer.found.size;
-  const overallTotal = totalDinoSlots + EXPLORER_NOTES.length;
+  const overallDone = tracker.records.size + explorer.found.size + bossSet.keys.size;
+  const overallTotal = totalDinoSlots + EXPLORER_NOTES.length + TOTAL_BOSS_KILLS;
   const overallPercent = overallTotal > 0 ? Math.round((overallDone / overallTotal) * 100) : 0;
   const overallPercentAnimated = useCountUp(overallPercent);
 
@@ -123,6 +149,8 @@ export function App() {
   const totalTames = useCountUp(tracker.records.size);
   const notesCount = useCountUp(EXPLORER_NOTES.length);
   const foundTotal = useCountUp(explorer.found.size);
+  const bossKillTotal = useCountUp(bossSet.keys.size);
+  const bossFightCount = useCountUp(TOTAL_BOSS_KILLS);
   const completedMapsAnimated = useCountUp(completedMaps);
 
   const visibleDinos = useMemo(() => {
@@ -202,6 +230,24 @@ export function App() {
     [explorer, mapNoteIds, mapNotes.length, selectedMap, pushToast],
   );
 
+  const handleToggleBoss = useCallback(
+    (boss: Boss, difficulty: BossDifficulty) => {
+      const now = bossSet.toggle(bossKey(boss.id, difficulty));
+      if (now) {
+        const willBeComplete = bossSet.count(mapBossKeys) + 1 === mapBossKeys.size;
+        if (willBeComplete) {
+          fireConfetti();
+          pushToast('complete', `${selectedMap}: Alle Bosse besiegt!`);
+        } else {
+          pushToast('tamed', `${boss.name} (${DIFFICULTY_LABEL[difficulty]}) als besiegt markiert`);
+        }
+      } else {
+        pushToast('untamed', `${boss.name} (${DIFFICULTY_LABEL[difficulty]}) wieder offen`);
+      }
+    },
+    [bossSet, mapBossKeys, selectedMap, pushToast],
+  );
+
   const handleImportFile = async (file: File) => {
     try {
       const parsed = parseBackup(await file.text());
@@ -253,11 +299,17 @@ export function App() {
                   { value: foundTotal, label: 'Gefunden' },
                   { value: completedMapsAnimated, label: 'Maps komplett' },
                 ]
-              : [
-                  { value: speciesCount, label: 'Spezies' },
-                  { value: totalTames, label: 'Zähmungen' },
-                  { value: completedMapsAnimated, label: 'Maps komplett' },
-                ]
+              : viewMode === 'bosses'
+                ? [
+                    { value: bossFightCount, label: 'Boss-Kämpfe' },
+                    { value: bossKillTotal, label: 'Besiegt' },
+                    { value: completedMapsAnimated, label: 'Maps komplett' },
+                  ]
+                : [
+                    { value: speciesCount, label: 'Spezies' },
+                    { value: totalTames, label: 'Zähmungen' },
+                    { value: completedMapsAnimated, label: 'Maps komplett' },
+                  ]
             ).map((stat) => (
               <div key={stat.label} className="flex-1 px-4 text-center sm:px-8">
                 <dd className="font-display text-3xl font-bold tabular-nums text-amber-400 sm:text-4xl">
@@ -271,7 +323,7 @@ export function App() {
           {/* Gesamtfortschritt über Kreaturen UND Erkunder-Notizen */}
           <div className="mx-auto mt-8 max-w-lg">
             <div className="mb-1.5 flex items-baseline justify-between text-[11px] uppercase tracking-widest">
-              <span className="text-gray-500">Gesamtfortschritt · Zähmungen &amp; Notizen</span>
+              <span className="text-gray-500">Gesamtfortschritt · Zähmungen, Notizen &amp; Bosse</span>
               <span className="font-mono tabular-nums text-green-300">
                 {overallDone} / {overallTotal} · {overallPercentAnimated}%
               </span>
@@ -306,6 +358,7 @@ export function App() {
           {([
             { mode: 'creatures', label: 'Kreaturen', icon: <IconSwords size={16} /> },
             { mode: 'notes', label: 'Erkunder-Notizen', icon: <IconBook size={16} /> },
+            { mode: 'bosses', label: 'Bosse', icon: <IconTrophy size={16} /> },
           ] as const).map((entry) => (
             <button
               key={entry.mode}
@@ -365,13 +418,13 @@ export function App() {
       </div>
 
       <main className="relative mx-auto max-w-7xl space-y-5 px-4 pb-16 pt-6 sm:px-6">
-        {(tracker.storageError || explorer.storageError) && (
+        {(tracker.storageError || explorer.storageError || bossSet.storageError) && (
           <p
             role="alert"
             className="flex items-center gap-2 rounded-lg border border-yellow-600/50 bg-yellow-900/30 px-4 py-2 text-sm text-yellow-300"
           >
             <IconWarning size={16} />
-            {tracker.storageError ?? explorer.storageError}
+            {tracker.storageError ?? explorer.storageError ?? bossSet.storageError}
           </p>
         )}
 
@@ -403,7 +456,7 @@ export function App() {
               />
             )}
           </>
-        ) : (
+        ) : viewMode === 'notes' ? (
           <>
             <CompletionBar
               map={selectedMap}
@@ -441,6 +494,32 @@ export function App() {
                 onToggleFound={handleToggleNote}
                 onOpenNote={setSelectedNote}
                 onlyOpen={notesOnlyOpen}
+              />
+            )}
+          </>
+        ) : (
+          <>
+            <CompletionBar
+              map={selectedMap}
+              tamed={bossDoneCount}
+              total={mapBossKeys.size}
+              unit="besiegt"
+              completeText="Alle Bosse dieser Map besiegt."
+            />
+
+            <p className="rounded-xl border border-gray-800/80 bg-ark-surface/60 p-3.5 text-sm text-gray-400 sm:p-4">
+              Tippe eine Stufe (Gamma/Beta/Alpha) an, um sie als <span className="text-green-300">besiegt</span> zu
+              markieren, oder öffne einen Boss für Tribut und Strategie.
+            </p>
+
+            {bossSet.loading ? (
+              <p className="p-10 text-center text-gray-500">Lade Boss-Fortschritt …</p>
+            ) : (
+              <BossView
+                map={selectedMap}
+                isDefeated={bossSet.has}
+                onToggle={handleToggleBoss}
+                onOpenBoss={setSelectedBoss}
               />
             )}
           </>
@@ -544,6 +623,15 @@ export function App() {
           found={explorer.isFound(selectedNote.id)}
           onToggleFound={() => handleToggleNote(selectedNote)}
           onClose={() => setSelectedNote(null)}
+        />
+      )}
+
+      {selectedBoss && (
+        <BossModal
+          boss={selectedBoss}
+          isDefeated={bossSet.has}
+          onToggle={(difficulty) => handleToggleBoss(selectedBoss, difficulty)}
+          onClose={() => setSelectedBoss(null)}
         />
       )}
 
