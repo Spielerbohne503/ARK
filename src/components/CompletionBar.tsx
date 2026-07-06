@@ -28,16 +28,26 @@ export function CompletionBar({
   return (
     <section
       aria-label="Zähm-Fortschritt"
-      className="rounded-xl border border-gray-800 bg-ark-surface/80 p-4 shadow-lg sm:p-5"
+      className="relative overflow-hidden rounded-xl border border-gray-800 bg-ark-surface/80 p-4 shadow-lg sm:p-5"
     >
-      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
+      {/* dezenter Fortschritts-Glow im Hintergrund, wächst mit dem Prozent */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 bg-gradient-to-r from-green-500/[0.06] to-transparent transition-all duration-700"
+        style={{ width: `${Math.max(percent, 6)}%` }}
+      />
+      <div className="relative mb-3 flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="font-display text-sm uppercase tracking-widest text-gray-300">
           Completion · <span className="text-green-400">{map}</span>
         </h2>
         <p className="font-body text-sm text-gray-300">
           <span className="text-lg font-bold tabular-nums text-green-400">{animatedTamed}</span>
           <span className="text-gray-500"> / {total} {unit}</span>
-          <span className="ml-3 rounded bg-gray-800 px-2 py-0.5 font-mono text-xs tabular-nums text-green-300">
+          <span
+            className={`ml-3 rounded px-2 py-0.5 font-mono text-xs font-semibold tabular-nums ${
+              complete ? 'bg-amber-500/20 text-amber-300' : 'bg-gray-800 text-green-300'
+            }`}
+          >
             {animatedPercent}%
           </span>
         </p>
@@ -48,7 +58,7 @@ export function CompletionBar({
         aria-valuenow={percent}
         aria-valuemin={0}
         aria-valuemax={100}
-        className="h-3 overflow-hidden rounded-full bg-gray-800 shadow-inner"
+        className="relative h-3 overflow-hidden rounded-full border border-black/40 bg-gray-950/60 shadow-inner"
       >
         <div
           className={`relative h-full overflow-hidden rounded-full bg-gradient-to-r from-green-700 via-green-500 to-green-400 transition-all duration-700 ease-out ${

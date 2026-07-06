@@ -17,7 +17,7 @@ function BossImage({ boss }: { boss: Boss }) {
       alt={boss.name}
       loading="lazy"
       onError={() => setFailed(true)}
-      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+      className="h-full w-full object-cover brightness-110 contrast-105 transition-transform duration-500 group-hover:scale-110"
     />
   );
 }
@@ -49,8 +49,10 @@ export function BossView({ map, isDefeated, onToggle, onOpenBoss }: BossViewProp
           <article
             key={boss.id}
             style={{ animationDelay: `${Math.min(index, 12) * 35}ms` }}
-            className={`group animate-fade-in-up overflow-hidden rounded-xl border shadow-lg transition-all duration-300 ${
-              allDone ? 'border-green-500/60 bg-green-900/70' : 'border-gray-700/80 bg-gray-800'
+            className={`group animate-fade-in-up overflow-hidden rounded-xl border shadow-lg transition-all duration-300 hover:-translate-y-1 ${
+              allDone
+                ? 'border-green-500/60 bg-green-900/70 hover:shadow-glow-green'
+                : 'border-gray-700/80 bg-gray-800 hover:border-green-700/60 hover:shadow-2xl hover:shadow-black/60'
             }`}
           >
             {/* Bild öffnet die Detail-Ansicht */}
@@ -61,6 +63,15 @@ export function BossView({ map, isDefeated, onToggle, onOpenBoss }: BossViewProp
               className="relative block h-40 w-full overflow-hidden bg-gray-900 text-left"
             >
               <BossImage boss={boss} />
+              {/* radialer Lichtschein hellt den oft dunklen Boss-Render auf */}
+              <span
+                aria-hidden
+                className={`pointer-events-none absolute inset-0 mix-blend-screen ${
+                  allDone
+                    ? 'bg-[radial-gradient(ellipse_at_center,rgba(74,222,128,0.35),transparent_65%)]'
+                    : 'bg-[radial-gradient(ellipse_at_center,rgba(150,170,200,0.3),transparent_65%)]'
+                }`}
+              />
               <span aria-hidden className={`pointer-events-none absolute inset-0 bg-gradient-to-t to-transparent ${allDone ? 'from-green-950/90' : 'from-gray-950/90'}`} />
               <div className="absolute inset-x-0 bottom-0 p-3">
                 <h3 className="font-display text-lg font-bold text-white drop-shadow-md">{boss.name}</h3>

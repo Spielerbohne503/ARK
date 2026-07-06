@@ -46,6 +46,14 @@ export default {
           '0%': { opacity: '0', transform: 'translateY(12px) scale(0.96)' },
           '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
         },
+        'glow-pulse': {
+          '0%, 100%': { opacity: '0.5' },
+          '50%': { opacity: '0.85' },
+        },
+        'float-slow': {
+          '0%, 100%': { transform: 'translateY(0) scale(1)' },
+          '50%': { transform: 'translateY(-6%) scale(1.04)' },
+        },
       },
       animation: {
         'modal-in': 'modal-in 0.25s ease-out',
@@ -55,6 +63,12 @@ export default {
         shimmer: 'shimmer 2.5s ease-in-out infinite',
         'pin-pop': 'pin-pop 0.4s ease-out',
         'toast-in': 'toast-in 0.25s ease-out',
+        'glow-pulse': 'glow-pulse 6s ease-in-out infinite',
+        'float-slow': 'float-slow 14s ease-in-out infinite',
+      },
+      boxShadow: {
+        'glow-green': '0 0 24px -4px rgba(74, 222, 128, 0.35)',
+        'glow-amber': '0 0 24px -4px rgba(251, 191, 36, 0.3)',
       },
     },
   },

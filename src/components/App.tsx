@@ -303,27 +303,31 @@ export function App() {
     <div className="relative min-h-screen bg-ark-bg font-body text-gray-100">
       {/* Film-Grain + ambiente Glows über der ganzen Seite */}
       <span aria-hidden className="grain-overlay" />
-      <span aria-hidden className="pointer-events-none fixed -left-40 top-1/4 -z-0 h-96 w-96 rounded-full bg-green-500/[0.04] blur-3xl" />
-      <span aria-hidden className="pointer-events-none fixed -right-40 top-2/3 -z-0 h-96 w-96 rounded-full bg-amber-500/[0.03] blur-3xl" />
+      <span aria-hidden className="pointer-events-none fixed -left-40 top-1/4 -z-0 h-96 w-96 animate-glow-pulse rounded-full bg-green-500/[0.05] blur-3xl" />
+      <span aria-hidden className="pointer-events-none fixed -right-40 top-2/3 -z-0 h-96 w-96 animate-glow-pulse rounded-full bg-amber-500/[0.04] blur-3xl [animation-delay:3s]" />
 
       {/* Cinematic Hero */}
       <header className="relative overflow-hidden border-b border-gray-800/80">
-        <div aria-hidden className="absolute inset-0 flex opacity-25">
+        <div aria-hidden className="absolute inset-0 flex animate-float-slow opacity-20 blur-[2px]">
           {HERO_IMAGES.map((src) => (
             <img key={src} src={src} alt="" className="h-full w-1/3 object-cover" loading="eager" />
           ))}
         </div>
         <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-ark-bg via-ark-bg/85 to-ark-bg/40" />
-        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(10,14,18,0.9)_100%)]" />
+        <div aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_25%,rgba(10,14,18,0.92)_100%)]" />
+        {/* dezenter grüner Lichtkegel von oben */}
+        <div aria-hidden className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_top,rgba(74,222,128,0.1),transparent_70%)]" />
 
         <div className="relative mx-auto max-w-7xl px-4 pb-10 pt-12 sm:px-6 sm:pb-14 sm:pt-16">
           <p className="mb-3 flex items-center justify-center gap-2 text-[11px] font-medium uppercase tracking-[0.35em] text-green-400/90">
+            <span aria-hidden className="h-px w-6 bg-gradient-to-r from-transparent to-green-500/60" />
             <IconSkull size={18} />
             Survival Evolved Companion
+            <span aria-hidden className="h-px w-6 bg-gradient-to-l from-transparent to-green-500/60" />
           </p>
-          <h1 className="text-center font-display text-4xl font-bold tracking-wider text-gray-50 drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)] sm:text-5xl">
+          <h1 className="text-center font-display text-4xl font-bold tracking-wider text-gray-50 drop-shadow-[0_2px_24px_rgba(0,0,0,0.85)] sm:text-6xl">
             ARK{' '}
-            <span className="bg-gradient-to-r from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-green-300 via-green-400 to-emerald-500 bg-clip-text text-transparent drop-shadow-[0_0_24px_rgba(74,222,128,0.35)]">
               DINO TRACKER
             </span>
           </h1>
@@ -364,21 +368,26 @@ export function App() {
                         { value: completedMapsAnimated, label: 'Maps komplett' },
                       ]
             ).map((stat) => (
-              <div key={stat.label} className="flex-1 px-4 text-center sm:px-8">
-                <dd className="font-display text-3xl font-bold tabular-nums text-amber-400 sm:text-4xl">
+              <div
+                key={stat.label}
+                className="flex-1 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 py-3 text-center backdrop-blur-sm transition-colors hover:border-amber-400/20 sm:px-6"
+              >
+                <dd className="font-display text-3xl font-bold tabular-nums text-amber-400 drop-shadow-[0_0_10px_rgba(251,191,36,0.25)] sm:text-4xl">
                   {stat.value}
                 </dd>
-                <dt className="mt-1 text-[11px] uppercase tracking-widest text-gray-500">{stat.label}</dt>
+                <dt className="mt-1 text-[10px] uppercase tracking-[0.15em] text-gray-500 sm:text-[11px]">
+                  {stat.label}
+                </dt>
               </div>
             ))}
           </dl>
 
-          {/* Gesamtfortschritt über Kreaturen UND Erkunder-Notizen */}
-          <div className="mx-auto mt-8 max-w-lg">
-            <div className="mb-1.5 flex items-baseline justify-between text-[11px] uppercase tracking-widest">
-              <span className="text-gray-500">Gesamtfortschritt · Kreaturen, Notizen, Bosse &amp; Artefakte</span>
+          {/* Gesamtfortschritt über alle Sammel-Bereiche */}
+          <div className="mx-auto mt-8 max-w-lg rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5 backdrop-blur-sm">
+            <div className="mb-2 flex items-baseline justify-between gap-2 text-[10px] uppercase tracking-[0.15em] sm:text-[11px]">
+              <span className="text-gray-500">Gesamtfortschritt</span>
               <span className="font-mono tabular-nums text-green-300">
-                {overallDone} / {overallTotal} · {overallPercentAnimated}%
+                {overallDone} / {overallTotal} · <span className="text-amber-300">{overallPercentAnimated}%</span>
               </span>
             </div>
             <div
@@ -387,16 +396,18 @@ export function App() {
               aria-valuemin={0}
               aria-valuemax={100}
               aria-label="Gesamtfortschritt"
-              className="h-2.5 overflow-hidden rounded-full bg-gray-800/80 shadow-inner"
+              className="h-3 overflow-hidden rounded-full border border-black/40 bg-gray-950/60 shadow-inner"
             >
               <div
-                className="relative h-full overflow-hidden rounded-full bg-gradient-to-r from-green-600 via-green-400 to-amber-400 transition-all duration-700 ease-out"
-                style={{ width: `${overallPercent}%` }}
+                className={`relative h-full overflow-hidden rounded-full bg-gradient-to-r from-green-500 via-emerald-400 to-amber-400 transition-all duration-700 ease-out ${
+                  overallPercent > 0 ? 'shadow-[0_0_12px_rgba(74,222,128,0.5)]' : ''
+                }`}
+                style={{ width: `${Math.max(overallPercent, 1.5)}%` }}
               >
                 {overallPercent > 0 && (
                   <span
                     aria-hidden
-                    className="absolute inset-y-0 w-1/4 animate-shimmer bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                    className="absolute inset-y-0 w-1/4 animate-shimmer bg-gradient-to-r from-transparent via-white/30 to-transparent"
                   />
                 )}
               </div>
@@ -405,9 +416,10 @@ export function App() {
         </div>
       </header>
 
-      {/* Modus-Umschalter: Kreaturen ↔ Erkunder-Notizen */}
-      <div className="border-b border-gray-800/60 bg-ark-bg">
-        <div className="mx-auto flex max-w-7xl gap-2 px-4 py-2 sm:px-6">
+      {/* Modus-Umschalter als Segmented-Navigation */}
+      <div className="border-b border-gray-800/60 bg-ark-bg/60">
+        <div className="scrollbar-hide mx-auto max-w-7xl overflow-x-auto px-4 py-3 sm:px-6">
+          <div className="flex w-max gap-1 rounded-xl border border-gray-800/80 bg-ark-surface/50 p-1 shadow-inner">
           {([
             { mode: 'creatures', label: 'Kreaturen', icon: <IconSwords size={16} /> },
             { mode: 'notes', label: 'Erkunder-Notizen', icon: <IconBook size={16} /> },
@@ -420,9 +432,9 @@ export function App() {
               type="button"
               onClick={() => setViewMode(entry.mode)}
               aria-pressed={viewMode === entry.mode}
-              className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
+              className={`flex shrink-0 items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
                 viewMode === entry.mode
-                  ? 'bg-green-500/10 text-green-300 ring-1 ring-green-500/40'
+                  ? 'bg-gradient-to-b from-green-500/20 to-green-500/10 text-green-200 shadow-glow-green ring-1 ring-green-400/40'
                   : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
               }`}
             >
@@ -430,10 +442,10 @@ export function App() {
               {entry.label}
             </button>
           ))}
+          </div>
         </div>
       </div>
-
-      {/* Sticky Glass-Toolbar: Map-Tabs + (im Kreaturen-Modus) Planer & Suche.
+{/* Sticky Glass-Toolbar: Map-Tabs + (im Kreaturen-Modus) Planer & Suche.
           Im Kibble-Modus (map-unabhängig) entfällt sie. */}
       {viewMode !== 'kibble' && (
       <div className="sticky top-0 z-40 border-b border-gray-800/70 bg-ark-bg/80 backdrop-blur-md">
