@@ -30,13 +30,14 @@ import { DinoGrid } from './DinoGrid';
 import { ExplorerNoteModal } from './ExplorerNoteModal';
 import { ExplorerNotesView } from './ExplorerNotesView';
 import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } from './FilterBar';
+import { InteractiveMap } from './InteractiveMap';
 import { MapTabs } from './MapTabs';
 import { Spinner } from './Spinner';
 import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
-import { IconBook, IconDownload, IconDrumstick, IconGem, IconList, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
+import { IconBook, IconDownload, IconDrumstick, IconGem, IconList, IconMapPin, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
 
-type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts' | 'kibble';
+type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts' | 'kibble' | 'map';
 
 /** Anzahl Dinos, die überhaupt eine Kibble-Stufe nutzen. */
 const KIBBLE_NAMES = new Set(KIBBLE.map((k) => k.name));
@@ -426,6 +427,7 @@ export function App() {
             { mode: 'notes', label: 'Erkunder-Notizen', icon: <IconBook size={16} /> },
             { mode: 'bosses', label: 'Bosse', icon: <IconTrophy size={16} /> },
             { mode: 'artifacts', label: 'Artefakte', icon: <IconGem size={16} /> },
+            { mode: 'map', label: 'Karte', icon: <IconMapPin size={16} /> },
             { mode: 'kibble', label: 'Kibble', icon: <IconDrumstick size={16} /> },
           ] as const).map((entry) => (
             <button
@@ -596,6 +598,16 @@ export function App() {
           </>
         ) : viewMode === 'kibble' ? (
           <KibbleView />
+        ) : viewMode === 'map' ? (
+          <InteractiveMap
+            map={selectedMap}
+            notes={mapNotes}
+            artifacts={mapArtifacts}
+            isNoteFound={explorer.isFound}
+            isArtifactFound={artifactSet.has}
+            onOpenNote={setSelectedNote}
+            onOpenArtifact={setSelectedArtifact}
+          />
         ) : (
           <>
             <CompletionBar
