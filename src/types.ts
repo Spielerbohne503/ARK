@@ -38,6 +38,11 @@ export interface Dino {
   /** Brutzeit des Eis in Minuten (0 = lebendgebärend). */
   eggIncubationTime: number;
   difficulty: Difficulty;
+  /**
+   * false = nicht zähmbar (Alphas, Korrupte, Wildtiere). Wird als „Getötet"
+   * statt „Gezähmt" getrackt; Zähm-/Zucht-Tabs entfallen. undefined = zähmbar.
+   */
+  tameable?: boolean;
   imageUrl: string;
   /** 1–2 Sätze: Verhalten + Zähm-Tipp. */
   description: string;

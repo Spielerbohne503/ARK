@@ -30,6 +30,7 @@ import {
   IconFlask,
   IconNote,
   IconPinFilled,
+  IconSkull,
   IconTerminal,
   IconTimer,
 } from './icons';
@@ -149,6 +150,12 @@ export function DinoDetailModal({
   const taming = useTamingCalculator(dino, level);
   const tamed = record !== undefined;
   const difficulty = DIFFICULTY_META[dino.difficulty];
+  // Nicht-zähmbare Kreaturen: „Getötet"-Tracking, keine Zähm-/Betäub-/Zucht-Tabs.
+  const tameable = dino.tameable !== false;
+  const doneLabel = tameable ? 'Gezähmt' : 'Getötet';
+  const visibleTabs = tameable
+    ? TABS
+    : TABS.filter((t) => t.id === 'info' || t.id === 'stats' || t.id === 'misc');
 
   // ESC schließt das Modal; Fokus startet auf dem Close-Button.
   useEffect(() => {
@@ -271,7 +278,7 @@ export function DinoDetailModal({
           </button>
           {tamed && (
             <span className="absolute left-3 top-3 rounded-full border border-green-500/50 bg-green-950/80 px-3 py-1 text-xs font-medium text-green-300 backdrop-blur-sm">
-              Gezähmt am {formatDate(record.tamedDate)} · Lv. {record.level}
+              {doneLabel} am {formatDate(record.tamedDate)}{tameable && ` · Lv. ${record.level}`}
             </span>
           )}
           <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-2 p-4">
@@ -311,7 +318,7 @@ export function DinoDetailModal({
         {/* Tab-Leiste */}
         <nav aria-label="Detail-Bereiche" className="scrollbar-hide shrink-0 overflow-x-auto border-b border-gray-800">
           <div className="flex w-max gap-1 px-2" role="tablist">
-            {TABS.map((t) => (
+            {visibleTabs.map((t) => (
               <button
                 key={t.id}
                 type="button"
@@ -523,7 +530,7 @@ export function DinoDetailModal({
                             {row.tamedPct !== null ? `+${row.tamedPct} %` : '–'}
                           </td>
                           <td className="py-2 text-right font-mono tabular-nums text-gray-500">
-                            {row.stat ? `#${statRank(dino, row.stat)}/${TOTAL_SPECIES}` : '–'}
+                            {row.stat && tameable ? `#${statRank(dino, row.stat)}/${TOTAL_SPECIES}` : '–'}
                           </td>
                         </tr>
                       );
@@ -624,10 +631,13 @@ export function DinoDetailModal({
                   Konsolen-Befehle
                 </h3>
                 <div className="space-y-2">
-                  {[
-                    { label: 'Wild spawnen', cmd: commands.wild },
-                    { label: `Gezähmt (Lv. ${level})`, cmd: commands.tamed },
-                  ].map((entry) => (
+                  {(tameable
+                    ? [
+                        { label: 'Wild spawnen', cmd: commands.wild },
+                        { label: `Gezähmt (Lv. ${level})`, cmd: commands.tamed },
+                      ]
+                    : [{ label: 'Wild spawnen', cmd: commands.wild }]
+                  ).map((entry) => (
                     <div key={entry.label}>
                       <p className="mb-1 text-[11px] uppercase tracking-widest text-gray-500">{entry.label}</p>
                       <div className="flex items-stretch gap-2">
@@ -663,8 +673,14 @@ export function DinoDetailModal({
                 : 'border-green-500/50 bg-green-900/60 text-green-300 hover:bg-green-800/80'
             }`}
           >
-            <IconPinFilled size={16} />
-            {tamed ? 'Zähmung entfernen' : `Als gezähmt markieren (Lv. ${level})`}
+            {tameable ? <IconPinFilled size={16} /> : <IconSkull size={16} />}
+            {tameable
+              ? tamed
+                ? 'Zähmung entfernen'
+                : `Als gezähmt markieren (Lv. ${level})`
+              : tamed
+                ? 'Tötung entfernen'
+                : 'Als getötet markieren'}
           </button>
         </div>
       </div>

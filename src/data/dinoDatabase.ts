@@ -1,4 +1,5 @@
 import type { Dino, MapName } from '../types';
+import { WILD_CREATURES } from './wildCreatures';
 
 /**
  * Dino-Bilder liegen lokal in public/dinos/ (via scripts/fetch-images.mjs
@@ -1982,8 +1983,11 @@ export const DINO_DATABASE: Dino[] = [
 ];
 
 /** Liefert alle Dinos, die auf der angegebenen Map spawnen (alphabetisch sortiert). */
+/** Zähmbare Dinos + nicht-zähmbare Kreaturen (Alphas, Korrupte, Wildtiere). */
+export const ALL_CREATURES: Dino[] = [...DINO_DATABASE, ...WILD_CREATURES];
+
 export function getDinosForMap(map: MapName): Dino[] {
-  return DINO_DATABASE.filter((dino) => dino.maps.includes(map)).sort((a, b) =>
+  return ALL_CREATURES.filter((dino) => dino.maps.includes(map)).sort((a, b) =>
     a.name.localeCompare(b.name, 'de'),
   );
 }

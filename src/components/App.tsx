@@ -213,14 +213,15 @@ export function App() {
   const handleTogglePin = useCallback(
     (dino: Dino, level?: number) => {
       const nowTamed = tracker.toggleTamed(selectedMap, dino.id, level);
+      const verb = dino.tameable === false ? 'getötet' : 'gezähmt';
       if (nowTamed) {
         // 100 %-Check: Zähl-Stand vor dem Toggle + 1 gegen Gesamtzahl.
         const willBeComplete = tracker.countTamed(selectedMap, mapDinoIds) + 1 === mapDinos.length;
         if (willBeComplete) {
           fireConfetti();
-          pushToast('complete', `${selectedMap} ist komplett – alle ${mapDinos.length} Kreaturen gezähmt!`);
+          pushToast('complete', `${selectedMap} ist komplett – alle ${mapDinos.length} Kreaturen erledigt!`);
         } else {
-          pushToast('tamed', `${dino.name} als gezähmt markiert`);
+          pushToast('tamed', `${dino.name} als ${verb} markiert`);
         }
       } else {
         pushToast('untamed', `${dino.name} wieder als offen markiert`);
@@ -503,7 +504,13 @@ export function App() {
 
         {viewMode === 'creatures' ? (
           <>
-            <CompletionBar map={selectedMap} tamed={tamedCount} total={mapDinos.length} />
+            <CompletionBar
+              map={selectedMap}
+              tamed={tamedCount}
+              total={mapDinos.length}
+              unit="erledigt"
+              completeText="Alle Kreaturen dieser Map gezähmt bzw. erledigt."
+            />
 
             <FilterBar
               status={status}

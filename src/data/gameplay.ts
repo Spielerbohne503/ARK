@@ -262,6 +262,16 @@ const SPAWN_CLASS: Record<string, string> = {
   astrodelphis: 'SpaceDolphin_Character_BP_C', noglin: 'BrainSlug_Character_BP_C', stryder: 'TekStrider_Character_BP_C',
   amargasaurus: 'Amargasaurus_Character_BP_C', dinopithecus: 'BigMonkey_Character_BP_C',
   deinonychus: 'Deinonychus_Character_BP_C', basilisk: 'Basilisk_Character_BP_C',
+  // Nicht-zähmbare Kreaturen (Alphas, Wildtiere, Korrupte)
+  alpharaptor: 'MegaRaptor_Character_BP_C', alphacarno: 'MegaCarno_Character_BP_C',
+  alpharex: 'MegaRex_Character_BP_C', alphamegalodon: 'Megalodon_Character_BP_Alpha_C',
+  alphamosasaur: 'Mosa_Character_BP_Mega_C', alphatuso: 'Tusoteuthis_Character_BP_Mega_C',
+  leedsichthys: 'Leedsichthys_Character_BP_C', megapiranha: 'Piranha_Character_BP_C',
+  eurypterid: 'Eurypterid_Character_C', trilobite: 'Trilobite_Character_C',
+  corruptedrex: 'Rex_Character_BP_Corrupt_C', corruptedspino: 'Spino_Character_BP_Corrupt_C',
+  corruptedgiga: 'Gigant_Character_BP_Corrupt_C', corruptedwyvern: 'Wyvern_Character_BP_Fire_Corrupt_C',
+  corruptedarthro: 'Arthro_Character_BP_Corrupt_C', corruptedreaper: 'Xenomorph_Character_BP_Male_Corrupt_C',
+  defenseunit: 'DefenseUnit_Character_BP_C', insectswarm: 'InsectSwarmChar_BP_C',
 };
 
 /** Konsolen-Befehle: wild spawnen bzw. gezähmt mit Ziel-Level. */

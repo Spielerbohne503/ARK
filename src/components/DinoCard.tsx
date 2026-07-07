@@ -1,6 +1,6 @@
 import { useRef, useState, type MouseEvent } from 'react';
 import type { Difficulty, Dino } from '../types';
-import { IconPin, IconPinFilled, IconStar, IconStarFilled } from './icons';
+import { IconPin, IconPinFilled, IconSkull, IconStar, IconStarFilled } from './icons';
 
 const DIFFICULTY_META: Record<Difficulty, { label: string; dot: string; strip: string }> = {
   easy: { label: 'Leicht', dot: 'bg-green-400', strip: 'from-green-500/70 to-green-500/0' },
@@ -36,6 +36,9 @@ export function DinoCard({
   const [starPopping, setStarPopping] = useState(false);
   const cardRef = useRef<HTMLElement>(null);
   const difficulty = DIFFICULTY_META[dino.difficulty];
+  const tameable = dino.tameable !== false;
+  // Bei nicht-zähmbaren Kreaturen bedeutet der Pin „getötet" statt „gezähmt".
+  const doneLabel = tameable ? 'Gezähmt' : 'Getötet';
 
   // 3D-Tilt + Spotlight via CSS-Variablen; nur für Maus-Pointer relevant,
   // Touch löst kein mousemove aus, prefers-reduced-motion wird via CSS entschärft.
@@ -91,27 +94,30 @@ export function DinoCard({
 
       {/* Aktions-Buttons */}
       <div className="absolute right-2 top-2 z-20 flex gap-1.5">
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setStarPopping(true);
-            onToggleFavorite();
-          }}
-          onAnimationEnd={() => setStarPopping(false)}
-          aria-pressed={favorite}
-          aria-label={favorite ? `${dino.name} aus Favoriten entfernen` : `${dino.name} zu Favoriten`}
-          title={favorite ? 'Favorit entfernen' : 'Als Nächstes zähmen'}
-          className={`flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur-sm transition-all duration-300 hover:scale-110 active:scale-95 ${
-            starPopping ? 'animate-pin-pop' : ''
-          } ${
-            favorite
-              ? 'border-amber-400/70 bg-amber-500/20 text-amber-400'
-              : 'border-gray-600/60 bg-gray-950/70 text-gray-400 opacity-80 hover:text-amber-300 hover:opacity-100'
-          }`}
-        >
-          {favorite ? <IconStarFilled size={17} /> : <IconStar size={17} />}
-        </button>
+        {/* Favorit nur bei zähmbaren Kreaturen (Zähm-Liste/Planer) */}
+        {tameable && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setStarPopping(true);
+              onToggleFavorite();
+            }}
+            onAnimationEnd={() => setStarPopping(false)}
+            aria-pressed={favorite}
+            aria-label={favorite ? `${dino.name} aus Favoriten entfernen` : `${dino.name} zu Favoriten`}
+            title={favorite ? 'Favorit entfernen' : 'Als Nächstes zähmen'}
+            className={`flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur-sm transition-all duration-300 hover:scale-110 active:scale-95 ${
+              starPopping ? 'animate-pin-pop' : ''
+            } ${
+              favorite
+                ? 'border-amber-400/70 bg-amber-500/20 text-amber-400'
+                : 'border-gray-600/60 bg-gray-950/70 text-gray-400 opacity-80 hover:text-amber-300 hover:opacity-100'
+            }`}
+          >
+            {favorite ? <IconStarFilled size={17} /> : <IconStar size={17} />}
+          </button>
+        )}
         <button
           type="button"
           onClick={(e) => {
@@ -121,8 +127,8 @@ export function DinoCard({
           }}
           onAnimationEnd={() => setPinPopping(false)}
           aria-pressed={tamed}
-          aria-label={tamed ? `${dino.name} als ungezähmt markieren` : `${dino.name} als gezähmt markieren`}
-          title={tamed ? 'Gezähmt – Klick zum Entfernen' : 'Als gezähmt pinnen'}
+          aria-label={tamed ? `${dino.name} als ${tameable ? 'ungezähmt' : 'nicht getötet'} markieren` : `${dino.name} als ${tameable ? 'gezähmt' : 'getötet'} markieren`}
+          title={tamed ? `${doneLabel} – Klick zum Entfernen` : `Als ${tameable ? 'gezähmt' : 'getötet'} markieren`}
           className={`flex h-9 w-9 items-center justify-center rounded-full border backdrop-blur-sm transition-all duration-300 hover:scale-110 active:scale-95 ${
             pinPopping ? 'animate-pin-pop' : ''
           } ${
@@ -131,7 +137,7 @@ export function DinoCard({
               : 'border-gray-600/60 bg-gray-950/70 text-gray-400 opacity-80 hover:text-green-300 hover:opacity-100'
           }`}
         >
-          {tamed ? <IconPinFilled size={17} /> : <IconPin size={17} />}
+          {!tameable ? <IconSkull size={17} /> : tamed ? <IconPinFilled size={17} /> : <IconPin size={17} />}
         </button>
       </div>
 
@@ -156,7 +162,7 @@ export function DinoCard({
           </h3>
           {tamed && (
             <span className="mb-0.5 shrink-0 animate-fade-in rounded-full border border-green-400/50 bg-green-950/80 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-green-300">
-              Gezähmt
+              {doneLabel}
             </span>
           )}
         </div>
