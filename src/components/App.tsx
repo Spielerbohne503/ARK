@@ -15,9 +15,19 @@ import { useCountUp } from '../hooks/useCountUp';
 import { useDinoTracker } from '../hooks/useDinoTracker';
 import { useExplorerTracker } from '../hooks/useExplorerTracker';
 import { useKeySet } from '../hooks/useKeySet';
+import { useSync } from '../hooks/useSync';
 import { exportBackup, parseBackup } from '../lib/backup';
 import { fireConfetti } from '../lib/confetti';
-import { STORE_ARTIFACTS, STORE_BOSSES } from '../lib/db';
+import {
+  overwriteStore,
+  STORE_ARTIFACTS,
+  STORE_BOSSES,
+  STORE_FAVORITES,
+  STORE_FOUND_NOTES,
+  STORE_NOTES,
+  STORE_TAMED,
+} from '../lib/db';
+import { type SyncState } from '../lib/sync';
 import { MAPS, type Dino, type ExplorerNote, type MapName } from '../types';
 import { ArtifactModal } from './ArtifactModal';
 import { ArtifactView } from './ArtifactView';
@@ -33,6 +43,7 @@ import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } f
 import { InteractiveMap } from './InteractiveMap';
 import { MapTabs } from './MapTabs';
 import { Spinner } from './Spinner';
+import { SyncPanel } from './SyncPanel';
 import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
 import { IconBook, IconDownload, IconDrumstick, IconGem, IconList, IconMapPin, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
@@ -72,12 +83,46 @@ export function App() {
   const [sort, setSort] = useState<SortOrder>('name');
   const [notesOnlyOpen, setNotesOnlyOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastData[]>([]);
+  const [syncOpen, setSyncOpen] = useState(false);
   const toastIdRef = useRef(0);
   const importInputRef = useRef<HTMLInputElement>(null);
   const tracker = useDinoTracker();
   const explorer = useExplorerTracker();
   const bossSet = useKeySet(STORE_BOSSES);
   const artifactSet = useKeySet(STORE_ARTIFACTS);
+
+  // Kompletter Zustand für den Cloud-Sync (alle sechs Sammel-Bereiche).
+  const syncState = useMemo<SyncState>(
+    () => ({
+      tamed: [...tracker.records.values()],
+      favorites: [...tracker.favorites],
+      notes: [...tracker.notes.values()],
+      found: [...explorer.found],
+      bosses: [...bossSet.keys],
+      artifacts: [...artifactSet.keys],
+    }),
+    [tracker.records, tracker.favorites, tracker.notes, explorer.found, bossSet.keys, artifactSet.keys],
+  );
+
+  // Eingehenden Fremd-Stand übernehmen: React-State + IndexedDB überschreiben.
+  const applyRemote = useCallback(
+    (remote: SyncState) => {
+      tracker.hydrate(remote.tamed, remote.favorites, remote.notes);
+      explorer.hydrate(remote.found);
+      bossSet.hydrate(remote.bosses);
+      artifactSet.hydrate(remote.artifacts);
+      const now = new Date().toISOString();
+      void overwriteStore(STORE_TAMED, remote.tamed);
+      void overwriteStore(STORE_FAVORITES, remote.favorites.map((key) => ({ key })));
+      void overwriteStore(STORE_NOTES, remote.notes);
+      void overwriteStore(STORE_FOUND_NOTES, remote.found.map((key) => ({ key, foundDate: now })));
+      void overwriteStore(STORE_BOSSES, remote.bosses.map((key) => ({ key })));
+      void overwriteStore(STORE_ARTIFACTS, remote.artifacts.map((key) => ({ key })));
+    },
+    [tracker.hydrate, explorer.hydrate, bossSet.hydrate, artifactSet.hydrate],
+  );
+
+  const syncStatus = useSync({ state: syncState, onRemote: applyRemote });
 
   useEffect(() => {
     try {
@@ -715,6 +760,34 @@ export function App() {
                 }}
               />
             </div>
+            <button
+              type="button"
+              onClick={() => setSyncOpen(true)}
+              className="mt-3 flex items-center gap-2 rounded-lg border border-gray-700 px-3 py-2 text-xs text-gray-300 transition-colors hover:border-green-600 hover:text-green-300"
+            >
+              <span
+                aria-hidden
+                className={`h-2 w-2 rounded-full ${
+                  syncStatus === 'connected'
+                    ? 'bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]'
+                    : syncStatus === 'connecting'
+                      ? 'animate-pulse bg-amber-400'
+                      : syncStatus === 'error'
+                        ? 'bg-red-400'
+                        : 'bg-gray-600'
+                }`}
+              />
+              Live-Sync
+              <span className="text-gray-500">
+                {syncStatus === 'connected'
+                  ? '· aktiv'
+                  : syncStatus === 'connecting'
+                    ? '· verbinde …'
+                    : syncStatus === 'error'
+                      ? '· Fehler'
+                      : '· aus'}
+              </span>
+            </button>
           </div>
           <div>
             <h2 className="mb-3 font-display text-xs uppercase tracking-widest text-gray-400">Über</h2>
@@ -778,6 +851,8 @@ export function App() {
           onClose={() => setSelectedArtifact(null)}
         />
       )}
+
+      {syncOpen && <SyncPanel status={syncStatus} onClose={() => setSyncOpen(false)} />}
 
       <ToastStack toasts={toasts} onDismiss={dismissToast} />
     </div>

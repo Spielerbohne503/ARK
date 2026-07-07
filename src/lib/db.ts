@@ -100,6 +100,26 @@ export const putFoundNote = (record: FoundNoteRecord) =>
 export const deleteFoundNote = (key: string) =>
   withStore(STORE_FOUND_NOTES, 'readwrite', (s) => s.delete(key));
 
+/**
+ * Ersetzt den kompletten Inhalt eines Stores in einer Transaktion
+ * (leeren + neu befüllen). Für den Cloud-Sync: eingehender Fremd-Stand
+ * überschreibt den lokalen Store vollständig.
+ */
+export function overwriteStore(store: StoreName, records: { key: string }[]): Promise<void> {
+  return openDb().then(
+    (db) =>
+      new Promise<void>((resolve, reject) => {
+        const tx = db.transaction(store, 'readwrite');
+        const os = tx.objectStore(store);
+        os.clear();
+        for (const record of records) os.put(record);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error ?? new Error('IndexedDB-Overwrite fehlgeschlagen.'));
+        tx.onabort = () => reject(tx.error ?? new Error('IndexedDB-Transaktion abgebrochen.'));
+      }),
+  );
+}
+
 // ── Generischer Key-Set-Store (für Bosse etc.) ──
 export const getAllKeys = (store: StoreName) =>
   withStore(store, 'readonly', (s) => s.getAll() as IDBRequest<{ key: string }[]>);

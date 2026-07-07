@@ -45,6 +45,54 @@ npm run build      # Ausgabe in dist/
 npm run preview    # Build lokal testen
 ```
 
+## Live-Sync (geräteübergreifend)
+
+Optional lässt sich der Fortschritt **in Echtzeit zwischen mehreren Geräten** teilen –
+ohne Datei-Export/-Import. Sobald **eine** Supabase-Instanz in der Config hinterlegt
+ist, synchronisiert sich **jedes Gerät automatisch**, das die Seite öffnet (gemeinsamer
+Stand für dich und z. B. deinen Bruder). Ist nichts hinterlegt, läuft die App wie bisher
+rein lokal/offline.
+
+**Einrichtung (einmalig, ~5 Minuten):**
+
+1. Auf [supabase.com](https://supabase.com) ein **kostenloses** Projekt anlegen.
+2. Im **SQL Editor** einmal ausführen:
+
+   ```sql
+   create table if not exists sync_state (
+     code text primary key,
+     state jsonb not null default '{}'::jsonb,
+     device text,
+     updated_at timestamptz not null default now()
+   );
+   alter table sync_state enable row level security;
+   create policy "anon access" on sync_state
+     for all to anon using (true) with check (true);
+   alter publication supabase_realtime add table sync_state;
+   ```
+
+3. Unter **Project Settings → API** die **Project URL** und den **anon public**-Key
+   kopieren und in `src/lib/supabaseConfig.ts` eintragen:
+
+   ```ts
+   const HARDCODED_URL = 'https://DEIN-PROJEKT.supabase.co';
+   const HARDCODED_ANON_KEY = 'eyJ…';   // anon public key
+   ```
+
+   Alternativ über Umgebungsvariablen beim Deploy: `VITE_SUPABASE_URL`,
+   `VITE_SUPABASE_ANON_KEY` (und optional `VITE_SUPABASE_ROOM`, um mehrere getrennte
+   Gruppen zu betreiben – Standard ist ein gemeinsamer Raum `ark-shared`).
+
+4. Neu bauen/deployen. Fertig – alle Geräte, die die Seite öffnen, sind live gesynct.
+
+**Wie es funktioniert:** Der komplette Fortschritt (Zähmungen, Tötungen, Notizen,
+Erkunder-Notizen, Bosse, Artefakte) liegt als eine JSON-Zeile in Supabase und wird per
+**Supabase Realtime** (WebSocket) sofort auf alle Geräte gespiegelt. Lokal bleibt alles
+weiter in IndexedDB, sodass die App auch offline funktioniert. Der `anon`-Key ist ein
+öffentlicher Browser-Schlüssel (durch die Tabellen-Policy abgesichert) und darf im
+Frontend stehen – gib die Seite aber nur an Leute weiter, mit denen du den Stand teilen
+willst. Den Sync-Status siehst du im Footer unter **Live-Sync**.
+
 ## Technik
 
 | Bereich | Lösung |

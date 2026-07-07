@@ -37,6 +37,8 @@ export interface DinoTracker {
   saveNote: (map: MapName, dinoId: string, text: string) => void;
   /** Kompletten Zustand ersetzen (nach Backup-Import). */
   replaceAll: (tamed: TamedRecord[], favoriteKeys: string[], noteRecords: NoteRecord[]) => void;
+  /** Nur den React-State setzen (Cloud-Sync schreibt die DB separat). */
+  hydrate: (tamed: TamedRecord[], favoriteKeys: string[], noteRecords: NoteRecord[]) => void;
 }
 
 /**
@@ -215,6 +217,15 @@ export function useDinoTracker(): DinoTracker {
     [persistCatch],
   );
 
+  const hydrate = useCallback(
+    (tamed: TamedRecord[], favoriteKeys: string[], noteRecords: NoteRecord[]) => {
+      setRecords(new Map(tamed.map((r) => [r.key, r])));
+      setFavorites(new Set(favoriteKeys));
+      setNotes(new Map(noteRecords.map((n) => [n.key, n])));
+    },
+    [],
+  );
+
   return {
     loading,
     storageError,
@@ -231,5 +242,6 @@ export function useDinoTracker(): DinoTracker {
     updateLevel,
     saveNote,
     replaceAll,
+    hydrate,
   };
 }

@@ -10,6 +10,8 @@ export interface KeySet {
   count: (validKeys: Set<string>) => number;
   /** Key umschalten, Auto-Save. Liefert den neuen Zustand. */
   toggle: (key: string) => boolean;
+  /** Nur den React-State setzen (Cloud-Sync schreibt die DB separat). */
+  hydrate: (keys: string[]) => void;
 }
 
 /**
@@ -65,5 +67,7 @@ export function useKeySet(storeName: string): KeySet {
     [keys, storeName],
   );
 
-  return { loading, storageError, keys, has, count, toggle };
+  const hydrate = useCallback((next: string[]) => setKeys(new Set(next)), []);
+
+  return { loading, storageError, keys, has, count, toggle, hydrate };
 }

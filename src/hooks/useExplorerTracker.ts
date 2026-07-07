@@ -11,6 +11,8 @@ export interface ExplorerTracker {
   countFound: (noteIds: Set<string>) => number;
   /** Umschalten, ob eine Notiz gefunden ist. Liefert den neuen Status. */
   toggleFound: (noteId: string) => boolean;
+  /** Nur den React-State setzen (Cloud-Sync schreibt die DB separat). */
+  hydrate: (foundKeys: string[]) => void;
 }
 
 /**
@@ -78,5 +80,7 @@ export function useExplorerTracker(): ExplorerTracker {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [found]);
 
-  return { loading, storageError, found, isFound, countFound, toggleFound };
+  const hydrate = useCallback((foundKeys: string[]) => setFound(new Set(foundKeys)), []);
+
+  return { loading, storageError, found, isFound, countFound, toggleFound, hydrate };
 }
