@@ -12,8 +12,9 @@
  */
 
 // ▼▼▼ Hier die EINE Supabase-Instanz eintragen ▼▼▼
-const HARDCODED_URL = '';
-const HARDCODED_ANON_KEY = '';
+const HARDCODED_URL = 'https://hhasmfefcnfuczytstjd.supabase.co';
+const HARDCODED_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoYXNtZmVmY25mdWN6eXRzdGpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzOTAwNzksImV4cCI6MjA5ODk2NjA3OX0.z7qggi6dOT5642vO7rGY3d5zoGP8uAcP9HlXfDPv2n0';
 // ▲▲▲ ────────────────────────────────────── ▲▲▲
 
 export const SUPABASE_URL =
