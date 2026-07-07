@@ -1,0 +1,9 @@
+name = "ark"
+compatibility_date = "2026-07-01"
+
+# Statische Single-Page-App: Wrangler lädt nur das Build-Verzeichnis hoch
+# (kein Worker-Skript). Die explizite Konfiguration verhindert die
+# Framework-Autoerkennung, die Vite >= 6 verlangen würde.
+[assets]
+directory = "./dist"
+not_found_handling = "single-page-application"
