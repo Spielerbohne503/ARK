@@ -113,6 +113,22 @@ const CANDIDATES = {
   dinopithecus: ['Dossier Dinopithecus.png'],
   deinonychus: ['Dossier Deinonychus.png'],
   basilisk: ['Dossier Basilisk.png'],
+  // Scorched Earth
+  morellatops: ['Dossier Morellatops.png', 'Morellatops.png'],
+  thornydragon: ['Dossier Thorny Dragon.png', 'Thorny Dragon.png'],
+  mantis: ['Dossier Mantis.png', 'Mantis.png'],
+  vulture: ['Dossier Vulture.png', 'Vulture.png'],
+  jerboa: ['Dossier Jerboa.png', 'Jerboa.png'],
+  lymantria: ['Dossier Lymantria.png', 'Lymantria.png'],
+  // Aberration
+  ravager: ['Dossier Ravager.png', 'Ravager.png'],
+  rockdrake: ['Dossier Rock Drake.png', 'Rock Drake.png'],
+  bulbdog: ['Dossier Bulbdog.png', 'Bulbdog.png'],
+  rollrat: ['Dossier Roll Rat.png', 'Roll Rat.png'],
+  // Fjordur
+  desmodus: ['Dossier Desmodus.png', 'Desmodus.png'],
+  andrewsarchus: ['Dossier Andrewsarchus.png', 'Andrewsarchus.png'],
+  fjordhawk: ['Dossier Fjordhawk.png', 'Fjordhawk.png'],
 };
 
 /** Fragt die MediaWiki-API in 50er-Batches nach den echten Bild-URLs. */

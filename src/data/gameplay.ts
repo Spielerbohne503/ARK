@@ -272,6 +272,20 @@ const SPAWN_CLASS: Record<string, string> = {
   corruptedgiga: 'Gigant_Character_BP_Corrupt_C', corruptedwyvern: 'Wyvern_Character_BP_Fire_Corrupt_C',
   corruptedarthro: 'Arthro_Character_BP_Corrupt_C', corruptedreaper: 'Xenomorph_Character_BP_Male_Corrupt_C',
   defenseunit: 'DefenseUnit_Character_BP_C', insectswarm: 'InsectSwarmChar_BP_C',
+  // Scorched Earth
+  morellatops: 'Camelsaurus_Character_BP_C', thornydragon: 'SpineyLizard_Character_BP_C',
+  mantis: 'Mantis_Character_BP_C', vulture: 'Vulture_Character_BP_C',
+  jerboa: 'Jerboa_Character_BP_C', lymantria: 'Moth_Character_BP_C',
+  deathworm: 'Deathworm_Character_BP_C', alphadeathworm: 'MegaDeathworm_Character_BP_C',
+  // Aberration
+  ravager: 'CaveWolf_Character_BP_C', rockdrake: 'RockDrake_Character_BP_C',
+  bulbdog: 'LanternPug_Character_BP_C', rollrat: 'MoleRat_Character_BP_C',
+  reaperking: 'Xenomorph_Character_BP_Male_C', lamprey: 'Lamprey_Character_C',
+  alphakarkinos: 'MegaCrab_Character_BP_C', alphabasilisk: 'MegaBasilisk_Character_BP_C',
+  alphasurfacereaper: 'MegaXenomorph_Character_BP_Male_Surface_C',
+  // Fjordur
+  desmodus: 'Desmodus_Character_BP_C', andrewsarchus: 'Andrewsarchus_Character_BP_C',
+  fjordhawk: 'Fjordhawk_Character_BP_C',
 };
 
 /** Konsolen-Befehle: wild spawnen bzw. gezähmt mit Ziel-Level. */

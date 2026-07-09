@@ -1,12 +1,17 @@
-/** Alle unterstützten Ark-Maps. */
+/** Alle unterstützten Ark-Maps: erst die Story-Maps, dann die kostenlosen offiziellen Maps. */
 export const MAPS = [
   'The Island',
-  'Ragnarok',
+  'Scorched Earth',
+  'Aberration',
   'Extinction',
   'Genesis 1',
   'Genesis 2',
+  'The Center',
+  'Ragnarok',
+  'Valguero',
   'Crystal Isles',
   'Lost Island',
+  'Fjordur',
 ] as const;
 
 export type MapName = (typeof MAPS)[number];

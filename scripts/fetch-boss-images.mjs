@@ -24,6 +24,13 @@ const BOSSES = {
   rockwell_prime: 'Rockwell Prime.png',
   crystal_wyvern_queen: 'Crystal Wyvern Queen.png',
   dinopithecus_king: 'Dinopithecus King.png',
+  rockwell: 'Rockwell.png',
+  // Fjordur: Beyla (Riesenbiene) und Sköll & Hati (Riesenwölfe) haben im Wiki
+  // keine eigenen Renders – die Kreaturen-Renders sind die passenden Motive.
+  beyla: 'Giant Bee.png',
+  skollhati: 'Direwolf.png',
+  steinbjorn: 'Mod Fjordur Steinbjorn.png',
+  fenrisulfr: 'Mod Fjordur Fenrir image.png',
 };
 
 async function resolveUrls(titles) {

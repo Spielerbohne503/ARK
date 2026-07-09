@@ -30,6 +30,13 @@ const WILD = {
   corruptedreaper: 'Corrupted Reaper King.png',
   defenseunit: 'Defense Unit.png',
   insectswarm: 'Insect Swarm.png',
+  deathworm: 'Deathworm.png',
+  alphadeathworm: 'Alpha Deathworm.png',
+  reaperking: 'Reaper King.png',
+  lamprey: 'Lamprey.png',
+  alphakarkinos: 'Alpha Karkinos.png',
+  alphabasilisk: 'Alpha Basilisk.png',
+  alphasurfacereaper: 'Alpha Surface Reaper King.png',
 };
 
 async function resolveUrls(titles) {

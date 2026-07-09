@@ -380,8 +380,8 @@ export function App() {
             </span>
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-center text-sm leading-relaxed text-gray-400">
-            Verfolge deine Zähmungen und Erkunder-Notizen auf sieben Maps, plane den
-            nächsten Fang mit dem Taming-Calculator und behalte alles an einem Ort.
+            Verfolge deine Zähmungen und Erkunder-Notizen auf allen zwölf offiziellen Maps,
+            plane den nächsten Fang mit dem Taming-Calculator und behalte alles an einem Ort.
           </p>
 
           {/* Global-Stats mit Count-up (kontextabhängig) */}

@@ -25,6 +25,8 @@ const ARTIFACTS = {
   flamekeeper: 'Artifact of the Flamekeeper.png',
   crag: 'Artifact of the Crag (Scorched Earth).png',
   depths: 'Artifact of the Depths (Aberration).png',
+  shadows: 'Artifact of the Shadows (Aberration).png',
+  stalker: 'Artifact of the Stalker (Aberration).png',
   destroyer: 'Artifact of the Destroyer (Scorched Earth).png',
   gatekeeper: 'Artifact of the Gatekeeper (Scorched Earth).png',
   lost: 'Artifact of the Lost.png',

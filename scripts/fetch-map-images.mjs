@@ -13,12 +13,17 @@ const THUMB_WIDTH = 900;
 // Map-Slug (wie in maps.ts) → Wiki-Dateititel.
 const MAP_FILES = {
   theisland: 'The Island Topographic Map.jpg',
+  scorchedearth: 'Scorched Earth Topographic Map.jpg',
+  aberration: 'Aberration Topographic Map.jpg',
   ragnarok: 'Ragnarok Topographic Map.jpg',
   extinction: 'Extinction Topographic Map.jpg',
   genesis1: 'Genesis Part 1 Topographic Map.jpg',
   genesis2: 'Genesis Part 2 Map.jpg',
+  thecenter: 'The Center Topographic Map.jpg',
+  valguero: 'Valguero Topographic Map.jpg',
   crystalisles: 'Crystal Isles Topographic Map.jpg',
   lostisland: 'Lost Island Topographic Map.jpg',
+  fjordur: 'Mod Fjordur Ingame Map.png',
 };
 
 async function resolveUrls(titles) {
