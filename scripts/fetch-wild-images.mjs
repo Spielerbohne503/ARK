@@ -37,6 +37,21 @@ const WILD = {
   alphakarkinos: 'Alpha Karkinos.png',
   alphabasilisk: 'Alpha Basilisk.png',
   alphasurfacereaper: 'Alpha Surface Reaper King.png',
+  ammonite: 'Ammonite.png',
+  cnidaria: 'Cnidaria.png',
+  coelacanth: 'Coelacanth.png',
+  leech: 'Leech.png',
+  meganeura: 'Meganeura.png',
+  titanomyrma: 'Titanomyrma.png',
+  jugbug: 'Jug Bug.png',
+  sabertoothsalmon: 'Sabertooth Salmon.png',
+  nameless: 'Nameless.png',
+  seeker: 'Seeker.png',
+  glowbug: 'Glowbug.png',
+  reaperqueen: 'Reaper Queen.png',
+  lavaelemental: 'Lava Elemental.png',
+  icewormqueen: 'Iceworm Queen.png',
+  forestwyvern: 'Forest Wyvern.png',
 };
 
 async function resolveUrls(titles) {

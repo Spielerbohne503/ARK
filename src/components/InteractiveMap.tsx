@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { Artifact } from '../data/artifacts';
 import { mapImage } from '../data/maps';
+import { RESOURCE_META, type ResourceDeposit, type ResourceType } from '../data/resources';
 import type { ExplorerNote, MapName } from '../types';
-import { IconCheck, IconGem, IconNote } from './icons';
+import { IconCheck, IconGem, IconNote, IconGauge } from './icons';
 
 interface InteractiveMapProps {
   map: MapName;
   notes: ExplorerNote[];
   artifacts: Artifact[];
+  resources: ResourceDeposit[];
   isNoteFound: (id: string) => boolean;
   isArtifactFound: (id: string) => boolean;
   onOpenNote: (note: ExplorerNote) => void;
@@ -24,6 +26,7 @@ export function InteractiveMap({
   map,
   notes,
   artifacts,
+  resources,
   isNoteFound,
   isArtifactFound,
   onOpenNote,
@@ -31,10 +34,27 @@ export function InteractiveMap({
 }: InteractiveMapProps) {
   const [showNotes, setShowNotes] = useState(true);
   const [showArtifacts, setShowArtifacts] = useState(true);
+  const [showResources, setShowResources] = useState(false);
+  // Ressourcen-Arten, die aktuell ausgeblendet sind (Standard: alle sichtbar).
+  const [hiddenTypes, setHiddenTypes] = useState<ReadonlySet<ResourceType>>(new Set());
   const [imageFailed, setImageFailed] = useState(false);
 
   const notesFound = notes.filter((n) => isNoteFound(n.id)).length;
   const artifactsFound = artifacts.filter((a) => isArtifactFound(a.id)).length;
+
+  // Auf dieser Map vorkommende Ressourcen-Arten (für die Filter-Chips).
+  const resourceTypes = useMemo(
+    () => [...new Set(resources.map((r) => r.type))],
+    [resources],
+  );
+  const toggleType = (type: ResourceType) =>
+    setHiddenTypes((prev) => {
+      const next = new Set(prev);
+      if (next.has(type)) next.delete(type);
+      else next.add(type);
+      return next;
+    });
+  const visibleResources = resources.filter((r) => !hiddenTypes.has(r.type));
 
   return (
     <div className="space-y-4">
@@ -76,8 +96,48 @@ export function InteractiveMap({
             </span>
           </button>
         )}
+        {resources.length > 0 && (
+          <button
+            type="button"
+            aria-pressed={showResources}
+            onClick={() => setShowResources((v) => !v)}
+            className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
+              showResources
+                ? 'border-cyan-500/60 bg-cyan-500/10 text-cyan-300'
+                : 'border-gray-800 text-gray-500 hover:border-gray-600 hover:text-gray-300'
+            }`}
+          >
+            <IconGauge size={14} />
+            Ressourcen
+            <span className="font-mono tabular-nums opacity-80">{resources.length}</span>
+          </button>
+        )}
         <p className="ml-auto text-xs text-gray-500">Klick auf einen Pin öffnet die Details.</p>
       </div>
+
+      {/* Ressourcen-Arten filtern (Chips dienen zugleich als Farb-Legende) */}
+      {showResources && resourceTypes.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5">
+          {resourceTypes.map((type) => {
+            const meta = RESOURCE_META[type];
+            const active = !hiddenTypes.has(type);
+            return (
+              <button
+                key={type}
+                type="button"
+                aria-pressed={active}
+                onClick={() => toggleType(type)}
+                className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-all duration-200 ${
+                  active ? meta.chip : 'border-gray-800 text-gray-600 hover:text-gray-400'
+                }`}
+              >
+                <span aria-hidden className={`h-2 w-2 rotate-45 border ${active ? meta.pin : 'border-gray-700 bg-gray-800'}`} />
+                {meta.label}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Kartenfläche mit Pins */}
       <div className="relative mx-auto aspect-square w-full max-w-3xl overflow-hidden rounded-2xl border border-gray-700 bg-gray-950 shadow-2xl shadow-black/50 ring-1 ring-white/[0.05]">
@@ -96,6 +156,18 @@ export function InteractiveMap({
         )}
         {/* leichte Abdunklung für besseren Pin-Kontrast */}
         <span aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20" />
+
+        {/* Ressourcen als kleine Rauten (Farbe = Art, Tooltip nennt den Fundort) */}
+        {showResources &&
+          visibleResources.map((res) => (
+            <span
+              key={res.id}
+              title={`${RESOURCE_META[res.type].label} – ${res.spot}`}
+              aria-label={`${RESOURCE_META[res.type].label} – ${res.spot}`}
+              style={{ left: `${res.coords.lon}%`, top: `${res.coords.lat}%` }}
+              className={`absolute z-[5] h-3 w-3 -translate-x-1/2 -translate-y-1/2 rotate-45 cursor-help border shadow-[0_0_6px_rgba(0,0,0,0.7)] transition-transform duration-200 hover:scale-150 ${RESOURCE_META[res.type].pin}`}
+            />
+          ))}
 
         {showNotes &&
           notes.map((note) => {

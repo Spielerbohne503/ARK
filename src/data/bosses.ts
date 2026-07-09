@@ -181,6 +181,18 @@ export const BOSSES: Boss[] = [
     imageUrl: img('dinopithecus_king'),
   },
   {
+    id: 'moeder',
+    name: 'Moeder, Master of the Ocean',
+    map: 'Genesis 1',
+    arena: 'Ozean-Biom (Mission)',
+    difficulties: GBA,
+    access: 'Start der Mission „Herrin des Ozeans" am Missions-Terminal des Ozean-Bioms',
+    tribute: ['Missions-Start (keine Artefakte)', 'empfohlen: starke Wasser-Tames'],
+    recommended: 'Gezüchtete Megalodons oder ein Tuso; erst die Eel-Adds ausschalten, sonst heilt sich Moeder',
+    description: 'Gigantischer Ur-Aal und Wächterin des Ozean-Bioms von Genesis. Ruft Aal-Schwärme und muss in ihrer Arena-Blase bezwungen werden.',
+    imageUrl: img('moeder'),
+  },
+  {
     id: 'manticore_se',
     name: 'Manticore',
     map: 'Scorched Earth',

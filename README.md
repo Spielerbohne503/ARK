@@ -7,7 +7,7 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
 ## Features
 
 - **12 offizielle Maps**: alle Story-Maps (The Island, Scorched Earth, Aberration, Extinction, Genesis 1, Genesis 2) und alle kostenlosen offiziellen Maps (The Center, Ragnarok, Valguero, Crystal Isles, Lost Island, Fjordur)
-- **135+ Kreaturen** (111 zähmbare + 25 nicht-zähmbare mit „Getötet“-Tracking) mit Spawn-Locations, Base-Stats, Futter- und Kibble-Angaben
+- **184 Kreaturen** (144 zähmbare + 40 nicht-zähmbare mit „Getötet“-Tracking) – per Abgleich mit der vollständigen Ark-Kreaturen-Liste (arkids.net) auf Spezies-Ebene komplett; Varianten (Aberrant/X/R/Tek) sind über die Map-Zuordnung derselben Spezies abgedeckt
 - **Pin-System**: Dino als gezähmt markieren – Karte wird grün, Status wird in **IndexedDB** gespeichert (kein Server, komplett offline)
 - **Favoriten & Notizen**: Zähm-Wunschliste pro Map, Freitext-Notizen (z. B. Spawn-Koordinaten) mit Auto-Save
 - **Filter & Sortierung**: Status, Schwierigkeit, Name/Schwierigkeit/zuletzt gezähmt
@@ -16,6 +16,7 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
 - **Erkunder-Notizen-Tracker** (Explorer Notes): eigener Modus neben den Kreaturen – 167 Notizen über alle 12 Maps, gruppiert nach Autor (Helena Walker, Rockwell, Mei Yin, Nerva, Diana, Santiago, HLN-A, Gabriel, Grad-Student) mit dem **offiziellen In-Game-Notiz-Icon des Autors auf jeder Karte und im Detail-Fenster**, **lesbarem Inhaltstext**, Fundort-Koordinaten, gefunden-Markierung und Fortschritt pro Autor/Map (persistiert in IndexedDB)
 - **Boss-Tracker**: eigener Modus mit allen Arena-Bossen pro Map (Broodmother, Megapithecus, Dragon, Overseer, Manticore, Rockwell, Titanen, King Titan, Master Controller, Rockwell Prime, Center- und Valguero-Arena, Crystal Wyvern Queen, Dinopithecus King sowie Beyla, Sköll & Hati, Steinbjörn und Fenrisúlfr auf Fjordur) samt Boss-Bild, Gamma/Beta/Alpha-Sieg-Tracking, Tribut-Anforderungen, Zugang und empfohlener Strategie
 - **Artefakt-Tracker**: eigener Modus mit den Höhlen-Artefakten jeder Map (Bild, Höhle, Koordinaten, wofür sie als Boss-Tribut gebraucht werden), gefunden-Markierung und „nur offene"-Filter
+- **Ressourcen-Fundorte** auf der interaktiven Karte: zuschaltbare Pin-Ebene mit den besten Farm-Spots (Metall, Kristall, Obsidian, Öl, Perlen, Schwefel, Edelsteine, Element) pro Map, filterbar nach Art
 - **Kibble-Übersicht**: die 6 Kibble-Stufen mit Icon, Ei-Größe, Rezept, typischen Ei-Quellen und den Kreaturen, die sie zum Zähmen bevorzugen (live aus der Dino-Datenbank abgeleitet)
 - **Gesamt-Fortschrittsbalken** im Hero: Zähmungen, Erkunder-Notizen, Boss-Siege und Artefakte über alle Maps zusammengefasst
 - **Completion-Tracker** mit Progress-Bar pro Map

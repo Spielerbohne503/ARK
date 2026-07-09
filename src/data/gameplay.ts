@@ -286,6 +286,31 @@ const SPAWN_CLASS: Record<string, string> = {
   // Fjordur
   desmodus: 'Desmodus_Character_BP_C', andrewsarchus: 'Andrewsarchus_Character_BP_C',
   fjordhawk: 'Fjordhawk_Character_BP_C',
+  // Vollständigkeits-Abgleich (arkids.net)
+  achatina: 'Achatina_Character_BP_C', archaeopteryx: 'Archa_Character_BP_C',
+  chalicotherium: 'Chalico_Character_BP_C', dimetrodon: 'Dimetro_Character_BP_C',
+  diplocaulus: 'Diplocaulus_Character_BP_C', dungbeetle: 'DungBeetle_Character_BP_C',
+  electrophorus: 'Eel_Character_BP_C', featherlight: 'LanternBird_Character_BP_C',
+  fenrir: 'Fenrir_Character_BP_C', giantbee: 'Bee_Queen_Character_BP_C',
+  gigantopithecus: 'Bigfoot_Character_BP_C', glowtail: 'LanternLizard_Character_BP_C',
+  hesperornis: 'Hesperornis_Character_BP_C', kairuku: 'Kairuku_Character_BP_C',
+  liopleurodon: 'Liopleurodon_Character_BP_C', megalosaurus: 'Megalosaurus_Character_BP_C',
+  microraptor: 'Microraptor_Character_BP_C', onyc: 'Bat_Character_BP_C',
+  ovis: 'Sheep_Character_BP_C', pachyrhinosaurus: 'Pachyrhino_Character_BP_C',
+  pegomastax: 'Pegomastax_Character_BP_C', phoenix: 'Phoenix_Character_BP_C',
+  shinehorn: 'LanternGoat_Character_BP_C', titanosaur: 'Titanosaur_Character_BP_C',
+  troodon: 'Troodon_Character_BP_C', unicorn: 'Equus_Character_BP_Unicorn_C',
+  voidwyrm: 'TekWyvern_Character_BP_C', carcha: 'Carcha_Character_BP_C',
+  rhyniognatha: 'Rhynio_Character_BP_C', direpolarbear: 'Polar_Bear_C',
+  mek: 'Mek_Character_BP_C', exomek: 'Exosuit_Character_BP_C', scout: 'Scout_Character_BP_C',
+  ammonite: 'Ammonite_Character_C', cnidaria: 'Cnidaria_Character_BP_C',
+  coelacanth: 'Coel_Character_BP_C', leech: 'Leech_Character_C',
+  meganeura: 'Dragonfly_Character_BP_C', titanomyrma: 'Ant_Character_BP_C',
+  jugbug: 'Jugbug_Character_BaseBP_C', sabertoothsalmon: 'Salmon_Character_BP_C',
+  nameless: 'ChupaCabra_Character_BP_C', seeker: 'Pteroteuthis_Char_BP_C',
+  glowbug: 'Lightbug_Character_BaseBP_C', reaperqueen: 'Xenomorph_Character_BP_Female_C',
+  lavaelemental: 'Golem_Character_BP_Boss_C', icewormqueen: 'Iceworm_Queen_Character_BP_C',
+  forestwyvern: 'Wyvern_Character_BP_Fire_Minion_C',
 };
 
 /** Konsolen-Befehle: wild spawnen bzw. gezähmt mit Ziel-Level. */

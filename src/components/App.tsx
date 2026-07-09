@@ -40,6 +40,7 @@ import { DinoGrid } from './DinoGrid';
 import { ExplorerNoteModal } from './ExplorerNoteModal';
 import { ExplorerNotesView } from './ExplorerNotesView';
 import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } from './FilterBar';
+import { getResourcesForMap } from '../data/resources';
 import { InteractiveMap } from './InteractiveMap';
 import { MapTabs } from './MapTabs';
 import { Spinner } from './Spinner';
@@ -655,6 +656,7 @@ export function App() {
             map={selectedMap}
             notes={mapNotes}
             artifacts={mapArtifacts}
+            resources={getResourcesForMap(selectedMap)}
             isNoteFound={explorer.isFound}
             isArtifactFound={artifactSet.has}
             onOpenNote={setSelectedNote}
