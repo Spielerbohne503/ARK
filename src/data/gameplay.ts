@@ -311,6 +311,16 @@ const SPAWN_CLASS: Record<string, string> = {
   glowbug: 'Lightbug_Character_BaseBP_C', reaperqueen: 'Xenomorph_Character_BP_Female_C',
   lavaelemental: 'Golem_Character_BP_Boss_C', icewormqueen: 'Iceworm_Queen_Character_BP_C',
   forestwyvern: 'Wyvern_Character_BP_Fire_Minion_C',
+  corruptedraptor: 'Raptor_Character_BP_Corrupt_C', corruptedcarno: 'Carno_Character_BP_Corrupt_C',
+  corrupteddilo: 'Dilo_Character_BP_Corrupt_C', corrupteddimorph: 'Dimorph_Character_BP_Corrupt_C',
+  corruptedptera: 'Ptero_Character_BP_Corrupt_C', corruptedstego: 'Stego_Character_BP_Corrupt_C',
+  corruptedtrike: 'Trike_Character_BP_Corrupt_C', corruptedchalico: 'Chalico_Character_BP_Corrupt_C',
+  corruptedparacer: 'Paracer_Character_BP_Corrupt_C', corruptedrockdrake: 'RockDrake_Character_BP_Corrupt_C',
+  alphafirewyvern: 'MegaWyvern_Character_BP_Fire_C', alphabloodcrystalwyvern: 'CrystalWyvern_Character_BP_Mega_C',
+  alphaxtrike: 'Volcano_Golem_Character_BP_C'.replace('Volcano_Golem','MegaXTrike'), alphaleedsichthys: 'Alpha_Leedsichthys_Character_BP_C',
+  rubblegolem: 'RubbleGolem_Character_BP_C', summoner: 'Summoner_Character_BP_C',
+  spiritdirewolf: 'Direwolf_Character_BP_Ghost_C', spiritdirebear: 'Direbear_Character_BP_Ghost_C',
+  parakeetfishschool: 'Microbe_Swarm_Char_BP_C'.replace('Microbe_Swarm','FishSchool'), reaperkingtame: 'Xenomorph_Character_BP_Male_Tamed_C',
 };
 
 /** Konsolen-Befehle: wild spawnen bzw. gezähmt mit Ziel-Level. */

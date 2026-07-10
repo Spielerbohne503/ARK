@@ -7,7 +7,7 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
 ## Features
 
 - **12 offizielle Maps**: alle Story-Maps (The Island, Scorched Earth, Aberration, Extinction, Genesis 1, Genesis 2) und alle kostenlosen offiziellen Maps (The Center, Ragnarok, Valguero, Crystal Isles, Lost Island, Fjordur)
-- **184 Kreaturen** (144 zähmbare + 40 nicht-zähmbare mit „Getötet“-Tracking) – per Abgleich mit der vollständigen Ark-Kreaturen-Liste (arkids.net) auf Spezies-Ebene komplett; Varianten (Aberrant/X/R/Tek) sind über die Map-Zuordnung derselben Spezies abgedeckt
+- **204 Kreaturen** (145 zähmbare + 59 nicht-zähmbare mit „Getötet“-Tracking) – per Drei-Quellen-Abgleich (ark.fandom.com, ark.wiki.gg, arkids.net) auf Spezies-Ebene komplett für **ARK: Survival Evolved** (ASA-Inhalte bewusst ausgeschlossen); Varianten (Aberrant/X/R/Tek) sind über die Map-Zuordnung derselben Spezies abgedeckt
 - **Pin-System**: Dino als gezähmt markieren – Karte wird grün, Status wird in **IndexedDB** gespeichert (kein Server, komplett offline)
 - **Favoriten & Notizen**: Zähm-Wunschliste pro Map, Freitext-Notizen (z. B. Spawn-Koordinaten) mit Auto-Save
 - **Filter & Sortierung**: Status, Schwierigkeit, Name/Schwierigkeit/zuletzt gezähmt

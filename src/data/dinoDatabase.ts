@@ -2912,6 +2912,26 @@ export const DINO_DATABASE: Dino[] = [
     extraStats: { stamina: 200, oxygen: 150, food: 450, weight: 30, torpor: 200 },
     imageUrl: img('scout'),
   },
+  {
+    id: 'reaperkingtame',
+    name: 'Reaper King',
+    maps: ['Aberration'],
+    spawnLocations: ['Austragung nach Reaper-Queen-Schwangerschaft'],
+    baseStats: { health: 1400, damage: 75, speed: 110 },
+    tamingFood: 'Von der Reaper Queen austragen lassen (Schwangerschaft überleben)',
+    kibbleType: '– (Königin-Schwangerschaft)',
+    baseKibbleCount: 1,
+    baseTamingTime: 1,
+    breedingInterval: 0,
+    eggIncubationTime: 0,
+    difficulty: 'hard',
+    description: "Der einzige zähmbare Reaper: Wer die Umarmung einer Reaper Queen mit genug Strahlenschutz überlebt, trägt einen Prinzen aus und prägt ihn bei der Geburt. Das ultimative Aberration-Endgame.",
+    roles: ["Endgame-Kampf", "Sprung-Angriff", "Prestige"],
+    sizeClass: 'large',
+    drops: ["Reaper-Wimpel"],
+    extraStats: { stamina: 500, oxygen: 150, food: 2600, weight: 480, torpor: 2500 },
+    imageUrl: img('reaperkingtame'),
+  },
 ];
 
 /** Liefert alle Dinos, die auf der angegebenen Map spawnen (alphabetisch sortiert). */
