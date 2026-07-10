@@ -611,7 +611,7 @@ export const ARTIFACTS: Artifact[] = [
     imageUrl: img("massive"),
   },
 
-  // ── Fjordur (Sammler-Artefakte; die Bosse verlangen Runensteine) ──
+  // ── Fjordur (Tribut für Broodmother, Megapithecus und Dragon; die nordischen Bosse verlangen Runensteine) ──
   {
     id: "fjordur-hunter",
     slug: "hunter",
@@ -619,7 +619,7 @@ export const ARTIFACTS: Artifact[] = [
     map: "Fjordur",
     cave: "Drengrheimr-Höhle",
     coords: { lat: 25.6, lon: 66.3 },
-    usedFor: "Sammlung (Bosse nutzen Runensteine)",
+    usedFor: "Broodmother (Fjordur)",
     imageUrl: img("hunter"),
   },
   {
@@ -629,7 +629,7 @@ export const ARTIFACTS: Artifact[] = [
     map: "Fjordur",
     cave: "Wolfshöhle (Vardiland)",
     coords: { lat: 65.9, lon: 24.0 },
-    usedFor: "Sammlung (Bosse nutzen Runensteine)",
+    usedFor: "Megapithecus (Fjordur)",
     imageUrl: img("pack"),
   },
   {
@@ -639,7 +639,7 @@ export const ARTIFACTS: Artifact[] = [
     map: "Fjordur",
     cave: "Mount-Doom-Kaverne",
     coords: { lat: 8.5, lon: 27.4 },
-    usedFor: "Sammlung (Bosse nutzen Runensteine)",
+    usedFor: "Broodmother (Fjordur)",
     imageUrl: img("massive"),
   },
   {
@@ -649,7 +649,7 @@ export const ARTIFACTS: Artifact[] = [
     map: "Fjordur",
     cave: "Molwyrm-Höhle",
     coords: { lat: 40.7, lon: 58.2 },
-    usedFor: "Sammlung (Bosse nutzen Runensteine)",
+    usedFor: "Broodmother (Fjordur)",
     imageUrl: img("clever"),
   },
   {
@@ -659,7 +659,7 @@ export const ARTIFACTS: Artifact[] = [
     map: "Fjordur",
     cave: "Himmelsturm-Grotte (Asgard)",
     coords: { lat: 34.3, lon: 76.1 },
-    usedFor: "Sammlung (Bosse nutzen Runensteine)",
+    usedFor: "Dragon (Fjordur)",
     imageUrl: img("skylord"),
   },
   {
@@ -669,7 +669,7 @@ export const ARTIFACTS: Artifact[] = [
     map: "Fjordur",
     cave: "Unterwasser-Kaverne (Vannaland)",
     coords: { lat: 19.3, lon: 41.9 },
-    usedFor: "Sammlung (Bosse nutzen Runensteine)",
+    usedFor: "Megapithecus (Fjordur)",
     imageUrl: img("devourer"),
   },
   {
@@ -679,7 +679,7 @@ export const ARTIFACTS: Artifact[] = [
     map: "Fjordur",
     cave: "Lava-Höhle (Balheimr)",
     coords: { lat: 87.4, lon: 82.3 },
-    usedFor: "Sammlung (Bosse nutzen Runensteine)",
+    usedFor: "Dragon (Fjordur)",
     imageUrl: img("immune"),
   },
   {
@@ -689,7 +689,7 @@ export const ARTIFACTS: Artifact[] = [
     map: "Fjordur",
     cave: "Runenstein-Grotte",
     coords: { lat: 55.4, lon: 85.7 },
-    usedFor: "Sammlung (Bosse nutzen Runensteine)",
+    usedFor: "Dragon (Fjordur)",
     imageUrl: img("strong"),
   },
   {
@@ -699,7 +699,7 @@ export const ARTIFACTS: Artifact[] = [
     map: "Fjordur",
     cave: "Frost-Höhle (Jotunheim)",
     coords: { lat: 12.8, lon: 12.6 },
-    usedFor: "Sammlung (Bosse nutzen Runensteine)",
+    usedFor: "Dragon (Fjordur)",
     imageUrl: img("cunning"),
   },
   {
@@ -709,7 +709,7 @@ export const ARTIFACTS: Artifact[] = [
     map: "Fjordur",
     cave: "Bärenhöhle (Vardiland)",
     coords: { lat: 74.6, lon: 45.5 },
-    usedFor: "Sammlung (Bosse nutzen Runensteine)",
+    usedFor: "Megapithecus (Fjordur)",
     imageUrl: img("brute"),
   },
 ];
