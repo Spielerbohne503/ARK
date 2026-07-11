@@ -72,6 +72,9 @@ const WILD = {
   spiritdirebear: 'Spirit Dire Bear.png',
   parakeetfishschool: 'Parakeet Fish School.png',
   reaperkingtame: 'Reaper King.png',
+  enragedcorruptedrex: 'Enraged Corrupted Rex.png',
+  enragedtrike: 'Enraged Triceratops.png',
+  macrophage: 'Macrophage.png',
 };
 
 async function resolveUrls(titles) {

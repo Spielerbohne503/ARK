@@ -320,6 +320,8 @@ const SPAWN_CLASS: Record<string, string> = {
   alphaxtrike: 'Volcano_Golem_Character_BP_C'.replace('Volcano_Golem','MegaXTrike'), alphaleedsichthys: 'Alpha_Leedsichthys_Character_BP_C',
   rubblegolem: 'RubbleGolem_Character_BP_C', summoner: 'Summoner_Character_BP_C',
   spiritdirewolf: 'Direwolf_Character_BP_Ghost_C', spiritdirebear: 'Direbear_Character_BP_Ghost_C',
+  corrupteddeathworm: 'Deathworm_Character_BP_Corrupt_C', enragedcorruptedrex: 'MegaRex_Character_BP_Corrupt_C',
+  enragedtrike: 'MegaTrike_Character_BP_Corrupt_C', macrophage: 'Macrophage_Swarm_Character_C',
   parakeetfishschool: 'Microbe_Swarm_Char_BP_C'.replace('Microbe_Swarm','FishSchool'), reaperkingtame: 'Xenomorph_Character_BP_Male_Tamed_C',
 };
 
