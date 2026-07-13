@@ -20,7 +20,7 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
 - **„Wer war's?"**: optionaler Spielername pro Gerät – jeder Eintrag merkt sich, wer ihn abgehakt hat; das Dashboard zeigt das Duell („Du: 47 · Bro: 52")
 - **Varianten-Tracking (opt-in)**: Tek-/X-/R-/Aberrant-Varianten als eigene Unterhaken im Detail-Fenster (zählen nicht in den Map-Fortschritt)
 - **Meilenstein-Erfolge**: 17 Badges im Dashboard – von „Erster Fang" über „Alpha-Schlächter" und „König der Ozeane" bis „100 % ARK"
-- **Dossier-Sammlung**: eigener Modus mit allen 162 Kreaturen-Dossiers (Helenas Dino-Seiten, Teil der In-Game-Explorer-Notes) als map-unabhängige Checkliste mit Artwork, Suche und „nur offene"-Filter – zählt in den Gesamtfortschritt
+- **Dossier-Sammlung**: Unter-Tab im Erkunder-Notizen-Modus mit allen 162 Kreaturen-Dossiers (Helenas Dino-Seiten, Teil der In-Game-Explorer-Notes) als map-unabhängige Checkliste mit Artwork, Suche und „nur offene"-Filter – zählt in den Gesamtfortschritt
 - **Kibble-Übersicht**: die 6 Kibble-Stufen mit Icon, Ei-Größe, Rezept, typischen Ei-Quellen und den Kreaturen, die sie zum Zähmen bevorzugen (live aus der Dino-Datenbank abgeleitet)
 - **100%-Dashboard**: eigener Modus mit einer Fortschritts-Karte pro Map – alle fünf Kategorien (Gezähmt, Getötet, Notizen, Bosse, Artefakte) als Balken plus Gesamt-Prozent; Klick auf eine Map springt direkt in ihre Kreaturen-Liste
 - **Gesamt-Fortschrittsbalken** im Hero: Zähmungen, Erkunder-Notizen, Boss-Siege und Artefakte über alle Maps zusammengefasst

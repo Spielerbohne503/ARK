@@ -56,7 +56,7 @@ import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
 import { IconBook, IconDownload, IconDrumstick, IconGem, IconGauge, IconList, IconMapPin, IconNote, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
 
-type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts' | 'kibble' | 'map' | 'dashboard' | 'dossiers';
+type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts' | 'kibble' | 'map' | 'dashboard';
 
 /** Anzahl Dinos, die überhaupt eine Kibble-Stufe nutzen. */
 const KIBBLE_NAMES = new Set(KIBBLE.map((k) => k.name));
@@ -90,6 +90,7 @@ export function App() {
   const [difficulty, setDifficulty] = useState<DifficultyFilter>('all');
   const [sort, setSort] = useState<SortOrder>('name');
   const [notesOnlyOpen, setNotesOnlyOpen] = useState(false);
+  const [notesTab, setNotesTab] = useState<'notes' | 'dossiers'>('notes');
   const [toasts, setToasts] = useState<ToastData[]>([]);
   const [syncOpen, setSyncOpen] = useState(false);
   const toastIdRef = useRef(0);
@@ -514,7 +515,6 @@ export function App() {
             { mode: 'artifacts', label: 'Artefakte', icon: <IconGem size={16} /> },
             { mode: 'map', label: 'Karte', icon: <IconMapPin size={16} /> },
             { mode: 'kibble', label: 'Kibble', icon: <IconDrumstick size={16} /> },
-            { mode: 'dossiers', label: 'Dossiers', icon: <IconNote size={16} /> },
             { mode: 'dashboard', label: '100%', icon: <IconGauge size={16} /> },
           ] as const).map((entry) => (
             <button
@@ -537,7 +537,7 @@ export function App() {
       </div>
 {/* Sticky Glass-Toolbar: Map-Tabs + (im Kreaturen-Modus) Planer & Suche.
           Im Kibble-Modus (map-unabhängig) entfällt sie. */}
-      {viewMode !== 'kibble' && viewMode !== 'dashboard' && viewMode !== 'dossiers' && (
+      {viewMode !== 'kibble' && viewMode !== 'dashboard' && !(viewMode === 'notes' && notesTab === 'dossiers') && (
       <div className="sticky top-0 z-40 border-b border-gray-800/70 bg-ark-bg/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2.5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <MapTabs selected={selectedMap} onChange={handleMapChange} progress={mapProgress} />
@@ -624,6 +624,33 @@ export function App() {
           </>
         ) : viewMode === 'notes' ? (
           <>
+            {/* Unter-Tabs: Story-Notizen (pro Map) und Dossiers (map-unabhängig) */}
+            <div className="flex w-max gap-1 rounded-xl border border-gray-800/80 bg-ark-surface/50 p-1 shadow-inner">
+              {([
+                { id: 'notes', label: 'Erkunder-Notizen', icon: <IconBook size={15} /> },
+                { id: 'dossiers', label: 'Dossiers', icon: <IconNote size={15} /> },
+              ] as const).map((entry) => (
+                <button
+                  key={entry.id}
+                  type="button"
+                  onClick={() => setNotesTab(entry.id)}
+                  aria-pressed={notesTab === entry.id}
+                  className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
+                    notesTab === entry.id
+                      ? 'bg-gradient-to-b from-green-500/20 to-green-500/10 text-green-200 ring-1 ring-green-400/40'
+                      : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                  }`}
+                >
+                  {entry.icon}
+                  {entry.label}
+                </button>
+              ))}
+            </div>
+
+            {notesTab === 'dossiers' ? (
+              <DossierView dossierSet={dossierSet} onToggle={handleToggleDossier} />
+            ) : (
+              <>
             <CompletionBar
               map={selectedMap}
               tamed={foundCount}
@@ -661,6 +688,8 @@ export function App() {
                 onOpenNote={setSelectedNote}
                 onlyOpen={notesOnlyOpen}
               />
+            )}
+              </>
             )}
           </>
         ) : viewMode === 'bosses' ? (
@@ -703,8 +732,6 @@ export function App() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
-        ) : viewMode === 'dossiers' ? (
-          <DossierView dossierSet={dossierSet} onToggle={handleToggleDossier} />
         ) : viewMode === 'kibble' ? (
           <KibbleView />
         ) : viewMode === 'map' ? (
