@@ -26,6 +26,7 @@ import {
   STORE_FOUND_NOTES,
   STORE_NOTES,
   STORE_TAMED,
+  STORE_VARIANTS,
 } from '../lib/db';
 import { type SyncState } from '../lib/sync';
 import { MAPS, type Dino, type ExplorerNote, type MapName } from '../types';
@@ -42,6 +43,8 @@ import { ExplorerNoteModal } from './ExplorerNoteModal';
 import { ExplorerNotesView } from './ExplorerNotesView';
 import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } from './FilterBar';
 import { getResourcesForMap } from '../data/resources';
+import { getVariantsFor, variantKey, type VariantId } from '../data/variants';
+import { getPlayerName, getVariantsEnabled, setPlayerName, setVariantsEnabled } from '../lib/player';
 import { InteractiveMap } from './InteractiveMap';
 import { MapTabs } from './MapTabs';
 import { Spinner } from './Spinner';
@@ -92,6 +95,9 @@ export function App() {
   const explorer = useExplorerTracker();
   const bossSet = useKeySet(STORE_BOSSES);
   const artifactSet = useKeySet(STORE_ARTIFACTS);
+  const variantSet = useKeySet(STORE_VARIANTS);
+  const [playerName, setPlayerNameState] = useState(getPlayerName);
+  const [variantsEnabled, setVariantsEnabledState] = useState(getVariantsEnabled);
 
   // Kompletter Zustand für den Cloud-Sync (alle sechs Sammel-Bereiche).
   const syncState = useMemo<SyncState>(
@@ -102,8 +108,9 @@ export function App() {
       found: [...explorer.found],
       bosses: [...bossSet.keys],
       artifacts: [...artifactSet.keys],
+      variants: [...variantSet.keys],
     }),
-    [tracker.records, tracker.favorites, tracker.notes, explorer.found, bossSet.keys, artifactSet.keys],
+    [tracker.records, tracker.favorites, tracker.notes, explorer.found, bossSet.keys, artifactSet.keys, variantSet.keys],
   );
 
   // Eingehenden Fremd-Stand übernehmen: React-State + IndexedDB überschreiben.
@@ -113,6 +120,7 @@ export function App() {
       explorer.hydrate(remote.found);
       bossSet.hydrate(remote.bosses);
       artifactSet.hydrate(remote.artifacts);
+      variantSet.hydrate(remote.variants ?? []);
       const now = new Date().toISOString();
       void overwriteStore(STORE_TAMED, remote.tamed);
       void overwriteStore(STORE_FAVORITES, remote.favorites.map((key) => ({ key })));
@@ -120,8 +128,9 @@ export function App() {
       void overwriteStore(STORE_FOUND_NOTES, remote.found.map((key) => ({ key, foundDate: now })));
       void overwriteStore(STORE_BOSSES, remote.bosses.map((key) => ({ key })));
       void overwriteStore(STORE_ARTIFACTS, remote.artifacts.map((key) => ({ key })));
+      void overwriteStore(STORE_VARIANTS, (remote.variants ?? []).map((key) => ({ key })));
     },
-    [tracker.hydrate, explorer.hydrate, bossSet.hydrate, artifactSet.hydrate],
+    [tracker.hydrate, explorer.hydrate, bossSet.hydrate, artifactSet.hydrate, variantSet.hydrate],
   );
 
   const syncStatus = useSync({ state: syncState, onRemote: applyRemote });
@@ -337,6 +346,14 @@ export function App() {
       }
     },
     [artifactSet, mapArtifactIds, mapArtifacts.length, selectedMap, pushToast],
+  );
+
+  const handleToggleVariant = useCallback(
+    (dino: Dino, variant: VariantId) => {
+      const now = variantSet.toggle(variantKey(selectedMap, dino.id, variant));
+      pushToast(now ? 'tamed' : 'untamed', `${dino.name} (${variant.toUpperCase()}-Variante) ${now ? 'abgehakt' : 'wieder offen'}`);
+    },
+    [variantSet, selectedMap, pushToast],
   );
 
   const handleImportFile = async (file: File) => {
@@ -654,6 +671,7 @@ export function App() {
         ) : viewMode === 'dashboard' ? (
           <DashboardView
             tracker={tracker}
+            playerName={playerName}
             explorer={explorer}
             bossSet={bossSet}
             artifactSet={artifactSet}
@@ -671,6 +689,7 @@ export function App() {
             notes={mapNotes}
             artifacts={mapArtifacts}
             resources={getResourcesForMap(selectedMap)}
+            dinos={mapDinos}
             isNoteFound={explorer.isFound}
             isArtifactFound={artifactSet.has}
             onOpenNote={setSelectedNote}
@@ -776,6 +795,31 @@ export function App() {
                 }}
               />
             </div>
+            <div className="mt-4 space-y-2 border-t border-gray-800/70 pt-3">
+              <label className="flex items-center gap-2 text-xs text-gray-400">
+                <span className="w-24 shrink-0 uppercase tracking-widest text-gray-500">Spielername</span>
+                <input
+                  value={playerName}
+                  onChange={(e) => setPlayerNameState(e.target.value)}
+                  onBlur={(e) => setPlayerName(e.target.value)}
+                  placeholder="z. B. Bohne"
+                  className="w-36 rounded-lg border border-gray-700 bg-gray-900 px-2.5 py-1.5 text-xs text-gray-100 placeholder-gray-600 outline-none focus:border-green-500"
+                />
+                <span className="text-gray-600">→ „Wer war's?"</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-2 text-xs text-gray-400">
+                <input
+                  type="checkbox"
+                  checked={variantsEnabled}
+                  onChange={(e) => {
+                    setVariantsEnabledState(e.target.checked);
+                    setVariantsEnabled(e.target.checked);
+                  }}
+                  className="h-3.5 w-3.5 accent-green-500"
+                />
+                Varianten einzeln tracken (Tek / X / R / Aberrant)
+              </label>
+            </div>
             <button
               type="button"
               onClick={() => setSyncOpen(true)}
@@ -825,6 +869,9 @@ export function App() {
           onTogglePin={(level) => handleTogglePin(selectedDino, level)}
           onUpdateLevel={(level) => tracker.updateLevel(selectedMap, selectedDino.id, level)}
           onSaveNote={(text) => tracker.saveNote(selectedMap, selectedDino.id, text)}
+          variants={variantsEnabled ? getVariantsFor(selectedDino, selectedMap) : []}
+          isVariantDone={(v) => variantSet.has(variantKey(selectedMap, selectedDino.id, v))}
+          onToggleVariant={(v) => handleToggleVariant(selectedDino, v)}
           onClose={() => setSelectedDino(null)}
         />
       )}

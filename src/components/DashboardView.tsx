@@ -6,8 +6,9 @@ import { getNotesForMap } from '../data/explorerNotes';
 import type { DinoTracker } from '../hooks/useDinoTracker';
 import type { ExplorerTracker } from '../hooks/useExplorerTracker';
 import type { KeySet } from '../hooks/useKeySet';
+import { ACHIEVEMENTS } from '../data/achievements';
 import { MAPS, type MapName } from '../types';
-import { IconBook, IconGem, IconSkull, IconSwords, IconTrophy } from './icons';
+import { IconBook, IconCheck, IconGem, IconSkull, IconSparkles, IconSwords, IconTrophy } from './icons';
 
 interface CategoryRow {
   label: string;
@@ -26,6 +27,8 @@ interface MapReport {
 
 interface DashboardViewProps {
   tracker: DinoTracker;
+  /** Eigener Spielername (für das „Wer war's?"-Duell). */
+  playerName: string;
   explorer: ExplorerTracker;
   bossSet: KeySet;
   artifactSet: KeySet;
@@ -38,7 +41,7 @@ interface DashboardViewProps {
  * Sammel-Kategorien (Zähmungen, Tötungen, Notizen, Bosse, Artefakte) und
  * einer Gesamt-Prozentzahl – die Checkliste für den kompletten Durchlauf.
  */
-export function DashboardView({ tracker, explorer, bossSet, artifactSet, onOpenMap }: DashboardViewProps) {
+export function DashboardView({ tracker, playerName, explorer, bossSet, artifactSet, onOpenMap }: DashboardViewProps) {
   const reports = useMemo<MapReport[]>(
     () =>
       MAPS.map((map) => {
@@ -69,6 +72,24 @@ export function DashboardView({ tracker, explorer, bossSet, artifactSet, onOpenM
   const best = reports.reduce((a, b) => (b.percent > a.percent ? b : a), reports[0]);
   const anyProgress = reports.some((r) => r.done > 0);
 
+  // „Wer war's?": Einträge nach Spielername gruppieren.
+  const duel = useMemo(() => {
+    const counts = new Map<string, number>();
+    tracker.records.forEach((r) => {
+      const who = r.by?.trim() || 'Unbekannt';
+      counts.set(who, (counts.get(who) ?? 0) + 1);
+    });
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]);
+  }, [tracker.records]);
+  const named = duel.filter(([who]) => who !== 'Unbekannt');
+
+  // Erfolge auswerten.
+  const snapshot = useMemo(
+    () => ({ records: tracker.records, found: explorer.found, bossKeys: bossSet.keys, artifactKeys: artifactSet.keys }),
+    [tracker.records, explorer.found, bossSet.keys, artifactSet.keys],
+  );
+  const unlockedCount = ACHIEVEMENTS.filter((a) => a.check(snapshot)).length;
+
   return (
     <section aria-label="100%-Fortschritt pro Map" className="space-y-4">
       <p className="text-sm text-gray-400">
@@ -78,6 +99,26 @@ export function DashboardView({ tracker, explorer, bossSet, artifactSet, onOpenM
         )}{' '}
         Klick auf eine Map öffnet ihre Kreaturen-Liste.
       </p>
+
+      {named.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2 rounded-xl border border-gray-800 bg-ark-surface/60 p-3">
+          <span className="font-display text-xs uppercase tracking-widest text-gray-500">Wer war's?</span>
+          {duel.map(([who, count], i) => (
+            <span
+              key={who}
+              className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm ${
+                i === 0
+                  ? 'border-amber-500/50 bg-amber-500/10 text-amber-200'
+                  : 'border-gray-700 bg-gray-900/60 text-gray-300'
+              }`}
+            >
+              {i === 0 && <IconTrophy size={13} />}
+              {who === playerName.trim() && playerName ? `${who} (du)` : who}:
+              <span className="font-mono font-bold tabular-nums">{count}</span>
+            </span>
+          ))}
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {reports.map((report, index) => {
@@ -167,6 +208,48 @@ export function DashboardView({ tracker, explorer, bossSet, artifactSet, onOpenM
             </button>
           );
         })}
+      </div>
+
+      {/* Meilenstein-Erfolge */}
+      <div className="rounded-xl border border-gray-800 bg-ark-surface/60 p-4">
+        <h3 className="mb-3 flex items-center gap-2 font-display text-sm uppercase tracking-widest text-gray-300">
+          <IconSparkles size={16} className="text-amber-400" />
+          Erfolge
+          <span className="font-mono text-xs tabular-nums text-gray-500">
+            {unlockedCount}/{ACHIEVEMENTS.length}
+          </span>
+        </h3>
+        <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+          {ACHIEVEMENTS.map((achievement) => {
+            const unlocked = achievement.check(snapshot);
+            return (
+              <li
+                key={achievement.id}
+                className={`flex items-start gap-2.5 rounded-lg border px-3 py-2.5 transition-colors ${
+                  unlocked ? 'border-amber-500/40 bg-amber-500/[0.06]' : 'border-gray-800/80 bg-gray-900/40'
+                }`}
+              >
+                <span
+                  className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${
+                    unlocked
+                      ? 'border-amber-400/70 bg-amber-400/20 text-amber-300'
+                      : 'border-gray-700 bg-gray-950/60 text-gray-600'
+                  }`}
+                >
+                  {unlocked ? <IconCheck size={13} /> : <IconTrophy size={12} />}
+                </span>
+                <span>
+                  <span className={`block text-sm font-semibold ${unlocked ? 'text-amber-200' : 'text-gray-400'}`}>
+                    {achievement.title}
+                  </span>
+                  <span className={`block text-xs ${unlocked ? 'text-gray-300' : 'text-gray-600'}`}>
+                    {achievement.description}
+                  </span>
+                </span>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );

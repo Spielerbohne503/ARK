@@ -76,6 +76,8 @@ export interface TamedRecord {
   /** ISO-Datum der Zähmung. */
   tamedDate: string;
   level: number;
+  /** Wer hat's gemacht (Spielername dieses Geräts, optional). */
+  by?: string;
 }
 
 /** Persistierte Notiz pro Dino+Map in IndexedDB. */

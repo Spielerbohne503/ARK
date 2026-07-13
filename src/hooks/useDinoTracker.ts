@@ -10,6 +10,7 @@ import {
   putNote,
   putTamed,
 } from '../lib/db';
+import { getPlayerName } from '../lib/player';
 import type { MapName, NoteRecord, TamedRecord } from '../types';
 
 const keyOf = (map: MapName, dinoId: string) => `${map}:${dinoId}`;
@@ -123,12 +124,14 @@ export function useDinoTracker(): DinoTracker {
       setRecords((prev) => {
         const next = new Map(prev);
         if (nowTamed) {
+          const player = getPlayerName();
           const record: TamedRecord = {
             key,
             dinoId,
             map,
             tamedDate: new Date().toISOString(),
             level,
+            ...(player ? { by: player } : {}),
           };
           next.set(key, record);
           persistCatch(putTamed(record));

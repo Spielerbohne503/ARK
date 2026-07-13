@@ -12,17 +12,20 @@ export interface SyncState {
   found: string[];
   bosses: string[];
   artifacts: string[];
+  /** Abgehakte Kreaturen-Varianten (optionales Feature). */
+  variants?: string[];
 }
 
 /** Kanonische Signatur eines Zustands (sortiert) – erkennt echte Änderungen und Echos. */
 export function stateSignature(s: SyncState): string {
   return JSON.stringify({
-    tamed: s.tamed.map((r) => `${r.key}@${r.level}:${r.tamedDate}`).sort(),
+    tamed: s.tamed.map((r) => `${r.key}@${r.level}:${r.tamedDate}:${r.by ?? ''}`).sort(),
     favorites: [...s.favorites].sort(),
     notes: s.notes.map((n) => `${n.key}=${n.text}`).sort(),
     found: [...s.found].sort(),
     bosses: [...s.bosses].sort(),
     artifacts: [...s.artifacts].sort(),
+    variants: [...(s.variants ?? [])].sort(),
   });
 }
 
@@ -44,6 +47,7 @@ export function normalizeState(raw: unknown): SyncState {
     found: strings(o.found),
     bosses: strings(o.bosses),
     artifacts: strings(o.artifacts),
+    variants: strings(o.variants),
   };
 }
 

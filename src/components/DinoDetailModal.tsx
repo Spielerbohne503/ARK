@@ -18,6 +18,7 @@ import {
   type KnockoutRow,
   type RankableStat,
 } from '../data/gameplay';
+import { VARIANT_META, type VariantId } from '../data/variants';
 import { MAX_LEVEL, MIN_LEVEL, useTamingCalculator } from '../hooks/useTamingCalculator';
 import { formatDate, formatMinutes, formatNumber } from '../lib/format';
 import type { Dino, MapName, TamedRecord } from '../types';
@@ -123,6 +124,10 @@ interface DinoDetailModalProps {
   onTogglePin: (level: number) => void;
   onUpdateLevel: (level: number) => void;
   onSaveNote: (text: string) => void;
+  /** Abhakbare Varianten dieser Kreatur auf dieser Map (leer = Feature aus). */
+  variants: VariantId[];
+  isVariantDone: (variant: VariantId) => boolean;
+  onToggleVariant: (variant: VariantId) => void;
   onClose: () => void;
 }
 
@@ -135,6 +140,9 @@ export function DinoDetailModal({
   onTogglePin,
   onUpdateLevel,
   onSaveNote,
+  variants,
+  isVariantDone,
+  onToggleVariant,
   onClose,
 }: DinoDetailModalProps) {
   const [level, setLevel] = useState(record?.level ?? 150);
@@ -278,7 +286,7 @@ export function DinoDetailModal({
           </button>
           {tamed && (
             <span className="absolute left-3 top-3 rounded-full border border-green-500/50 bg-green-950/80 px-3 py-1 text-xs font-medium text-green-300 backdrop-blur-sm">
-              {doneLabel} am {formatDate(record.tamedDate)}{tameable && ` · Lv. ${record.level}`}
+              {doneLabel} am {formatDate(record.tamedDate)}{tameable && ` · Lv. ${record.level}`}{record.by ? ` · von ${record.by}` : ''}
             </span>
           )}
           <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-2 p-4">
@@ -355,6 +363,33 @@ export function DinoDetailModal({
                 <IconCompass size={16} className="mt-0.5 shrink-0" />
                 <span>Spawn auf {map}: {dino.spawnLocations.join(', ')}</span>
               </p>
+              {variants.length > 0 && (
+                <section aria-label="Varianten" className={panelClass}>
+                  <h3 className={headingClass}>Varianten auf {map}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {variants.map((variant) => {
+                      const done = isVariantDone(variant);
+                      const meta = VARIANT_META[variant];
+                      return (
+                        <button
+                          key={variant}
+                          type="button"
+                          aria-pressed={done}
+                          onClick={() => onToggleVariant(variant)}
+                          className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
+                            done ? 'border-green-400/70 bg-green-500/90 text-gray-950' : `${meta.chip} hover:brightness-125`
+                          }`}
+                        >
+                          {done && '✓ '.trim()}{meta.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="mt-2 text-[11px] text-gray-600">
+                    Optionales Extra-Tracking – zählt nicht in den Map-Fortschritt.
+                  </p>
+                </section>
+              )}
               <section aria-label="Notizen" className={panelClass}>
                 <h3 className={headingClass}>
                   <IconNote size={16} />
