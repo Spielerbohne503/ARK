@@ -14,6 +14,8 @@ export interface SyncState {
   artifacts: string[];
   /** Abgehakte Kreaturen-Varianten (optionales Feature). */
   variants?: string[];
+  /** Gefundene Kreaturen-Dossiers. */
+  dossiers?: string[];
 }
 
 /** Kanonische Signatur eines Zustands (sortiert) – erkennt echte Änderungen und Echos. */
@@ -26,6 +28,7 @@ export function stateSignature(s: SyncState): string {
     bosses: [...s.bosses].sort(),
     artifacts: [...s.artifacts].sort(),
     variants: [...(s.variants ?? [])].sort(),
+    dossiers: [...(s.dossiers ?? [])].sort(),
   });
 }
 
@@ -48,6 +51,7 @@ export function normalizeState(raw: unknown): SyncState {
     bosses: strings(o.bosses),
     artifacts: strings(o.artifacts),
     variants: strings(o.variants),
+    dossiers: strings(o.dossiers),
   };
 }
 

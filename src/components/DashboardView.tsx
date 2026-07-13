@@ -7,8 +7,9 @@ import type { DinoTracker } from '../hooks/useDinoTracker';
 import type { ExplorerTracker } from '../hooks/useExplorerTracker';
 import type { KeySet } from '../hooks/useKeySet';
 import { ACHIEVEMENTS } from '../data/achievements';
+import { TOTAL_DOSSIERS } from '../data/dossiers';
 import { MAPS, type MapName } from '../types';
-import { IconBook, IconCheck, IconGem, IconSkull, IconSparkles, IconSwords, IconTrophy } from './icons';
+import { IconBook, IconCheck, IconGem, IconNote, IconSkull, IconSparkles, IconSwords, IconTrophy } from './icons';
 
 interface CategoryRow {
   label: string;
@@ -27,6 +28,7 @@ interface MapReport {
 
 interface DashboardViewProps {
   tracker: DinoTracker;
+  dossierSet: KeySet;
   /** Eigener Spielername (für das „Wer war's?"-Duell). */
   playerName: string;
   explorer: ExplorerTracker;
@@ -41,7 +43,7 @@ interface DashboardViewProps {
  * Sammel-Kategorien (Zähmungen, Tötungen, Notizen, Bosse, Artefakte) und
  * einer Gesamt-Prozentzahl – die Checkliste für den kompletten Durchlauf.
  */
-export function DashboardView({ tracker, playerName, explorer, bossSet, artifactSet, onOpenMap }: DashboardViewProps) {
+export function DashboardView({ tracker, dossierSet, playerName, explorer, bossSet, artifactSet, onOpenMap }: DashboardViewProps) {
   const reports = useMemo<MapReport[]>(
     () =>
       MAPS.map((map) => {
@@ -85,8 +87,8 @@ export function DashboardView({ tracker, playerName, explorer, bossSet, artifact
 
   // Erfolge auswerten.
   const snapshot = useMemo(
-    () => ({ records: tracker.records, found: explorer.found, bossKeys: bossSet.keys, artifactKeys: artifactSet.keys }),
-    [tracker.records, explorer.found, bossSet.keys, artifactSet.keys],
+    () => ({ records: tracker.records, found: explorer.found, bossKeys: bossSet.keys, artifactKeys: artifactSet.keys, dossierKeys: dossierSet.keys }),
+    [tracker.records, explorer.found, bossSet.keys, artifactSet.keys, dossierSet.keys],
   );
   const unlockedCount = ACHIEVEMENTS.filter((a) => a.check(snapshot)).length;
 
@@ -99,6 +101,22 @@ export function DashboardView({ tracker, playerName, explorer, bossSet, artifact
         )}{' '}
         Klick auf eine Map öffnet ihre Kreaturen-Liste.
       </p>
+
+      {/* Map-unabhängig: Dossier-Sammlung */}
+      <div className="flex flex-wrap items-center gap-3 rounded-xl border border-gray-800 bg-ark-surface/60 p-3">
+        <span className="flex items-center gap-2 font-display text-xs uppercase tracking-widest text-gray-500">
+          <IconNote size={14} /> Dossiers (alle Maps)
+        </span>
+        <span className="h-2 min-w-24 flex-1 overflow-hidden rounded-full bg-gray-950/60">
+          <span
+            className="block h-full rounded-full bg-gradient-to-r from-green-700 to-green-400 transition-all duration-700"
+            style={{ width: `${TOTAL_DOSSIERS > 0 ? (dossierSet.keys.size / TOTAL_DOSSIERS) * 100 : 0}%` }}
+          />
+        </span>
+        <span className="font-mono text-sm tabular-nums text-gray-400">
+          <span className="font-bold text-green-300">{dossierSet.keys.size}</span>/{TOTAL_DOSSIERS}
+        </span>
+      </div>
 
       {named.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 rounded-xl border border-gray-800 bg-ark-surface/60 p-3">

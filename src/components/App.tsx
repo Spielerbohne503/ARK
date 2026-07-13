@@ -25,6 +25,7 @@ import {
   STORE_FAVORITES,
   STORE_FOUND_NOTES,
   STORE_NOTES,
+  STORE_DOSSIERS,
   STORE_TAMED,
   STORE_VARIANTS,
 } from '../lib/db';
@@ -39,9 +40,11 @@ import { CompletionBar } from './CompletionBar';
 import { DinoDetailModal } from './DinoDetailModal';
 import { DashboardView } from './DashboardView';
 import { DinoGrid } from './DinoGrid';
+import { DossierView } from './DossierView';
 import { ExplorerNoteModal } from './ExplorerNoteModal';
 import { ExplorerNotesView } from './ExplorerNotesView';
 import { FilterBar, type DifficultyFilter, type SortOrder, type StatusFilter } from './FilterBar';
+import { TOTAL_DOSSIERS } from '../data/dossiers';
 import { getResourcesForMap } from '../data/resources';
 import { getVariantsFor, variantKey, type VariantId } from '../data/variants';
 import { getPlayerName, getVariantsEnabled, setPlayerName, setVariantsEnabled } from '../lib/player';
@@ -51,9 +54,9 @@ import { Spinner } from './Spinner';
 import { SyncPanel } from './SyncPanel';
 import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
-import { IconBook, IconDownload, IconDrumstick, IconGem, IconGauge, IconList, IconMapPin, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
+import { IconBook, IconDownload, IconDrumstick, IconGem, IconGauge, IconList, IconMapPin, IconNote, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
 
-type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts' | 'kibble' | 'map' | 'dashboard';
+type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts' | 'kibble' | 'map' | 'dashboard' | 'dossiers';
 
 /** Anzahl Dinos, die überhaupt eine Kibble-Stufe nutzen. */
 const KIBBLE_NAMES = new Set(KIBBLE.map((k) => k.name));
@@ -96,6 +99,7 @@ export function App() {
   const bossSet = useKeySet(STORE_BOSSES);
   const artifactSet = useKeySet(STORE_ARTIFACTS);
   const variantSet = useKeySet(STORE_VARIANTS);
+  const dossierSet = useKeySet(STORE_DOSSIERS);
   const [playerName, setPlayerNameState] = useState(getPlayerName);
   const [variantsEnabled, setVariantsEnabledState] = useState(getVariantsEnabled);
 
@@ -109,8 +113,9 @@ export function App() {
       bosses: [...bossSet.keys],
       artifacts: [...artifactSet.keys],
       variants: [...variantSet.keys],
+      dossiers: [...dossierSet.keys],
     }),
-    [tracker.records, tracker.favorites, tracker.notes, explorer.found, bossSet.keys, artifactSet.keys, variantSet.keys],
+    [tracker.records, tracker.favorites, tracker.notes, explorer.found, bossSet.keys, artifactSet.keys, variantSet.keys, dossierSet.keys],
   );
 
   // Eingehenden Fremd-Stand übernehmen: React-State + IndexedDB überschreiben.
@@ -121,6 +126,7 @@ export function App() {
       bossSet.hydrate(remote.bosses);
       artifactSet.hydrate(remote.artifacts);
       variantSet.hydrate(remote.variants ?? []);
+      dossierSet.hydrate(remote.dossiers ?? []);
       const now = new Date().toISOString();
       void overwriteStore(STORE_TAMED, remote.tamed);
       void overwriteStore(STORE_FAVORITES, remote.favorites.map((key) => ({ key })));
@@ -129,8 +135,9 @@ export function App() {
       void overwriteStore(STORE_BOSSES, remote.bosses.map((key) => ({ key })));
       void overwriteStore(STORE_ARTIFACTS, remote.artifacts.map((key) => ({ key })));
       void overwriteStore(STORE_VARIANTS, (remote.variants ?? []).map((key) => ({ key })));
+      void overwriteStore(STORE_DOSSIERS, (remote.dossiers ?? []).map((key) => ({ key })));
     },
-    [tracker.hydrate, explorer.hydrate, bossSet.hydrate, artifactSet.hydrate, variantSet.hydrate],
+    [tracker.hydrate, explorer.hydrate, bossSet.hydrate, artifactSet.hydrate, variantSet.hydrate, dossierSet.hydrate],
   );
 
   const syncStatus = useSync({ state: syncState, onRemote: applyRemote });
@@ -216,8 +223,8 @@ export function App() {
     () => MAPS.reduce((sum, map) => sum + getDinosForMap(map).length, 0),
     [],
   );
-  const overallDone = tracker.records.size + explorer.found.size + bossSet.keys.size + artifactSet.keys.size;
-  const overallTotal = totalDinoSlots + EXPLORER_NOTES.length + TOTAL_BOSS_KILLS + TOTAL_ARTIFACTS;
+  const overallDone = tracker.records.size + explorer.found.size + bossSet.keys.size + artifactSet.keys.size + dossierSet.keys.size;
+  const overallTotal = totalDinoSlots + EXPLORER_NOTES.length + TOTAL_BOSS_KILLS + TOTAL_ARTIFACTS + TOTAL_DOSSIERS;
   const overallPercent = overallTotal > 0 ? Math.round((overallDone / overallTotal) * 100) : 0;
   const overallPercentAnimated = useCountUp(overallPercent);
 
@@ -354,6 +361,19 @@ export function App() {
       pushToast(now ? 'tamed' : 'untamed', `${dino.name} (${variant.toUpperCase()}-Variante) ${now ? 'abgehakt' : 'wieder offen'}`);
     },
     [variantSet, selectedMap, pushToast],
+  );
+
+  const handleToggleDossier = useCallback(
+    (dino: Dino) => {
+      const now = dossierSet.toggle(dino.id);
+      if (now && dossierSet.keys.size + 1 === TOTAL_DOSSIERS) {
+        fireConfetti();
+        pushToast('complete', `Alle ${TOTAL_DOSSIERS} Dossiers gesammelt!`);
+      } else {
+        pushToast(now ? 'tamed' : 'untamed', `Dossier: ${dino.name} ${now ? 'gefunden' : 'wieder offen'}`);
+      }
+    },
+    [dossierSet, pushToast],
   );
 
   const handleImportFile = async (file: File) => {
@@ -494,6 +514,7 @@ export function App() {
             { mode: 'artifacts', label: 'Artefakte', icon: <IconGem size={16} /> },
             { mode: 'map', label: 'Karte', icon: <IconMapPin size={16} /> },
             { mode: 'kibble', label: 'Kibble', icon: <IconDrumstick size={16} /> },
+            { mode: 'dossiers', label: 'Dossiers', icon: <IconNote size={16} /> },
             { mode: 'dashboard', label: '100%', icon: <IconGauge size={16} /> },
           ] as const).map((entry) => (
             <button
@@ -516,7 +537,7 @@ export function App() {
       </div>
 {/* Sticky Glass-Toolbar: Map-Tabs + (im Kreaturen-Modus) Planer & Suche.
           Im Kibble-Modus (map-unabhängig) entfällt sie. */}
-      {viewMode !== 'kibble' && viewMode !== 'dashboard' && (
+      {viewMode !== 'kibble' && viewMode !== 'dashboard' && viewMode !== 'dossiers' && (
       <div className="sticky top-0 z-40 border-b border-gray-800/70 bg-ark-bg/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2.5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <MapTabs selected={selectedMap} onChange={handleMapChange} progress={mapProgress} />
@@ -671,6 +692,7 @@ export function App() {
         ) : viewMode === 'dashboard' ? (
           <DashboardView
             tracker={tracker}
+            dossierSet={dossierSet}
             playerName={playerName}
             explorer={explorer}
             bossSet={bossSet}
@@ -681,6 +703,8 @@ export function App() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
+        ) : viewMode === 'dossiers' ? (
+          <DossierView dossierSet={dossierSet} onToggle={handleToggleDossier} />
         ) : viewMode === 'kibble' ? (
           <KibbleView />
         ) : viewMode === 'map' ? (

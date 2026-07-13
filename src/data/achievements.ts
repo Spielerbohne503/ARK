@@ -1,6 +1,7 @@
 import { getArtifactsForMap, TOTAL_ARTIFACTS } from './artifacts';
 import { bossKey, getBossesForMap, TOTAL_BOSS_KILLS } from './bosses';
 import { ALL_CREATURES, getDinosForMap } from './dinoDatabase';
+import { TOTAL_DOSSIERS } from './dossiers';
 import { EXPLORER_NOTES, getNotesForMap } from './explorerNotes';
 import { MAPS, type TamedRecord } from '../types';
 
@@ -10,6 +11,8 @@ export interface ProgressSnapshot {
   found: ReadonlySet<string>;
   bossKeys: ReadonlySet<string>;
   artifactKeys: ReadonlySet<string>;
+  /** Gefundene Kreaturen-Dossiers. */
+  dossierKeys: ReadonlySet<string>;
 }
 
 export interface Achievement {
@@ -68,6 +71,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'corrupted-clean', title: 'Säuberung', description: 'Alle korrupten Kreaturen auf Extinction erlegt.', check: (s) => everySpecies(s, (n, t) => !t && (n.startsWith('Korrupter') || n.startsWith('Wütender'))) },
   { id: 'dragon-rider', title: 'Drachen-Reiter', description: 'Einen Wyvern gezähmt (irgendeine Map).', check: (s) => ['Scorched Earth', 'Ragnarok', 'Lost Island', 'Fjordur'].some((m) => s.records.has(`${m}:wyvern`)) },
   { id: 'reaper-mother', title: 'Reaper-Blut', description: 'Einen eigenen Reaper King ausgetragen.', check: (s) => s.records.has('Aberration:reaperkingtame') },
+  { id: 'dossier-collector', title: 'Dossier-Sammler', description: `Alle ${TOTAL_DOSSIERS} Kreaturen-Dossiers freigeschaltet.`, check: (s) => s.dossierKeys.size >= TOTAL_DOSSIERS },
   { id: 'first-map', title: 'Erste Map komplett', description: 'Eine Map zu 100 % abgeschlossen.', check: anyMapComplete },
   { id: 'ark-100', title: '100 % ARK', description: 'Alles. Wirklich alles.', check: (s) => totalDone(s) >= GRAND_TOTAL },
 ];
