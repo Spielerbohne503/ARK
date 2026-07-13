@@ -36,6 +36,7 @@ import { BossView } from './BossView';
 import { KibbleView } from './KibbleView';
 import { CompletionBar } from './CompletionBar';
 import { DinoDetailModal } from './DinoDetailModal';
+import { DashboardView } from './DashboardView';
 import { DinoGrid } from './DinoGrid';
 import { ExplorerNoteModal } from './ExplorerNoteModal';
 import { ExplorerNotesView } from './ExplorerNotesView';
@@ -47,9 +48,9 @@ import { Spinner } from './Spinner';
 import { SyncPanel } from './SyncPanel';
 import { TamingPlanner } from './TamingPlanner';
 import { ToastStack, type ToastData } from './Toast';
-import { IconBook, IconDownload, IconDrumstick, IconGem, IconList, IconMapPin, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
+import { IconBook, IconDownload, IconDrumstick, IconGem, IconGauge, IconList, IconMapPin, IconSearch, IconSkull, IconSwords, IconTrophy, IconUpload, IconWarning } from './icons';
 
-type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts' | 'kibble' | 'map';
+type ViewMode = 'creatures' | 'notes' | 'bosses' | 'artifacts' | 'kibble' | 'map' | 'dashboard';
 
 /** Anzahl Dinos, die überhaupt eine Kibble-Stufe nutzen. */
 const KIBBLE_NAMES = new Set(KIBBLE.map((k) => k.name));
@@ -476,6 +477,7 @@ export function App() {
             { mode: 'artifacts', label: 'Artefakte', icon: <IconGem size={16} /> },
             { mode: 'map', label: 'Karte', icon: <IconMapPin size={16} /> },
             { mode: 'kibble', label: 'Kibble', icon: <IconDrumstick size={16} /> },
+            { mode: 'dashboard', label: '100%', icon: <IconGauge size={16} /> },
           ] as const).map((entry) => (
             <button
               key={entry.mode}
@@ -497,7 +499,7 @@ export function App() {
       </div>
 {/* Sticky Glass-Toolbar: Map-Tabs + (im Kreaturen-Modus) Planer & Suche.
           Im Kibble-Modus (map-unabhängig) entfällt sie. */}
-      {viewMode !== 'kibble' && (
+      {viewMode !== 'kibble' && viewMode !== 'dashboard' && (
       <div className="sticky top-0 z-40 border-b border-gray-800/70 bg-ark-bg/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-2.5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <MapTabs selected={selectedMap} onChange={handleMapChange} progress={mapProgress} />
@@ -649,6 +651,18 @@ export function App() {
               />
             )}
           </>
+        ) : viewMode === 'dashboard' ? (
+          <DashboardView
+            tracker={tracker}
+            explorer={explorer}
+            bossSet={bossSet}
+            artifactSet={artifactSet}
+            onOpenMap={(map) => {
+              handleMapChange(map);
+              setViewMode('creatures');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
         ) : viewMode === 'kibble' ? (
           <KibbleView />
         ) : viewMode === 'map' ? (

@@ -18,6 +18,7 @@ Offline-fähiger Zähmungs-Tracker für **Ark: Survival Evolved** – behalte au
 - **Artefakt-Tracker**: eigener Modus mit den Höhlen-Artefakten jeder Map (Bild, Höhle, Koordinaten, wofür sie als Boss-Tribut gebraucht werden), gefunden-Markierung und „nur offene"-Filter
 - **Ressourcen-Fundorte** auf der interaktiven Karte: zuschaltbare Pin-Ebene mit den besten Farm-Spots (Metall, Kristall, Obsidian, Öl, Perlen, Schwefel, Edelsteine, Element) pro Map, filterbar nach Art
 - **Kibble-Übersicht**: die 6 Kibble-Stufen mit Icon, Ei-Größe, Rezept, typischen Ei-Quellen und den Kreaturen, die sie zum Zähmen bevorzugen (live aus der Dino-Datenbank abgeleitet)
+- **100%-Dashboard**: eigener Modus mit einer Fortschritts-Karte pro Map – alle fünf Kategorien (Gezähmt, Getötet, Notizen, Bosse, Artefakte) als Balken plus Gesamt-Prozent; Klick auf eine Map springt direkt in ihre Kreaturen-Liste
 - **Gesamt-Fortschrittsbalken** im Hero: Zähmungen, Erkunder-Notizen, Boss-Siege und Artefakte über alle Maps zusammengefasst
 - **Completion-Tracker** mit Progress-Bar pro Map
 - **Detail-Ansicht mit 6 Tabs** (Dododex-Stil):
